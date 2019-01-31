@@ -64,10 +64,9 @@
             </div>
             <div class="clearfix">
                 <img src="../../../static/app/img/home/homeContent1.jpg" class="homeContent1 fll">
-                <div class="fll contentRight1" v-if="weekLists.length != 0">
+                <div class="fll contentRight1" v-if="weekLists&&weekLists.addTimeStr">
                     <p class="row1">会员周报</p>
                     <div class="row2">
-                        <!-- <span>2018年第二期 </span> -->
                          <span class="numbers">{{weekLists[0].addTimeStr.substr(0,4)}}年第{{count}}期</span>
                         <span @click="$router.push('/weekList')"> 点击阅读</span>
                     </div>
@@ -76,7 +75,6 @@
                     <p class="row1">会员周报</p>
                     <div class="row2">
                         <span>暂无周报 </span>
-                        <!-- <span @click="$router.push('/weekDetail')"> 点击阅读</span> -->
                     </div>
                 </div>
             </div>
@@ -193,6 +191,7 @@
     import Footer from "@/components/Bottom.vue";
     import "swiper/dist/css/swiper.css";
     import { swiper, swiperSlide } from "vue-awesome-swiper";
+    import * as Cookies from 'js-cookie'
     export default {
         components: {
             Footer,
@@ -266,7 +265,10 @@
         created() {
             this.getNewsList();
             this.getSwiper();
-            this.getWeekData()
+            if (Cookies.get("userKey")) {
+                 this.getWeekData()
+            }
+           
         }
     };
 </script>

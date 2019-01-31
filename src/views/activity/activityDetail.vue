@@ -216,6 +216,7 @@
             },
             // 点赞
             noGood() {
+                // if (Cookies.get('userKey') != '') {
                 this.$axios.get(`/jsp/wap/trActivity/do/doGreat.jsp?id=${this.id}`).then(res => {
                     console.log("点赞成功", res)
                     if (res.success == "true") {
@@ -224,7 +225,13 @@
                             instance.close();
                         }, 500);
                         this.good = 1
+
                         this.activityDetail.greatNum = Number(this.activityDetail.greatNum + 1)
+                    } else {
+                        let instance = Toast(res.message);
+                        setTimeout(() => {
+                            instance.close();
+                        }, 1000);
                     }
                 })
             },

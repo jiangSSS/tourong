@@ -259,8 +259,7 @@
             handleCloseList3() { this.isShow3 = false },
             // 上拉加载
             loadMore() {
-                this.pn = this.pn + 1
-                
+                this.pn = this.pn + 1           
                 this.$axios.get('/jsp/wap/trProject/ctrl/jsonProjectPage.jsp', {
                     params: {
                         // sort:this.sort,
@@ -268,8 +267,7 @@
                         financingMoneys: this.financingMoneys,
                         industrys: this.industrys,
                         regions: this.regions,
-                        pageNumber: this.pn,
-                        
+                        pageNumber: this.pn,               
                     }
                 }).then(res => {
                     this.loading = true 
@@ -278,8 +276,7 @@
                         this.totalCount = Number(res.data.pagination.totalCount)              
                         if(this.totalCount > this.pageList.length){
                             this.more = true
-                            this.noMore = false
-                           
+                            this.noMore = false              
                         }else{
                             this.more = false
                             this.noMore = true                            
