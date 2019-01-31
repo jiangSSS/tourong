@@ -4089,7 +4089,6 @@
                 capitalSourceList: [],
                 capitalSources: [],
                 investTypeList: [],
-                // investTypes: "",
                 investTypes: [],
                 upfrontCostList: [],
                 riskControlList: [],
@@ -4279,7 +4278,6 @@
                     if (res.data.capital.investTypeStr != '') {
                         this.investTypes = (res.data.capital.investTypeStr || "").split(",");
                     }
-                    // this.investTypes = res.data.capital.investTypeList
                     if (res.data.capital.riskControlStr != '') {
                         this.riskControls = (res.data.capital.riskControlStr || "").split(",");
                     }
@@ -4314,7 +4312,6 @@
                     this.formData.validStartTimeStr = (res.data.capital.validStartTimeStr).slice(0, 4);
                     this.formData.validEndTimeStr = (res.data.capital.validEndTimeStr).slice(0, 4);
 
-                    // this.fileNames = res.data.fileNames
                     var file = '';
                     var fileList = [];
                     var fileList = res.data.capital.fileList;

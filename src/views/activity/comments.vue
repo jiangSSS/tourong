@@ -23,31 +23,6 @@
       };
     },
     methods: {
-      // submit() {
-      //   let newsId = this.$route.query.id;
-      //   this.$axios.get(`/jsp/wap/trNews/do/doComment.jsp`, {
-      //     params: {
-      //       newsId,
-      //       content: this.formData.content
-      //     }
-      //   }).then(res => {
-      //     console.log("新闻评论", res);
-      //     if (res.success == "true") {
-      //       let instance = Toast("评论成功");
-      //       setTimeout(() => {
-      //         instance.close();
-      //       }, 2000);
-      //       setTimeout(() => {
-      //         this.$router.push({name:'comment',query:{id}})
-      //       }, 2000)
-      //     } else {
-      //       let instance = Toast("评论失败");
-      //       setTimeout(() => {
-      //         instance.close();
-      //       }, 2000);
-      //     }
-      //   });
-      // },
       submit() {
         if (Cookies.get("userKey")) {
           if (this.content != "") {
@@ -57,18 +32,7 @@
                 params: { id, content: this.content }
               })
               .then(res => {
-                if (res.success == "true") {
-                  // var newCommon = {
-                  //   beforeTime: '1秒',
-                  //   content: this.content,
-                  //   headImgPath: this.avatar,
-                  //   provinceStr: this.provinceStr,
-                  //   memberName: this.memberName
-                  // }
-                  // this.commonData.unshift(newCommon)
-                  // this.content = ''
-                  // this.count += 1
-
+                if (res.success == "true") {               
                   let instance = Toast("评论成功");
                   setTimeout(() => {
                     instance.close();
@@ -116,10 +80,7 @@
     resize: none;
   }
 
-  .textarea:focus {
-    outline: none;
-  }
-
+  .textarea:focus {outline: none;}
   .submit {
     width: 94%;
     height: 0.8rem;

@@ -78,7 +78,6 @@
         font-size: .32rem;
         padding: .2rem
     }
-    .nav {}
     .navMenu:hover {
         color: #005982;
     } //点击样式随路由变化
@@ -86,57 +85,6 @@
         color: #005982 !important;
         border-bottom: 2px solid #005982;
     }
-    .container {}
-
-    .subTabs {
-        /* padding-top: .8rem; */
-        padding: .8rem 0 0 0;
-        width: 7.5rem !important;
-        min-width: 7.5rem !important
-        /* background: #fff; */
-    }
-
-    .subTab {
-        background: #fff;
-        margin-bottom: .3rem
-    }
-
-    .itemBox {
-        padding-bottom: .1rem;
-        border-bottom: .2rem solid #f3f5f7
-    }
-
-
-    .peojectTitle {
-        border-left: 3px solid #005982;
-        margin: .3rem;
-        padding-left: .2rem;
-        font-size: .3rem;
-        font-family: "PingFang";
-        color: rgb( 51, 51, 51);
-        line-height: 1.533;
-
-    }
-
-    .cancleBtn {
-        margin: .2rem .3rem 0 0;
-        padding: 0 .1rem;
-        height: .6rem;
-    }
-
-    .nowTime {
-        display: inline-block;
-        padding-left: .6rem;
-        color: #005982;
-        font-weight: 700;
-    }
-
-    .step {
-        background: #fff
-    } // /deep/.mu-step-label{
-    //     padding-left: .2rem;
-    //     padding-right: .2rem
-    // }
     .kefu{
         color: #666;
         font-size: .32rem!important

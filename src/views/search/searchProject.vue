@@ -4,7 +4,7 @@
             <div class="money">项目</div>
             <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading">
                 <div class="moneyList" v-for="(item,index) in pageList" :key="index">
-                    <router-link :to="{path:'/money/moneyDetail',query:{id:item.id}}">
+                    <router-link :to="{path:'/project/projectDetail',query:{id:item.id}}">
                         <div class="moneyTitle">{{item.title}}</div>
                         <div class="moneyDetail">{{item.investRequire}}</div>
                     </router-link>
@@ -95,22 +95,22 @@
             // 约见项目方
             handleSend(id) {
                 if (Cookies.get("userKey")) {
-                    // if (this.myMoney.length == 0) {
-                    //     let instance = Toast('您还没有发布资金，请先发布资金');
-                    //     setTimeout(() => {
-                    //         instance.close();
-                    //     }, 2000);
-                    // } else {
+                    if (this.myMoney.length == 0) {
+                        let instance = Toast('您还没有发布资金，请先发布资金');
+                        setTimeout(() => {
+                            instance.close();
+                        }, 2000);
+                    } else {
                     this.isShowApply = true;
                     this.projectId = id;
-                    // }
+                    }
                 }
-                // else {
-                //     let instance = Toast('您还未登录，请先登录');
-                //     setTimeout(() => {
-                //         instance.close();
-                //     }, 2000);
-                // }
+                else {
+                    let instance = Toast('您还未登录，请先登录');
+                    setTimeout(() => {
+                        instance.close();
+                    }, 2000);
+                }
             },
             // 确认投递 关闭投递框
             closeApply() {

@@ -346,7 +346,7 @@
     }
 
     .detail {
-        padding-bottom: 1.4rem;
+        padding-bottom: 1.2rem;
     }
 
     .noData {

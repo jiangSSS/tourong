@@ -5,19 +5,19 @@
             <i class="iconfont icon-shouye"></i>
             <div class="tab-title">首页</div>
         </router-link>
-        <router-link to="/projectA" class="tab-item" :class="{active:$route.name === 'projectA'}">
+        <router-link to="/project" class="tab-item" :class="{active:$route.name === 'project'}">
             <i class="iconfont icon-icon-project"></i>
             <div class="tab-title">项目库</div>
         </router-link>
-        <router-link to="/message" class="tab-item" :class="{active:$route.name === 'sysMessage'}">
+        <div @click="toMessage" class="tab-item" :class="{active:$route.name === 'sysMessage'}">
             <i class="iconfont icon-xiaoxi"></i>
             <div class="tab-title">消息</div>
-        </router-link>
+        </div>
         <router-link to="/money" class="tab-item" :class="{active:$route.name === 'money'}">
             <i class="iconfont icon-diamond"></i>
             <div class="tab-title">资金</div>
         </router-link>
-        <div @click="person" class="tab-item" :class="{active:$route.name === 'my'}">
+        <div @click="toPerson" class="tab-item" :class="{active:$route.name === 'my'}">
             <i class="iconfont icon-My"></i>
             <div class="tab-title">我的</div>
         </div>
@@ -38,9 +38,16 @@
             }
         },
         methods: {
-            person() {
+            toPerson() {
                 if (Cookies.get('userKey')) {
                     this.$router.push('/my')
+                } else {
+                    this.$router.push('/login')
+                }
+            },
+            toMessage() {
+                if (Cookies.get('userKey')) {
+                    this.$router.push('/message')
                 } else {
                     this.$router.push('/login')
                 }

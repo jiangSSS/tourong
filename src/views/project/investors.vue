@@ -348,7 +348,7 @@
     .contentTell {
         background: #fff;
         padding: .2rem;
-        margin-bottom: .3rem;
+        // margin-bottom: .3rem;
         .detaila {
             background: #fff;
             padding: .2rem 0;
@@ -424,7 +424,7 @@
 
     .mayProject {
         padding: .15rem 0;
-        border-bottom: .05rem solid #f3f5f7
+        border-bottom: .1rem solid #fafafa
     }
 
     .mayTitle {

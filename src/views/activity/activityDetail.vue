@@ -123,7 +123,7 @@
                 good: 0,
                 id: "",
                 countComment: "",
-
+                // 分享
                 share: false,
                 config: {
                     // url: '', // 网址，默认使用 window.location.href
@@ -216,7 +216,6 @@
             },
             // 点赞
             noGood() {
-                // if (Cookies.get('userKey') != '') {
                 this.$axios.get(`/jsp/wap/trActivity/do/doGreat.jsp?id=${this.id}`).then(res => {
                     console.log("点赞成功", res)
                     if (res.success == "true") {
@@ -225,7 +224,6 @@
                             instance.close();
                         }, 500);
                         this.good = 1
-
                         this.activityDetail.greatNum = Number(this.activityDetail.greatNum + 1)
                     } else {
                         let instance = Toast(res.message);
@@ -264,8 +262,6 @@
         }
     }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     .error {
         color: #f00;

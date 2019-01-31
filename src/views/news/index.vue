@@ -9,7 +9,7 @@
                 <div class="messageList">
                     <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading">
                         <div class="" v-for="(item,index) in pageList" :key="index">
-                            <router-link :to="{path:'/newsDetail',query:{id:item.id}}">
+                            <router-link :to="{path:'/news/newsDetail',query:{id:item.id}}">
                                 <div class="clearfix rows">
                                     <div class="nums clearfix flr">
                                         <div class="clearfix titleBox">

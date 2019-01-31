@@ -31,11 +31,7 @@
                     <span class="myName">联系我们</span>
                 <i class="iconfont icon-xiangyou flr"></i>
                 </div>    
-            </router-link>
-           
-            
-           
-            
+            </router-link>        
         </div>
     </div>
      <Footer class="footer"></Footer>       

@@ -8,8 +8,8 @@
                         <div class="choose">
                             <div class="sbuTitle clearfix">
                                 <span class="fll">请选择活动标签</span>
-                                <i class="iconfont icon-xiangxia flr" v-if="!isShow" @click="handleShowList"></i>
-                                <i class="iconfont icon-shouqi flr" v-else @click="handleCloseList"></i>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow" @click="isShow = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow = false"></i>
                             </div>
                             <div class="type" v-show="isShow">
                                 <span v-for="(item,index) in categoryList" :key="index" @click="getCategory(item.dataValue,index)" :class="{activeBox:item.checked}">{{item.dataName}}</span>
@@ -70,7 +70,6 @@
                                             <mt-button type="default" class="flr" :class="item.status == 1 ? 'applyBtn' : 'overBtn'" @click="$router.push({name:'activityDetail',query:{id:item.id}})">
                                                 {{item.status == 1 ? '立即报名' :'' + item.status == 0 ? '活动预告':'' + item.status == -1 ? '往期回顾' : ''}}
                                             </mt-button>
-                                            <!-- <mt-button type="default" class="flr">我要报名</mt-button> -->
                                         </div>
                                     </div>
                                 </div>
@@ -86,9 +85,6 @@
                 </div>
             </div>
         </vue-drawer-layout>
-        <!-- <a class="totop" id="totop" @click="goTop">
-            <img src="../../../static/app/img/backTop.png" alt="">
-        </a> -->
     </div>
 </template>
 
@@ -111,8 +107,6 @@
                 noMore: false,
                 showTop: false,
                 isShow: false,
-                isShow1: false,
-                isShow2: false,
                 active1: 0,
                 pn: 1,
                 pageNumber: 1,
@@ -131,26 +125,12 @@
         },
         methods: {
             // 打开筛选
-            handleToggleDrawer() {
-                this.$refs.drawerLayout.toggle();
-            },
+            handleToggleDrawer() {this.$refs.drawerLayout.toggle();},
             // 关闭筛选
-            handleMaskClick() {
-                this.$refs.drawerLayout.toggle(false);
-            },
-            // 下拉/收起
-            handleShowList() { this.isShow = true },
-            handleCloseList() { this.isShow = false },
-            handleShowList1() { this.isShow1 = true },
-            handleCloseList1() { this.isShow1 = false },
-            handleShowList2() { this.isShow2 = true },
-            handleCloseList2() { this.isShow2 = false },
-            handleShowList3() { this.isShow3 = true },
-            handleCloseList3() { this.isShow3 = false },
+            handleMaskClick() {this.$refs.drawerLayout.toggle(false);},
             // 上拉加载
             loadMore() {
                 this.pn += 1
-
                 this.$axios.get('/jsp/wap/trActivity/ctrl/jsonActivityPage.jsp', { params: { statuss: this.status, categorys: this.category, pageNumber: this.pn } }).then(res => {
                     this.loading = true
                     if (res.success == "true") {
@@ -330,7 +310,7 @@
     .imgPath {
         width: 100%;
         height: 100%;
-    }
+    }，
 
     /deep/ .mu-tabs-inverse {
         background: #fff;

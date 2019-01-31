@@ -1,34 +1,45 @@
 <template>
-
-    <div class="all" :data="moneyDetail">
+    <div class="all" :data="projectDetail">
         <Header></Header>
         <div class="containerAll">
             <div class="detail">
                 <div class="projectHeader">
-                    <div class="projectTitle">{{moneyDetail.title}}</div>
+                    <div class="projectTitle">{{projectDetail.title}}</div>
                     <div class="time">
                         <span>编号：</span>
-                        <span>{{moneyDetail.id}}</span>
+                        <span>{{projectDetail.projectId}}</span>
                     </div>
                     <div class="clearfix">
                         <div class="fll time">
                             <i class="iconfont icon-shijian"></i>
-                            <span v-if="moneyDetail.addTimeStr">{{moneyDetail.addTimeStr.slice(0,10)}}</span>
+                            <span v-if="projectDetail.addTimeStr">{{projectDetail.addTimeStr.slice(0,10)}}</span>
                             <span v-else>2019-01-01</span>
                         </div>
-                        <div class="sendBtn flr likeBtn" v-if="follow" @click="isFollow">已关注</div>
-                        <div class="sendBtn flr" v-else @click="noFollow">关注</div>
-                        <div class="sendBtn flr" @click="handleSend">投递项目</div>
+                        <div class="sendBtn flr isFollow" v-if="follow" @click="isFollow">已关注</div>
+                        <div class="sendBtn flr likeBtn" v-else @click="noFollow">关注</div>
+                        <div class="sendBtn flr" @click="handleTell">我要约谈</div>
                     </div>
                     <mu-dialog width="400" center class="applyDialog" :open.sync="isShowApply">
-                        <select class="oneRows" v-model="projectId">
-                            <option :value="item.id" v-for="item in myProject" :key="item.index" :label="item.title">{{item.title}}</option>
+                        <select class="oneRows" v-model="moneyId">
+                            <option :value="item.id" v-for="item in myMoney" :key="item.index" :label="item.title">{{item.title}}</option>
                         </select>
-                        <mu-button class="applyBtn" @click="closeApply">确认</mu-button>
-                        <mu-button class="applyBtn" @click="isShowApply = false">取消</mu-button>
+                        <div class="btnSend">
+                            <mu-button class="applyBtn" @click="closeApply">确认</mu-button>
+                            <mu-button class="applyBtn" @click="isShowApply = false">取消</mu-button>
+                        </div>
                     </mu-dialog>
+
                 </div>
-                <div class="user clearfix" @click="$router.push({name:'investors',query:{id}})">
+                <!-- <div class="user clearfix" @click="$router.push({name:'projectInvestors',query:{id}})">
+                    <img class="fll" src="../../../static/app/img/usrname.jpg" style="width:1rem">
+                    <span class="fll">{{memberInfo.userName}}</span>
+                    <div class="flr">
+                        <span class="">{{memberId.company}}</span>
+                        <i class="iconfont icon-xiangyou"></i>
+                    </div>
+                </div> -->
+                  <div class="user clearfix" @click="$router.push({name:'projectInvestors',query:{id}})">
+                    <!-- <img class="fll" src="../../../static/app/img/usrname.jpg" style="width:1rem"> -->
                     <img class="avatar fll" :src="$url + memberInfo.photoImgPath" v-if="memberInfo&&memberInfo.photoImgPath"  alt>
                     <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=188149577,2949073731&fm=26&gp=0.jpg" v-else class="avatar fll">
                     <span class="fll" v-if="memberInfo.name">{{memberInfo.name}}</span>
@@ -49,66 +60,66 @@
                 </div> -->
                 <div class="message">
                     <div>
-                        <span>投资资金:</span>
-                        <span>{{moneyDetail.investAmountName}}</span>
+                        <span>融资主体:</span>
+                        <span>{{projectDetail.financeBodyName}}</span>
                     </div>
                     <div>
-                        <span>投资方式:</span>
-                        <span>{{moneyDetail.capitalSourceName}}</span>
-                    </div>
-                    <div>
-                        <span>投资类型:</span>
-                        <span>{{moneyDetail.investTypeName}}</span>
+                        <span>所在地区:</span>
+                        <span>{{projectDetail.regionNameStr}}</span>
 
                     </div>
                     <div>
-                        <span>资金来源:</span>
-                        <span>{{moneyDetail.capitalSourceName}}</span>
+                        <span>公司估值:</span>
+                        <span>{{projectDetail.companyAssessed}}</span>
 
                     </div>
                     <div>
-                        <span>资金类型:</span>
-                        <span>{{moneyDetail.capitalBodyName}}</span>
+                        <span>市净率(P/B):</span>
+                        <span>{{projectDetail.pb}}</span>
 
                     </div>
                     <div>
-                        <span>投资行业:</span>
-                        <span>{{moneyDetail.investIndustryName}}</span>
+                        <span>市盈率(P/E):</span>
+                        <span>{{projectDetail.pe}}</span>
 
                     </div>
                     <div>
-                        <span>投资阶段: </span>
-                        <span>{{moneyDetail.investStageName}}</span>
-
-                    </div>
-                    <div>
-                        <span>市场热点:</span>
-                        <span>{{moneyDetail.marketHotName}}</span>
-
-                    </div>
-                    <div>
-                        <span>区域热点:</span>
-                        <span>{{moneyDetail.areaHotName}}</span>
+                        <span>行业性质:</span>
+                        <span>{{projectDetail.industryName}}</span>
 
                     </div>
                     <div>
                         <span>支付方式:</span>
-                        <span>{{moneyDetail.paymentTypeName}}</span>
+                        <span>{{projectDetail.paymentTypeName}}</span>
 
                     </div>
                     <div>
-                        <span>有效期限:</span>
-                        <span>{{moneyDetail.validStartTimeStr}}--{{moneyDetail.validEndTimeStr}}</span>
+                        <span>融资用途:</span>
+                        <span>{{projectDetail.financingExplain}}</span>
 
                     </div>
                     <div>
-                        <span>保障措施:</span>
-                        <span>{{moneyDetail.safeguardName}}</span>
-                    </div>
+                        <span>融资金额:</span>
+                        <span>{{projectDetail.paymentTypeName}}</span>
 
+                    </div>
+                    <div>
+                        <span>总投资额:</span>
+                        <span>{{projectDetail.investIndustryName}}</span>
+
+                    </div>
+                    <div>
+                        <span>意向资金: </span>
+                        <span>{{projectDetail.intentCapitalList}}</span>
+
+                    </div>
+                    <div>
+                        <span>投资方式:</span>
+                        <span>{{projectDetail.financingWayName}}</span>
+
+                    </div>
                 </div>
                 <!-- <div class="user clearfix" @click="$router.push('/money/progress')">
-
                     <div class="fll">查看项目进展</div>
                     <div class="flr">
                         <i class="iconfont icon-xiangyou"></i>
@@ -116,69 +127,47 @@
                 </div> -->
                 <div class="contentTell">
                     <div class="detaila">
-                        <div class="peojectTitle">投资要求概述</div>
+                        <div class="peojectTitle">项目介绍</div>
+
                     </div>
-                    <div class="contentDesc">{{moneyDetail.investRequire}}</div>
-                </div>
-                <div class="contentTell">
-                    <div class="detaila">
-                        <div class="peojectTitle">投资案例</div>
-                    </div>
-                    <!-- <div class="" v-for="(item,index) in core" :key="index">
-                        <div class="coreName">
-                            {{item.name}}
-                        </div>
-                        <div class="coreDetail">
-                            {{item.detail}}
-                        </div>
+                    <div class="contentDesc">{{projectDetail.brief}}</div>
+                    <!-- <div>
+                        <img src="/static/app/img/detailImg1.jpg" alt="">
                     </div> -->
-                     <div class="coreDetail">
-                            {{moneyDetail.investCase}}
-                        </div>
                 </div>
                 <!-- <div class="contentTell">
                     <div class="detaila">
+                        <div class="peojectTitle">核心团队</div>
+                    </div>
+                        <div class="coreDetail">
+                            {{projectDetail.teamBrief}}
+                        </div>
+                </div>
+                <div class="contentTell">
+                    <div class="detaila">
                         <div class="peojectTitle">项目点评</div>
-
                     </div>
                     <div class="" v-for="(item,index) in review" :key="index">
                         <div class="coreName">
-                            {{item.bb}}
+                            {{item.title}}
                         </div>
                         <div class="coreDetail">
                             {{item.desc}}
                         </div>
                     </div>
                 </div> -->
-                <div class="contentTell">
-                    <div class="detaila">
-                        <div class="peojectTitle">其他说明</div>
-                    </div>
-                    <div class="contentDesc">{{moneyDetail.otherExplain}}</div>
-                </div>
                 <div class="contentTell ">
-                    <!-- <router-link :to="{name:'mayMoney',query:{id}}">
-                        <div class="detaila">
-                            <div class="peojectTitle">可能感兴趣的资金</div>
-                        </div>
-                    </router-link> -->
-                    <div class="detaila" @click="toMayMoney">
-                        <div class="peojectTitle">可能感兴趣的资金 <i class="iconfont icon-xiangyou flr"></i></div>
-                       
+                    <div class="detaila" @click="toMayProject">
+                        <div class="peojectTitle">可能感兴趣的项目<i class="iconfont icon-xiangyou flr"></i></div>
                     </div>
-                    <!-- <div class="mayProject" v-for="(item,index) in capitalList" :key="index">
-                        <router-link :to="{name:'moneyDetail',query:{id:item.id}}" >
-                            <div class="mayTitle">
-                                {{item.title}}
-                            </div>
-                            <div class="mayTime">
-                                <span>投资金额：</span>
-                                <span>{{item.investAmountName}}</span>
-                            </div>
-                            <div class="mayTime">
-                                <span>{{item.capitalSourceName}}</span>
-                            </div>
-                        </router-link>
+                    <!-- <div class="mayProject" v-for="(item,index) in mayProject" :key="index">
+                        <div class="mayTitle">
+                            {{item.title}}
+                        </div>
+                        <div class="mayTime">
+                            <i class="iconfont icon-shijian"></i>
+                            <span>{{item.time}}</span>
+                        </div>
                     </div> -->
                 </div>
             </div>
@@ -188,16 +177,13 @@
 
 <script>
     import Header from "@/components/Header.vue"
-    import Footer from "@/components/Bottom.vue"
+    import { Dialog } from 'vant';
+    // import commentDetailVue from '../activity/commentDetail.vue';
     import { Toast } from 'mint-ui'
-    import { Dialog } from "vant";
     import * as Cookies from 'js-cookie'
-
     export default {
         components: {
             Header,
-            Footer,
-            Toast
         },
         data() {
             return {
@@ -213,62 +199,57 @@
                 ],
                 review: [
                     {
-                        bb: "完整的逻辑架构",
+                        title: "完整的逻辑架构",
                         desc: "打造符合投资人口味的完整计划书逻辑框架和商业模式，提出优化建议。"
                     },
                     {
-                        bb: "清晰的商业模式",
+                        title: "清晰的商业模式",
                         desc: "打造符合投资人口味的完整计划书逻辑框架和商业模式，提出优化建议。"
                     },
                 ],
-                moneyDetail: [],
+                projectDetail: [],
                 follow: 0,
                 id: "",
 
                 isShowApply: false,
-                myProject: [],
-                capitalList: [],
+                myMoney: [],
                 projectId: "",
                 moneyId: "",
+                memberInfo:[],
                 myMoney_Count: 0,
-                myMoney_pagination: false,
 
-                memberId:"",
-                memberInfo:[]
+                memberId:""
             }
         },
         methods: {
-            toDetail(){
-                let id = this.$route.query.id
-                this.$router.push({name: 'moneyDetail', params:{id}})
-            },
-            getMyProject(pn) {
-                this.$axios.get("/jsp/wap/center/ctrl/jsonIssueProjectList.jsp", {
+
+            getMyMoney(pn) {
+                this.$axios.get("/jsp/wap/center/ctrl/jsonIssueCapitalList.jsp", {
                     params: { pageNumber: pn }
                 }).then(res => {
-                    console.log("我的项目去投递", res)
-                    this.myProject = res.data.pageList;
-                    var myProject = res.data.pageList
-                    if (myProject.length > 0) {
-                        this.projectId = myProject[0].id
+                    this.myMoney = res.data.pageList;
+                    var myMoney = res.data.pageList
+                    if (myMoney.length > 0) {
+                        this.moneyId = myMoney[0].id
                     }
-                    this.myProject_Count = Number(res.data.pagination.totalCount);
+                    this.myMoney_Count = Number(res.data.pagination.totalCount);
                 });
             },
-            handleSend() {
+            // 约见项目方
+            handleTell(id) {
                 if (Cookies.get("userKey")) {
-                    if (this.myProject.length == 0) {
-                        let instance = Toast('您还没有发布项目，请先发布项目');
+                    if (this.myMoney.length == 0) {
+                        let instance = Toast('您还没有发布资金，请先发布资金');
                         setTimeout(() => {
                             instance.close();
                         }, 2000);
                     } else {
                         this.isShowApply = true;
-                        this.moneyId = this.$route.query.id;
+                        this.projectId = this.$route.query.id;
                     }
                 }
                 else {
-                    let instance = Toast('您未登录，请先登录');
+                    let instance = Toast('您还未登录，请先登录');
                     setTimeout(() => {
                         instance.close();
                     }, 2000);
@@ -296,32 +277,39 @@
                     this.isShowApply = false;
                 }, 500);
             },
-            // 投资详情
-            getMoneyDetail() {
+            // 模态框
+            // handleTell() {
+            //     Dialog.alert({
+            //         img: "/static/app/img/success.jpg",
+            //         title: "提交成功",
+            //         message: '平台会尽快为你安排。'
+            //     }).then(() => {
+            //         // on close
+            //     });
+            // },
+            // 获取项目详情
+            getProjectDetail() {
                 this.id = this.$route.query.id
-                this.$axios.get(`/jsp/wap/trCapital/ctrl/jsonCapitalDetail.jsp?id=${this.id}`).then(res => {
-                    console.log("投资详情", res)
-                    this.moneyDetail = res.data.capital
+                this.$axios.get(`/jsp/wap/trProject/ctrl/jsonProjectDetail.jsp?id=${this.id}`, ).then(res => {
+                    console.log("项目详情", res)
+                    this.projectDetail = res.data.project   
                     this.memberInfo = res.data.memberInfo
                     this.memberId = res.data.memberInfo.id
                     this.capitalList = res.data.capitalList
                 })
             },
-            toMayMoney(){
-                let id = this.$route.query.id
-                this.$router.push({name:'mayMoney',query:{id}})
-            },
             // 获取关注状态
             getFollow() {
-                this.$axios.get(`/jsp/wap/trCapital/ctrl/jsonIsFollow.jsp?id=${this.id}`).then(res => {
+                this.$axios.get(`/jsp/wap/trProject/ctrl/jsonIsFollow.jsp?id=${this.id}`).then(res => {
+                    // this.follow 
                     console.log("是否关注", res)
                     this.follow = Number(res.data)
                 })
             },
             // 关注
             noFollow() {
-                this.$axios.get(`/jsp/wap/trCapital/do/doFollow.jsp?id=${this.id}`).then(res => {
-                    console.log("投资关注", res)
+                this.$axios.get(`/jsp/wap/trProject/do/doFollow.jsp?id=${this.id}`).then(res => {
+                    console.log("关注", res)
                     if (res.success == "true") {
                         let instance = Toast('关注成功');
                         setTimeout(() => {
@@ -338,37 +326,45 @@
             },
             // 取消关注
             isFollow() {
-                this.$axios.get(`/jsp/wap/trCapital/do/doUnfollow.jsp?id=${this.id}`).then(res => {
+                this.$axios.get(`/jsp/wap/trProject/do/doUnfollow.jsp?id=${this.id}`).then(res => {
                     console.log("取消关注", res)
                     if (res.success == "true") {
                         let instance = Toast('已取消关注');
                         setTimeout(() => {
                             instance.close();
-                        }, 2000);
+                        }, 1000);
                         this.follow = 0
                     } else {
                         let instance = Toast('取消失败');
                         setTimeout(() => {
                             instance.close();
-                        }, 2000);
+                        }, 1000);
                     }
                 })
             },
+            // 项目进展
+            getProgress() {
+                this.$axios.get(`/jsp/wap/trProject/ctrl/jsonProjectDynamicList.jsp?id=${this.id}`).then(res => {
+                    console.log("项目进展", res)
+                })
+            },
+            toMayProject(){
+                let id = this.$route.query.id
+                this.$router.push({name:'mayProject',query:{id}})
+            }
+
         },
         created() {
-            this.getMoneyDetail()
+            this.getProjectDetail()
             this.getFollow()
-            if (Cookies.get("userKey")) {
-                this.getMyProject();
-            }
+            this.getProgress()/*  */
         }
     }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     .containerAll {
-        background: #f3f5f7; // margin-bottom: 1rem
+        background: #f3f5f7;
     }
 
     img {
@@ -387,7 +383,6 @@
         line-height: 1.6;
         padding: .3rem 0 0 0;
     }
-
     .sendBtn {
         border: 1px solid #005982;
         border-radius: 2px;
@@ -404,27 +399,22 @@
         margin-right: .3rem;
         text-align: center;
     }
-
-    .likeBtn {
-        background: #005982;
-        color: #fff
+    .isFollow {
+        color: #fff;
+        background: #005982
     }
-
     .time {
 
         font-size: .3rem;
         font-family: "PingFang";
         color: rgb(137, 137, 137);
         line-height: 2;
-
     }
-
     .projectHeader {
         background: #fff;
         padding: .8rem .2rem .1rem;
         margin-bottom: .3rem
     }
-
     .user {
         line-height: 3;
         padding: .2rem;
@@ -436,28 +426,24 @@
         font-size: .3rem;
         color: rgb( 51, 51, 51);
     }
-
     .customer {
         color: rgb( 0, 89, 130);
     }
-
     .contentTell {
         background: #fff;
         padding: .2rem;
-        margin-bottom: .3rem;
+        // margin-bottom: .3rem;
         .detaila {
             background: #fff;
             padding: .2rem 0;
             border-bottom: 1px solid #f3f5f7;
             .peojectTitle {
-                border-left: 3px solid #005982; // margin: 0 .3rem;
+                border-left: 3px solid #005982; 
                 padding-left: .2rem;
                 font-size: .3rem;
                 font-family: "PingFang";
                 color: rgb( 51, 51, 51);
                 line-height: 1.533;
-
-
             }
         }
         .contentDesc {
@@ -466,85 +452,56 @@
             line-height: 1.5;
         }
     }
-
     .coreDetail {
         color: rgb(128, 128, 128);
     }
-
     .coreName {
         font-weight: 700;
         padding: .2rem 0 0;
+    }
+    .mayProject {
+        padding: .1rem 0;
+
+    }
+    .mayTitle {
+        color: rgb(128, 128, 128);
+    }
+    .mayTime {
+        line-height: 2;
+        color: rgb(128, 128, 128);
     }
     .message {
         background: #fff;
         padding: .2rem;
         margin-bottom: .3rem
     }
-
     .message div {
         line-height: 2
     }
-
     .message div span:nth-child(1) {
         font-family: "PingFang";
         color: rgb(137, 137, 137);
         display: inline-block;
         margin-right: .1rem
     }
-
-    /* 投递框 */
-
-    .applyDialog {
-        text-align: center;
-        margin: 0 auto;
-        input {
-            border: 0;
-            border-bottom: 1px solid rgb(237, 237, 237);
-            line-height: 2.6;
-            margin-left: 0.1rem;
-            width: 80%;
-        }
-        .iconfont {
-            font-size: 0.6rem; // padding-top: 1rem;
-            display: inline-block;
-        }
-    }
-
-    .dialogTitle {
-        font-weight: bold;
-        font-size: 0.34rem;
-    }
-
+    /*  */
     .applyBtn {
-        /* width: 90%; */
         background: #005982;
         color: #fff;
         margin-top: 0.4rem;
-    }，
-
-    /deep/ .mu-dialog-body {
+    }
+    .btnSend{
+        text-align: center;
+    }
+    /deep/ .mu-dialog-body{
         padding: .7rem .5rem .5rem
     }
 
     .oneRows {
-        width: 4.6rem !important;
-    }
-
-    .mayProject {
-        padding: .15rem 0;
-        border-bottom: .05rem solid #f3f5f7
-    }
-
-    .mayTitle {
-        color: rgb( 51, 51, 51);
-        line-height: 1.6
-    }
-
-    .mayTime {
-        line-height: 2;
-        color: rgb(128, 128, 128);
+        width: 4.6rem
     }
     .avatar{
-        width:1rem;border-radius: 100%;
+        width: 1rem;
+        border-radius: 100%
     }
 </style>

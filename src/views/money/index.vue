@@ -8,8 +8,8 @@
                         <div class="choose">
                             <div class="sbuTitle clearfix">
                                 <span class="fll">投资行业</span>
-                                <i class="iconfont icon-xiangxia flr" v-if="!isShow2" @click="handleShowList2"></i>
-                                <i class="iconfont icon-shouqi flr" v-else @click="handleCloseList2"></i>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow2" @click="isShow2 = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow2 = false"></i>
                             </div>
                             <div class="type" v-show="isShow2">
                                 <van-checkbox-group v-model="investIndustrysa" @change="investIndustry">
@@ -19,8 +19,8 @@
                             </div>
                             <div class="sbuTitle clearfix">
                                 <span class="fll">资金类型</span>
-                                <i class="iconfont icon-xiangxia flr" v-if="!isShow" @click="handleShowList"></i>
-                                <i class="iconfont icon-shouqi flr" v-else @click="handleCloseList"></i>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow" @click="isShow = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow = false"></i>
                             </div>
                             <div class="type" v-show="isShow">
                                 <van-checkbox-group v-model="investTypesa" @change="investType">
@@ -30,8 +30,8 @@
                             </div>
                             <div class="sbuTitle clearfix">
                                 <span class="fll">所属地区（可多选）</span>
-                                <i class="iconfont icon-xiangxia flr" v-if="!isShow1" @click="handleShowList1"></i>
-                                <i class="iconfont icon-shouqi flr" v-else @click="handleCloseList1"></i>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow1" @click="isShow1 = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow1 = false"></i>
                             </div>
                             <div class="type" v-show="isShow1">
                                 <van-checkbox-group v-model="regionArea" @change="regionAreaItem">
@@ -41,8 +41,8 @@
                             </div>
                             <div class="sbuTitle clearfix">
                                 <span class="fll">投资地区（可多选）</span>
-                                <i class="iconfont icon-xiangxia flr" v-if="!isShow3" @click="handleShowList3"></i>
-                                <i class="iconfont icon-shouqi flr" v-else @click="handleCloseList3"></i>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow3" @click="isShow3 = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow3 = false"></i>
                             </div>
                             <div class="type" v-show="isShow3">
                                 <van-checkbox-group v-model="investRegionArea" @change="investRegionItem">
@@ -61,8 +61,8 @@
                             </div>
                             <div class="sbuTitle clearfix">
                                 <span class="fll">投资金额</span>
-                                <i class="iconfont icon-xiangxia flr" v-if="!isShow4" @click="handleShowList4"></i>
-                                <i class="iconfont icon-shouqi flr" v-else @click="handleCloseList4"></i>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow4" @click="isShow4 = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow4 = false"></i>
                             </div>
                             <div class="type" v-show="isShow4">
                                 <span class="radioItem" v-for="(item,index) in investAmountList" :key="index" :class="{active:item.checked}" @click="investAmount(item.dataValue,index)">{{item.dataName}}</span>
@@ -180,8 +180,8 @@
                 investRegions: "",
                 investTypes: "",
                 regions: "",
-                investIndustrysa:[],
-                investTypesa:[],
+                investIndustrysa: [],
+                investTypesa: [],
                 investRegionArea: [],
                 regionArea: [],
 
@@ -334,37 +334,6 @@
                         }
                     });
             },
-            // 下拉/收起
-            handleShowList() {
-                this.isShow = true;
-            },
-            handleCloseList() {
-                this.isShow = false;
-            },
-            handleShowList1() {
-                this.isShow1 = true;
-            },
-            handleCloseList1() {
-                this.isShow1 = false;
-            },
-            handleShowList2() {
-                this.isShow2 = true;
-            },
-            handleCloseList2() {
-                this.isShow2 = false;
-            },
-            handleShowList3() {
-                this.isShow3 = true;
-            },
-            handleCloseList3() {
-                this.isShow3 = false;
-            },
-            handleShowList4() {
-                this.isShow4 = true;
-            },
-            handleCloseList4() {
-                this.isShow4 = false;
-            },
             // 投资分类
             getTypeData() {
                 this.$axios
@@ -376,7 +345,6 @@
                             investAmountList.forEach(item => {
                                 this.$set(item, "checked", false);
                             });
-
                             this.investAmountList = investAmountList;
                             let investIndustryList = res.data.investIndustryList;
                             investIndustryList.forEach(item => {
@@ -398,7 +366,6 @@
                             });
                             regionList.unshift({ dataName: "不限" });
                             this.regionList = regionList;
-
                             let investTypeList = res.data.investTypeList;
                             investTypeList.forEach(item => {
                                 this.$set(item, "checked", false);
@@ -454,8 +421,7 @@
             investAmount(e, index) {
                 this.investAmounts = e;
                 if (this.investAmountList[index].checked) {
-                    this.investAmountList[index].checked = !this.investAmountList[index]
-                        .checked;
+                    this.investAmountList[index].checked = !this.investAmountList[index].checked;
                     this.investAmounts = "";
                 } else {
                     this.investAmountList.forEach(item => {
@@ -464,7 +430,6 @@
                     this.investAmountList[index].checked = true;
                 }
             },
-
             // 所属地区
             regionAreaItem(val) {
                 let regionList = [];
@@ -481,33 +446,17 @@
                 });
                 this.investRegions = investRegionList.join(",");
                 this.getDatalList(this.investAmounts, this.investIndustrys, this.investRegions, this.investTypes, this.regions);
-            },          
+            },
             // 清空
             handleRemove() {
-                // this.investIndustryList = [];
-                // this.investTypeList = [];
-                // this.investRegionArea = [],
-                // this.regionArea = [],
                 this.investIndustrysa = [],
-                this.investTypesa = [],
-                this.investRegionArea = [],
-                this.regionArea = [],
+                    this.investTypesa = [],
+                    this.investRegionArea = [],
+                    this.regionArea = [],
                     this.investAmountList.forEach(item => {
                         this.$set(item, 'checked', false)
                     });
-                // this.investIndustryList.forEach(item => {
-                //     this.$set(item, "checked", false);
-                // });
-                // this.investTypeList.forEach(item => {
-                //     item.checked = false;
-                // });
-
-                this.getDatalList(
-                    this.investAmounts = null,
-                    this.investIndustrys = null,
-                    this.investRegions = null,
-                    this.investTypes = null,
-                    this.regions = null
+                this.getDatalList(this.investAmounts = "", this.investIndustrys = "", this.investRegions = "", this.investTypes = "", this.regions = ""
                 );
             },
             // 确定
@@ -536,6 +485,7 @@
                     }
                 });
             },
+            // 发布项目
             sendMoney() {
                 if (Cookies.get("userKey")) {
                     this.$router.push("/issueProject");
@@ -543,6 +493,7 @@
                     this.$router.push("/login");
                 }
             },
+            // 排序
             getAll(sort, index) {
                 this.sortList.forEach(item => {
                     item.checked = false

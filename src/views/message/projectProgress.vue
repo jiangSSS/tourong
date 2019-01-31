@@ -16,6 +16,7 @@
 </template>
 
 <script>
+    import * as Cookies from 'js-cookie'
     export default {
         data() {
             return {
@@ -52,7 +53,10 @@
             }
         },
         created() {
-            this.getData()
+            if (Cookies.get("userKey")) {
+                 this.getData()
+            }
+            // this.getData()
         }
 
     }

@@ -15,18 +15,13 @@
                             <div class="fll">
                                 <span>作者：</span>
                                 <span>{{newsDetail.author}}</span>
-                                <span>(来源：
-                                    <span>{{newsDetail.source}}</span> )</span>
+                                <span>(来源：<span>{{newsDetail.source}}</span> )</span>
                             </div>
-                            <div class="flr">
-                                <span>{{newsDetail.addTimeStr}}</span>
-                            </div>
+                            <div class="flr"><span>{{newsDetail.addTimeStr}}</span></div>
                         </div>
                     </div>
                     <div>
-                        <div class="contentImg">
-                            <img :src="$url + newsDetail.imgPath" alt="">
-                        </div>
+                        <div class="contentImg"><img :src="$url + newsDetail.imgPath" alt=""></div>
                         <div class="contentText" v-html="newsDetail.content"></div>
                     </div>
                 </div>
@@ -44,16 +39,18 @@
                     <i class="iconfont icon-weibiaoti-"></i>
                     <span>{{countComment}}</span>
                 </div>
-                <div>
+                <div @click="share = true">
                     <i class="iconfont icon-share"></i>
                     <span>分享</span>
                 </div>
             </div>
+            <van-popup v-model="share" position="bottom" :overlay="true" class="shareBox">
+                <share :config="config"></share>
+                <div class="cancelShare" @click="share = false">取消</div>
+            </van-popup>
         </div>
     </div>
-
 </template>
-
 <script>
     import Header from "@/components/Header.vue"
     import Footer from "@/components/Bottom.vue"
@@ -64,14 +61,27 @@
         components: {
             Header,
             Footer,
-            Toast
         },
         data() {
             return {
                 id: "",
                 good: 0,
                 newsDetail: [],
-                countComment: ""
+                countComment: "",
+                // 分享
+                share: false,
+                config: {
+                    // url: '', // 网址，默认使用 window.location.href
+                    // source: '', // 来源（QQ空间会用到）, 默认读取head标签：<meta name="site" content="http://overtrue" />
+                    // title: '', // 标题，默认读取 document.title 或者 <meta name="title" content="share.js" />
+                    // description: '', // 描述, 默认读取head标签：<meta name="description" content="PHP弱类型的实现原理分析" />
+                    // image: '', // 图片, 默认取网页中第一个img标签
+                    sites: ["qzone", "qq", "weibo",], // 启用的站点
+                    // disabled: ['google', 'facebook', 'twitter'], // 禁用的站点
+                    wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
+                    wechatQrcodeHelper:
+                        "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
+                },
             }
         },
         methods: {
@@ -111,6 +121,11 @@
                         }, 500);
                         this.good = 1
                         this.newsDetail.greatNum = Number(this.newsDetail.greatNum + 1)
+                    } else {
+                        let instance = Toast(res.message);
+                        setTimeout(() => {
+                            instance.close();
+                        }, 1000);
                     }
                 })
             },
@@ -273,5 +288,20 @@
             }
         }
 
+    }
+
+    .shareBox {
+        padding: .5rem;
+        text-align: center;
+        /* padding-top: 4rem */
+    }
+
+    .cancelShare {
+        margin-top: .3rem;
+        border: 1px solid #005982;
+        border-radius: .1rem;
+        width: 40%;
+        text-align: center;
+        margin: .3rem auto 0
     }
 </style>

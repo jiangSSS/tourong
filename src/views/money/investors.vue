@@ -8,7 +8,7 @@
                 <div class="clearfix investors">
                     <div>
                         <!-- <img class="fll" src="../../../static/app/img/usrname.jpg" style="width:1.2rem"> -->
-                        <img class="avatar fll" :src="$url + memberInfo.photoImgPath" v-if="memberInfo&&memberInfo.photoImgPath"  alt>
+                        <img class="avatar fll" :src="$url + memberInfo.photoImgPath" v-if="memberInfo&&memberInfo.photoImgPath" alt>
                         <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=188149577,2949073731&fm=26&gp=0.jpg" v-else class="avatar fll">
                     </div>
                     <div class="messageInfo">
@@ -16,8 +16,8 @@
                         <!-- <div class="name">李世宏（董事长）</div> -->
                         <!-- <div class="company">{{memberInfo.company}}</div> -->
                         <div class="company" v-if="memberInfo.company">{{memberInfo.company}}</div>
-                        <div class="company" v-else>******</div>                        
-                        
+                        <div class="company" v-else>******</div>
+
                         <!-- <div class="company">北京开拓明天科技有限公司</div> -->
                     </div>
                 </div>
@@ -247,19 +247,18 @@
         created() {
             this.getMoneyDetail()
             this.getMoreMoney()
-            // this.getMoreMoney()
         }
     }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    .avatar{
+    .avatar {
         width: 1.2rem;
         border-radius: 100%
     }
+
     .containerAll {
-        background: #f3f5f7; // margin-bottom: 1rem
+        background: #f3f5f7;
     }
 
     img {
@@ -352,25 +351,19 @@
     .contentTell {
         background: #fff;
         padding: .2rem;
-        margin-bottom: .3rem;
-
         .detaila {
             background: #fff;
             padding: .2rem 0;
             border-bottom: 1px solid #f3f5f7;
-
             .peojectTitle {
-                border-left: 3px solid #005982; // margin: 0 .3rem;
+                border-left: 3px solid #005982;
                 padding-left: .2rem;
                 font-size: .3rem;
                 font-family: "PingFang";
                 color: rgb(51, 51, 51);
                 line-height: 1.533;
-
-
             }
         }
-
         .contentDesc {
             color: rgb(128, 128, 128);
             padding: .1rem 0;
@@ -418,7 +411,8 @@
         display: inline-block;
         margin-right: .1rem
     }
-    .messageInfo{
+
+    .messageInfo {
         margin-left: .2rem;
         float: left;
     }
@@ -431,8 +425,6 @@
     }
 
     .mayTitle {
-        /* border-left: 3px solid #005982; */
-        /* padding-left: .2rem; */
         color: rgb(51, 51, 51);
         line-height: 1.6;
         overflow: hidden;
@@ -450,6 +442,5 @@
     .noData {
         color: #ccc;
         text-align: center;
-        /* margin-top: 2rem */
     }
 </style>

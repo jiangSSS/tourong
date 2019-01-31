@@ -25,9 +25,9 @@ const router = new Router({
       }
     },
     {
-      path: '/projectA',
-      name: 'projectA',
-      component: () => import("@/views/projectA/index.vue"),
+      path: '/project',
+      name: 'project',
+      component: () => import("@/views/project/index.vue"),
       meta: {
         title: "融资项目",
         keepAlive: true
@@ -85,9 +85,9 @@ const router = new Router({
       }
     },
     {
-      path: '/projectA/projectDetail',
+      path: '/project/projectDetail',
       name: 'projectDetail',
-      component: () => import("@/views/project/index.vue"),
+      component: () => import("@/views/project/projectDetail.vue"),
       meta: {
         title: "项目介绍"
       }
@@ -95,7 +95,7 @@ const router = new Router({
     {
       path: '/issueProject',
       name: 'issueProject',
-      component: () => import("@/views/projectA/issueProject.vue"),
+      component: () => import("@/views/project/issueProject.vue"),
       meta: {
         title: "发布项目"
       }
@@ -180,25 +180,25 @@ const router = new Router({
       }
     },
     {
-      path: '/projectA/moreProject',
+      path: '/project/moreProject',
       name: 'moreProject',
-      component: () => import("@/views/projectA/moreProject.vue"),
+      component: () => import("@/views/project/moreProject.vue"),
       meta: {
         title: "更多项目"
       }
     },
     {
-      path: '/projectA/mayProject',
+      path: '/project/mayProject',
       name: 'mayProject',
-      component: () => import("@/views/projectA/mayProject.vue"),
+      component: () => import("@/views/project/mayProject.vue"),
       meta: {
         title: "更多项目"
       }
     },
     {
-      path: '/projectA/investors',
+      path: '/project/investors',
       name: 'projectInvestors',
-      component: () => import("@/views/projectA/investors.vue"),
+      component: () => import("@/views/project/investors.vue"),
       meta: {
         title: "投资人详情"
       }
@@ -236,17 +236,9 @@ const router = new Router({
       }
     },
     {
-      path: '/newsDetail',
+      path: '/news/newsDetail',
       name: 'newsDetail',
       component: () => import("@/views/news/newsDetail.vue"),
-      meta: {
-        title: "资讯详情"
-      }
-    },
-    {
-      path: '/newsDetail1',
-      name: 'newsDetail1',
-      component: () => import("@/views/news/newsDetail1.vue"),
       meta: {
         title: "资讯详情"
       }
@@ -454,14 +446,6 @@ const router = new Router({
       }
     },
     {
-      path: "/aa",
-      name: "aa",
-      component: () => import("@/components/HelloWorld.vue"),
-      // meta:{
-      //   title:"搜索活动"
-      // }
-    },
-    {
       path: "/search",
       name: "search",
       component: () => import("@/views/search/index.vue"),
@@ -511,28 +495,43 @@ const router = new Router({
       //   title:"搜索活动"
       // }
     },
-    {
-      path: "/xxz",
-      name: "xxz",
-      component: () => import("@/views/activity/aa.vue"),
-      meta:{
-        title:"搜索列表"
-      }
-    },
+    // {
+    //   path: "/xxz",
+    //   name: "xxz",
+    //   component: () => import("@/views/activity/aa.vue"),
+    //   meta:{
+    //     title:"搜索列表"
+    //   }
+    // },
   ],
 
 })
 
+// router.beforeEach((to, from, next) => {
+//   const toDepth = to.path.split('/').length
+//   const fromDepth = from.path.split('/').length
+//   if (toDepth < fromDepth) {
+//     console.log("back")
+//     from.meta.keepAlive = false
+//     to.meta.keepAlive = true
+//   }
+//   next()
+// })
+
+
 router.beforeEach((to, from, next) => {
-  const toDepth = to.path.split('/').length
-  const fromDepth = from.path.split('/').length
+  const toDepth = to.path.substring(to.path.length - 2, to.path.length)
+  const fromDepth = from.path.substring(from.path.length - 2, from.path.length)
   if (toDepth < fromDepth) {
-    console.log("back")
-    from.meta.keepAlive = false
-    to.meta.keepAlive = true
+    // 有tab界面时需要添加此判断 from的KeepAlive不需要置为false
+    // if (from.path !== '/Dtab1_04' && from.path !== '/Dtab2_04') {
+    from.meta.keepAlive = true
+    // }
+    to.meta.keepAlive = false
   }
   next()
 })
+// ------------------------------------------
 router.afterEach((to, from, next) => {
   window.scrollTo(0, 0);
 });

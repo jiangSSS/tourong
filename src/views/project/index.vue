@@ -1,231 +1,186 @@
 <template>
-    <div class="all" :data="projectDetail">
-        <Header></Header>
-        <div class="containerAll">
-            <div class="detail">
-                <div class="projectHeader">
-                    <div class="projectTitle">{{projectDetail.title}}</div>
-                    <div class="time">
-                        <span>编号：</span>
-                        <span>{{projectDetail.projectId}}</span>
-                    </div>
-                    <div class="clearfix">
-                        <div class="fll time">
-                            <i class="iconfont icon-shijian"></i>
-                            <span>{{projectDetail.addTimeStr}}</span>
+    <div>
+        <vue-drawer-layout ref="drawerLayout" :reverse="true" @mask-click="handleMaskClick">
+            <div class="drawer" slot="drawer">
+                <div class="text">
+                    <div class="chooseBox">
+                        <div class="title">项目筛选</div>
+                        <div class="choose">
+                            <div class="sbuTitle clearfix">
+                                <span class="fll">融资方式</span>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow" @click="isShow = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow = false"></i>
+                            </div>
+                            <div class="type" v-show="isShow">
+                                <span class="radioItem" v-for="(item,index) in financingWayList" :key="index" :class="{active:item.checked}" @click="wayCheckItem(item.dataValue,index)">{{item.dataName}}</span>
+                            </div>
+                            <div class="sbuTitle clearfix">
+                                <span class="fll">所属行业（可多选）</span>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow1" @click="isShow1 = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow1 = false"></i>
+                            </div>
+                            <div class="type" v-show="isShow1">
+                                <van-checkbox-group v-model="result" @change="industryItem">
+                                    <van-checkbox v-for="(item, index) in industryList" :key="index" :name="item" class="checkItem" checked-color="#005982">
+                                        {{ item.dataName }}
+                                    </van-checkbox>
+                                </van-checkbox-group>
+                                <!-- <span v-for="(item, index) in industryList" :key="index" class="checkBtn" :class="(item.like == 0 ? ' nolike' : ' like')" @click="checkItem1(index)">{{item.dataName}}</span> -->
+                            </div>
+                            <div class="sbuTitle clearfix">
+                                <span class="fll">所在地区（可多选）</span>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow2" @click="isShow2 = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow2 = false"></i>
+                            </div>
+                            <div class="type" v-show="isShow2">
+                                <van-checkbox-group v-model="area" @change="areaItem">
+                                    <van-checkbox v-for="(item, index) in regionList" :key="index" :name="item" class="checkItem" checked-color="#005982">
+                                        {{ item.dataName }}
+                                    </van-checkbox>
+                                </van-checkbox-group>
+                                <!-- <label v-model="area" @change="areaItem">
+                                    <button  v-for="(item, index) in regionList" :key="index" :name="item" class="radioItem buttonCheck" :class="{active:item.checked}">{{item.dataName}}</button>    
+                                </label> -->
+                                <!-- <span v-for="(item, index) in regionList" :key="index" class="checkBtn" :class="(item.like == 0 ? ' nolike' : ' like')" @click="checkItem2(index)">{{item.dataName}}</span> -->
+                                <!-- <label v-for="(item, index) in regionList" :key="index" class="checkBtn" :class="{active:isActive2 == true}" @click="checkItem2(index)"><input type="checkbox">{{item.dataName}}</label> -->
+                            </div>
+                            <div class="sbuTitle clearfix">
+                                <span class="fll">融资金额</span>
+                                <i class="iconfont icon-xiangxia flr" v-if="!isShow3" @click="isShow3 = true"></i>
+                                <i class="iconfont icon-shouqi flr" v-else @click="isShow3 = false"></i>
+                            </div>
+                            <div class="type" v-show="isShow3">
+                                <div v-for="(item, index) in financingMoneyList" :key="index" class="radioItem" :class="{active:item.checked}" @click="moneyCheckItem(item.dataValue,index)">{{item.dataName}}</div>
+                            </div>
                         </div>
-                        <div class="sendBtn flr isFollow" v-if="follow" @click="isFollow">已关注</div>
-                        <div class="sendBtn flr likeBtn" v-else @click="noFollow">关注</div>
-                        <div class="sendBtn flr" @click="handleTell">我要约谈</div>
-                    </div>
-                    <mu-dialog width="400" center class="applyDialog" :open.sync="isShowApply">
-                        <select class="oneRows" v-model="moneyId">
-                            <option :value="item.id" v-for="item in myMoney" :key="item.index" :label="item.title">{{item.title}}</option>
-                        </select>
-                        <div class="btnSend">
-                            <mu-button class="applyBtn" @click="closeApply">确认</mu-button>
-                            <mu-button class="applyBtn" @click="isShowApply = false">取消</mu-button>
-                        </div>
-                    </mu-dialog>
-
-                </div>
-                <!-- <div class="user clearfix" @click="$router.push({name:'projectInvestors',query:{id}})">
-                    <img class="fll" src="../../../static/app/img/usrname.jpg" style="width:1rem">
-                    <span class="fll">{{memberInfo.userName}}</span>
-                    <div class="flr">
-                        <span class="">{{memberId.company}}</span>
-                        <i class="iconfont icon-xiangyou"></i>
-                    </div>
-                </div> -->
-                  <div class="user clearfix" @click="$router.push({name:'projectInvestors',query:{id}})">
-                    <!-- <img class="fll" src="../../../static/app/img/usrname.jpg" style="width:1rem"> -->
-                    <img class="avatar fll" :src="$url + memberInfo.photoImgPath" v-if="memberInfo&&memberInfo.photoImgPath"  alt>
-                    <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=188149577,2949073731&fm=26&gp=0.jpg" v-else class="avatar fll">
-                    <span class="fll" v-if="memberInfo.name">{{memberInfo.name}}</span>
-                    <span class="fll" v-else>投资人</span>
-                    <!-- <span class="fll">{{memberInfo.name}}</span> -->
-                    <div class="flr">
-                        <span class="">{{memberInfo.company}}</span>
-                        <i class="iconfont icon-xiangyou"></i>
-                    </div>
-
-                </div>
-                <!-- <div class="user clearfix">
-                    <div class="fll titleDesc">融资信息</div>
-                    <div class="flr customer">
-                        客户要求保密
-                    </div>
-
-                </div> -->
-                <div class="message">
-                    <div>
-                        <span>融资主体:</span>
-                        <span>{{projectDetail.financeBodyName}}</span>
-                    </div>
-                    <div>
-                        <span>所在地区:</span>
-                        <span>{{projectDetail.regionNameStr}}</span>
-
-                    </div>
-                    <div>
-                        <span>公司估值:</span>
-                        <span>{{projectDetail.companyAssessed}}</span>
-
-                    </div>
-                    <div>
-                        <span>市净率(P/B):</span>
-                        <span>{{projectDetail.pb}}</span>
-
-                    </div>
-                    <div>
-                        <span>市盈率(P/E):</span>
-                        <span>{{projectDetail.pe}}</span>
-
-                    </div>
-                    <div>
-                        <span>行业性质:</span>
-                        <span>{{projectDetail.industryName}}</span>
-
-                    </div>
-                    <div>
-                        <span>支付方式:</span>
-                        <span>{{projectDetail.paymentTypeName}}</span>
-
-                    </div>
-                    <div>
-                        <span>融资用途:</span>
-                        <span>{{projectDetail.financingExplain}}</span>
-
-                    </div>
-                    <div>
-                        <span>融资金额:</span>
-                        <span>{{projectDetail.paymentTypeName}}</span>
-
-                    </div>
-                    <div>
-                        <span>总投资额:</span>
-                        <span>{{projectDetail.investIndustryName}}</span>
-
-                    </div>
-                    <div>
-                        <span>意向资金: </span>
-                        <span>{{projectDetail.intentCapitalList}}</span>
-
-                    </div>
-                    <div>
-                        <span>投资方式:</span>
-                        <span>{{projectDetail.financingWayName}}</span>
-
-                    </div>
-                </div>
-                <!-- <div class="user clearfix" @click="$router.push('/money/progress')">
-                    <div class="fll">查看项目进展</div>
-                    <div class="flr">
-                        <i class="iconfont icon-xiangyou"></i>
-                    </div>
-                </div> -->
-                <div class="contentTell">
-                    <div class="detaila">
-                        <div class="peojectTitle">项目介绍</div>
-
-                    </div>
-                    <div class="contentDesc">{{projectDetail.brief}}</div>
-                    <!-- <div>
-                        <img src="/static/app/img/detailImg1.jpg" alt="">
-                    </div> -->
-                </div>
-                <!-- <div class="contentTell">
-                    <div class="detaila">
-                        <div class="peojectTitle">核心团队</div>
-                    </div>
-                        <div class="coreDetail">
-                            {{projectDetail.teamBrief}}
-                        </div>
-                </div>
-                <div class="contentTell">
-                    <div class="detaila">
-                        <div class="peojectTitle">项目点评</div>
-                    </div>
-                    <div class="" v-for="(item,index) in review" :key="index">
-                        <div class="coreName">
-                            {{item.title}}
-                        </div>
-                        <div class="coreDetail">
-                            {{item.desc}}
+                        <div class="clearfix sureChoose">
+                            <mu-button class="chooseBtn fll" @click="handleRemove">清空</mu-button>
+                            <mu-button class="chooseBtn flr sure" @click="handleSure">确定</mu-button>
                         </div>
                     </div>
-                </div> -->
-                <div class="contentTell ">
-                    <div class="detaila" @click="toMayProject">
-                        <div class="peojectTitle">可能感兴趣的项目<i class="iconfont icon-xiangyou flr"></i></div>
-                    </div>
-                    <!-- <div class="mayProject" v-for="(item,index) in mayProject" :key="index">
-                        <div class="mayTitle">
-                            {{item.title}}
-                        </div>
-                        <div class="mayTime">
-                            <i class="iconfont icon-shijian"></i>
-                            <span>{{item.time}}</span>
-                        </div>
-                    </div> -->
                 </div>
             </div>
-        </div>
-        <!-- <Footer class="footer"></Footer> -->
+            <div class="content" slot="content">
+                <div class="text">
+                    <div class="index">
+                        <div class="header clearfix">
+                            <div class="flr" @click="sendProject">
+                                <button class="sendMoney">发布资金</button>
+                            </div>
+                            <div class="search fll">
+                                <input type="text" placeholder="请输入内容" v-model="title" class="input_search" />
+                                <i class="iconfont icon-sousuo1" @click="search"></i>
+                            </div>
+                        </div>
+                        <div class="detail">
+                            <div class="chooseTitle">
+                                <div class="titleA" v-for="(item,index) in sortList" :class="{actived:item.checked == true}" :key="index" @click="getAll(item.sort,index)">{{item.name}}</div>                                
+                                <div  class="titleA" @click="handleToggleDrawer">筛选</div>
+                            </div>
+                            <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading">
+                                <div class="projectList" v-for="(item,index) in pageList" :key="index">
+                                    <router-link :to="{path:'/project/projectDetail',query:{id:item.id}}">
+                                        <div class="projectTitle">{{item.title}}</div>
+                                        <div class="projectDetail">{{item.brief}}</div>
+                                    </router-link>
+                                    <div class="clearfix">
+                                        <div class="fll projectTime">
+                                            <i class="iconfont icon-shijian"></i>
+                                            <span>{{item.addTimeStr}}</span>
+                                        </div>
+                                        <div class="sendBtn flr" @click="handleCustomer(item.id)">
+                                            约见项目方
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="noData" v-show="more">加载中...</div>
+                                    <div class="noData" v-show="noMore">--- 没有更多数据了 ---</div>
+                                </div>
+                                <mu-dialog width="400" center class="applyDialog" :open.sync="isShowApply">
+                                    <select class="oneRows" v-model="moneyId">
+                                        <option :value="item.id" v-for="item in myMoney" :key="item.index" :label="item.title">{{item.title}}</option>
+                                    </select>
+                                    <div class="btnSend">
+                                        <mu-button class="applyBtn" @click="closeApply">确认</mu-button>
+                                        <mu-button class="applyBtn" @click="isShowApply = false">取消</mu-button>
+                                    </div>
+                                </mu-dialog>
+                            </div>
+                        </div>
+                        <Footer class="footer"></Footer>
+                    </div>
+                </div>
+            </div>
+        </vue-drawer-layout>
     </div>
 </template>
 
 <script>
-    import Header from "@/components/Header.vue"
-    import Footer from "@/components/Bottom.vue"
-    import { Dialog } from 'vant';
-    // import commentDetailVue from '../activity/commentDetail.vue';
-    import { Toast } from 'mint-ui'
+    import Header from "@/components/Header.vue";
+    import Footer from "@/components/Bottom.vue";
+    import { Dialog } from "vant";
+    import { Toast } from "mint-ui"
     import * as Cookies from 'js-cookie'
     export default {
         components: {
-            Header,
             Footer,
-            Toast
+            Header,
+            // Choose
         },
         data() {
             return {
-                core: [
-                    {
-                        name: "张麟（法人）",
-                        detail: "之前就职于苏州工业园区大型企业10多年，管理企业大型项目，对现代化企业管理流程熟悉。"
-                    },
-                    {
-                        name: "黄羽（总经理）",
-                        detail: "之前就职于苏州工业园区大型企业10多年，管理企业大型项目，对现代化企业管理流程熟悉。"
-                    },
-                ],
-                review: [
-                    {
-                        title: "完整的逻辑架构",
-                        desc: "打造符合投资人口味的完整计划书逻辑框架和商业模式，提出优化建议。"
-                    },
-                    {
-                        title: "清晰的商业模式",
-                        desc: "打造符合投资人口味的完整计划书逻辑框架和商业模式，提出优化建议。"
-                    },
-                ],
-                projectDetail: [],
-                follow: 0,
-                id: "",
+                area: [],                
+                pageList: [],
+                loading: false,
+                pn: 1,
+                pageNumber: 1,
+                totalCount: '',
 
+                more:false,
+                noMore:false,
+                // 
+                isShow: false,
+                isShow1: false,
+                isShow2: false,
+                isShow3: false,
+                isActive3: 0,
+                isActive2: 0,
+                isActive: 0,
+                result: [],
+                financingMoneyList: [],
+                financingWayList: [],
+                industryList: [],
+                regionList: [],
+                industrys: "",
+                regions: "",
+                financingWays: "",
+                financingMoneys: "",
+                title: "",
                 isShowApply: false,
                 myMoney: [],
                 projectId: "",
                 moneyId: "",
-                memberInfo:[],
                 myMoney_Count: 0,
+                myMoney_pagination: false,
+                sort:'',
+                sortList: [
+                    {
+                        name: "综合排序",
+                        checked: false,
+                        sort: 1
+                    },
+                    {
+                        name: "时间排序",
+                        checked: false,
+                        sort: 2
+                    }
+                ]
 
-                memberId:""
-            }
+            };
         },
         methods: {
-
+            // 获取我的资金列表
             getMyMoney(pn) {
                 this.$axios.get("/jsp/wap/center/ctrl/jsonIssueCapitalList.jsp", {
                     params: { pageNumber: pn }
@@ -235,11 +190,11 @@
                     if (myMoney.length > 0) {
                         this.moneyId = myMoney[0].id
                     }
-                    this.myMoney_Count = Number(res.data.pagination.totalCount);
+                    // this.myMoney_Count = Number(res.data.pagination.totalCount);
                 });
             },
             // 约见项目方
-            handleTell(id) {
+            handleCustomer(id) {
                 if (Cookies.get("userKey")) {
                     if (this.myMoney.length == 0) {
                         let instance = Toast('您还没有发布资金，请先发布资金');
@@ -247,8 +202,8 @@
                             instance.close();
                         }, 2000);
                     } else {
-                        this.isShowApply = true;
-                        this.projectId = this.$route.query.id;
+                    this.isShowApply = true;
+                    this.projectId = id;
                     }
                 }
                 else {
@@ -280,113 +235,316 @@
                     this.isShowApply = false;
                 }, 500);
             },
-
-            // 模态框
-            // handleTell() {
-            //     Dialog.alert({
-            //         img: "/static/app/img/success.jpg",
-            //         title: "提交成功",
-            //         message: '平台会尽快为你安排。'
-            //     }).then(() => {
-            //         // on close
-            //     });
-            // },
-            // 获取项目详情
-            getProjectDetail() {
-                this.id = this.$route.query.id
-                this.$axios.get(`/jsp/wap/trProject/ctrl/jsonProjectDetail.jsp?id=${this.id}`, ).then(res => {
-                    console.log("项目详情", res)
-                    this.projectDetail = res.data.project   
-                    this.memberInfo = res.data.memberInfo
-                    this.memberId = res.data.memberInfo.id
-                    this.capitalList = res.data.capitalList
-                })
-            },
-            // 获取关注状态
-            getFollow() {
-                this.$axios.get(`/jsp/wap/trProject/ctrl/jsonIsFollow.jsp?id=${this.id}`).then(res => {
-                    // this.follow 
-                    console.log("是否关注", res)
-                    this.follow = Number(res.data)
-                })
-            },
-            // 关注
-            noFollow() {
-                this.$axios.get(`/jsp/wap/trProject/do/doFollow.jsp?id=${this.id}`).then(res => {
-                    console.log("关注", res)
+            // 打开筛选
+            handleToggleDrawer() {this.$refs.drawerLayout.toggle();},
+            // 关闭筛选
+            handleMaskClick() {this.$refs.drawerLayout.toggle(false);},
+            // 上拉加载
+            loadMore() {
+                this.pn = this.pn + 1           
+                this.$axios.get('/jsp/wap/trProject/ctrl/jsonProjectPage.jsp', {
+                    params: {
+                        // sort:this.sort,
+                        financingWays: this.financingWays,
+                        financingMoneys: this.financingMoneys,
+                        industrys: this.industrys,
+                        regions: this.regions,
+                        pageNumber: this.pn,               
+                    }
+                }).then(res => {
+                    this.loading = true 
                     if (res.success == "true") {
-                        let instance = Toast('关注成功');
-                        setTimeout(() => {
-                            instance.close();
-                        }, 1000);
-                        this.follow = 1
-                    } else {
-                        let instance = Toast('关注失败，请检查登录状态');
-                        setTimeout(() => {
-                            instance.close();
-                        }, 1000);
+                        this.pageList = [...this.pageList, ...res.data.pageList]
+                        this.totalCount = Number(res.data.pagination.totalCount)              
+                        if(this.totalCount > this.pageList.length){
+                            this.more = true
+                            this.noMore = false              
+                        }else{
+                            this.more = false
+                            this.noMore = true                            
+                        }
+                        this.loading = false                 
+                    }        
+                })
+            },
+            // 获取项目列表
+            getProjectList(sort,financingMoneys, financingWays, industrys, regions) {
+                this.loading = true
+                this.$axios.get(`/jsp/wap/trProject/ctrl/jsonProjectPage.jsp`, {
+                    params: {
+                        sort,financingMoneys, financingWays, industrys, regions
+                    }
+                }).then(res => {
+                    console.log("项目列表", res)
+                     this.loading = true
+                    if (res.success == "true") {
+                        this.pageList = res.data.pageList
+                        this.totalCount = Number(res.data.pagination.totalCount)
+                        this.pn = 1
+                          if(this.totalCount > this.pageList.length){
+                            this.more = true
+                            this.noMore = false
+                           
+                        }else{
+                            this.more = false
+                            this.noMore = true                            
+                        }
+                        this.loading = false
+                    }
+                });
+            },
+            // --- 筛选 ---
+            // 投资方式筛选
+            wayCheckItem(e, index) {
+                this.financingWays = e
+                if (this.financingWayList[index].checked) {
+                    this.financingWayList[index].checked = !this.financingWayList[index].checked
+                    this.financingWays = ''
+                } else {
+                    this.financingWayList.forEach(item => {
+                        item.checked = false
+                    });
+                    this.financingWayList[index].checked = true
+                }
+            },
+            // 投资金额筛选
+            moneyCheckItem(e, index) {
+                this.financingMoneys = e
+                if (this.financingMoneyList[index].checked) {
+                    this.financingMoneyList[index].checked = !this.financingMoneyList[index].checked
+                    this.financingMoneys = ''
+                } else {
+                    this.financingMoneyList.forEach(item => {
+                        item.checked = false
+                    });
+                    this.financingMoneyList[index].checked = true
+                }
+            },
+            // 所属行业筛选
+            industryItem(val) {
+                let industryList = []
+                val.forEach(item => {
+                    industryList.push(item.dataValue)
+                })
+                this.industrys = industryList.join(',')
+            },
+            // 地区筛选
+            areaItem(val) {
+                let regionList = []
+                val.forEach(item => {
+                    regionList.push(item.dataValue)
+                })
+                this.regions = regionList.join(',')
+                this.getProjectList(this.financingMoneys, this.financingWays, this.industrys, this.regions)
+            },
+            // --- 全部分类 ---
+            getTypeData() {
+                this.$axios.get(`/jsp/wap/trProject/ctrl/jsonCategoryList.jsp`).then(res => {
+                    console.log("项目分类", res)
+                    if (res.success == "true") {
+                        let financingMoneyList = res.data.financingMoneyList
+                        financingMoneyList.forEach(item => {
+                            this.$set(item, 'checked', false)
+                        });
+                        financingMoneyList.unshift({dataName:'不限'})
+                        this.financingMoneyList = financingMoneyList
+
+                        let financingWayList = res.data.financingWayList
+                        financingWayList.forEach(item => {
+                            this.$set(item, 'checked', false)
+                        });
+                        financingWayList.unshift({dataName:'不限'})
+                        this.financingWayList = financingWayList
+
+                        let industryList = res.data.industryList
+                        industryList.forEach(item => {
+                            this.$set(item, 'checked', false)
+                        });
+                        industryList.unshift({dataName:'不限'})
+                        this.industryList = industryList
+
+                        let regionList = res.data.regionList
+                        regionList.forEach(item => {
+                            this.$set(item, 'checked', false)
+                        });
+                        regionList.unshift({dataName:'不限'})
+                        this.regionList = regionList
                     }
                 })
             },
-            // 取消关注
-            isFollow() {
-                this.$axios.get(`/jsp/wap/trProject/do/doUnfollow.jsp?id=${this.id}`).then(res => {
-                    console.log("取消关注", res)
+            // 清空
+            handleRemove() {
+                this.area = []
+                this.result = []
+                var region = []
+                this.regionList.forEach(item=>{
+                    region.pop(item.dataValue)
+                })
+                this.financingMoneyList.forEach(item => {
+                        item.checked = false
+                    });
+                this.financingWayList.forEach(item => {
+                    this.$set(item, 'checked', false)
+                });
+                this.getProjectList(this.financingMoneys = "", this.financingWays = "", this.industrys = "", this.regions = "")
+            },
+            // 确定筛选
+            handleSure() {
+                this.getProjectList(this.sort,this.financingMoneys, this.financingWays, this.industrys, this.regions)
+                // 关闭筛选
+                this.$refs.drawerLayout.toggle(false);
+            },
+            // 搜索
+            search() {
+                this.loading = true;
+                this.$axios.get("/jsp/wap/trProject/ctrl/jsonProjectPage.jsp", {
+                    params: { financingWays: this.financingWays, regions: this.regions, industrys: this.industrys, financingMoneys: this.financingMoneys, title: this.title }
+                }).then(res => {
                     if (res.success == "true") {
-                        let instance = Toast('已取消关注');
-                        setTimeout(() => {
-                            instance.close();
-                        }, 1000);
-                        this.follow = 0
-                    } else {
-                        let instance = Toast('取消失败');
-                        setTimeout(() => {
-                            instance.close();
-                        }, 1000);
+                        this.pageList = res.data.pageList;
+                        this.totalCount = res.data.pagination.totalCount;
+                        this.pn = 1;
+                        this.loading = false;
                     }
-                })
+                });
             },
-            // 项目进展
-            getProgress() {
-                this.$axios.get(`/jsp/wap/trProject/ctrl/jsonProjectDynamicList.jsp?id=${this.id}`).then(res => {
-                    console.log("项目进展", res)
-                })
+            // 发布资金
+            sendProject() {
+                if (Cookies.get('userKey')) {
+                    this.$router.push('/issueMoney')
+                } else {
+                    this.$router.push('/login')
+                }
             },
-            toMayProject(){
-                let id = this.$route.query.id
-                this.$router.push({name:'mayProject',query:{id}})
-            }
-
+            // 排序
+            getAll(sort,index) {
+                this.sortList.forEach(item => {
+                    item.checked = false
+                })
+                this.sortList[index].checked = true
+                this.getProjectList(sort,this.financingMoneys, this.financingWays, this.industrys, this.regions)
+               
+            },
         },
         created() {
-            this.getProjectDetail()
-            this.getFollow()
-            this.getProgress()/*  */
+            this.getProjectList(this.sort,this.financingMoneys, this.financingWays, this.industrys, this.regions)
+            this.getTypeData()
+            if (Cookies.get("userKey")) {
+                this.getMyMoney()
+            }
         }
-    }
+    };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    .containerAll {
-        background: #f3f5f7; // margin-bottom: 1rem
+    .detail {
+        padding-bottom: 1.2rem; // background: #fafafa;
+    }
+    .actived{
+        color: #005982
+    }
+
+    .buttonCheck {
+        outline: none;
+        border: 0
+    }
+
+    .Area {
+        background: #fff;
+        border: 0;
+        color: #666
+    }
+
+    .like {
+        background: #005982;
+        color: #fff
+    }
+
+    .header {
+        background: #fff !important;
     }
 
     img {
-        width: 100%
+        width: 100%;
     }
 
-    .detail {
-        background: #f3f5f7;
+    .index {
+        height: 100vh;
+    }
+
+    /* 筛选 */
+
+    .chooseTitle {
+        background: #fff;
+        border-top: 1px solid #fafafa;
+        display: flex;
+        justify-content: space-around;
+        padding: 0.3rem 0;
+    }
+
+    /* End */
+
+    .content {
+        overflow: scroll;
+    }
+
+    .tab {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.3rem 0;
+    }
+
+    .tab img {
+        width: 90%;
+        height: 2rem;
+    }
+
+    .projectList {
+        padding: 0.3rem;
+        background: #fff;
+        border-bottom: .2rem solid #fafafa
     }
 
     .projectTitle {
-        font-size: .3rem;
+        padding: .1rem 0;
+        font-size: 0.27rem;
         font-family: "PingFang";
-        color: rgb( 51, 51, 51);
+        color: rgb(62, 58, 57);
         font-weight: bold;
-        line-height: 1.6;
-        padding: .3rem 0 0 0;
+        line-height: 1;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .projectDetail {
+        font-size: 0.24rem;
+        margin: 0.2rem 0;
+        font-family: "PingFang";
+        color: rgb(137, 137, 137);
+        line-height: 1.5;
+        text-align: justifyLeft;
+        text-overflow: -o-ellipsis-lastline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .projectTime {
+        span {
+            font-size: .22rem;
+        }
+        .iconfont {
+            font-size: .2rem !important
+        }
+        font-family: "PingFang";
+        color: #ccc;
+        line-height: 1.385;
+        text-align: left;
     }
 
     .sendBtn {
@@ -394,144 +552,163 @@
         border-radius: 2px;
         display: inline-block;
         color: #005982;
-        padding: .1rem;
-        height: .6rem;
-        width: 1.2rem;
-        line-height: .4rem;
+        padding: 0.1rem 0.2rem;
+        line-height: 1.25;
         font-family: "PingFang";
-        font-size: .23rem;
+        font-size: 0.23rem;
         font-weight: bold;
-        opacity: 1;
-        margin-right: .3rem;
-        text-align: center;
+        opacity: 0.7;
     }
 
-    .likeBtn {
-        // color: #ccc;
-        // border: 1px solid #ccc;
+    .search {
+        margin: 0.2rem;
+        background: #fafafa
     }
 
-    .isFollow {
-        color: #fff;
-        background: #005982
-    }
-
-    .time {
-
-        font-size: .3rem;
-        font-family: "PingFang";
-        color: rgb(137, 137, 137);
+    .icon-sousuo {
         line-height: 2;
-
     }
 
-    .projectHeader {
-        background: #fff;
-        padding: .8rem .2rem .1rem;
-        margin-bottom: .3rem
-    }
-
-    .user {
+    .sendMoney {
+        border: 0;
+        background: none;
+        color: #005982;
+        padding-right: 0.3rem;
         line-height: 3;
-        padding: .2rem;
-        background: #fff;
-        margin-bottom: .3rem
     }
 
-    .titleDesc {
-        font-size: .3rem;
-        color: rgb( 51, 51, 51);
+    .sendMoney:focus {
+        outline: none;
     }
 
-    .customer {
-        color: rgb( 0, 89, 130);
-    }
-
-    .contentTell {
-        background: #fff;
-        padding: .2rem;
-        margin-bottom: .3rem;
-        .detaila {
-            background: #fff;
-            padding: .2rem 0;
-            border-bottom: 1px solid #f3f5f7;
-            .peojectTitle {
-                border-left: 3px solid #005982; // margin: 0 .3rem;
-                padding-left: .2rem;
-                font-size: .3rem;
-                font-family: "PingFang";
-                color: rgb( 51, 51, 51);
-                line-height: 1.533;
-
-
-            }
-        }
-        .contentDesc {
-            color: rgb(128, 128, 128);
-            padding: .1rem 0;
-            line-height: 1.5;
-        }
-    }
-
-    .coreDetail {
-        color: rgb(128, 128, 128);
-    }
-
-    .coreName {
-        font-weight: 700;
-        padding: .2rem 0 0;
-    }
-
-    .mayProject {
-        padding: .1rem 0;
-
-    }
-
-    .mayTitle {
-        color: rgb(128, 128, 128);
-    }
-
-    .mayTime {
-        line-height: 2;
-        color: rgb(128, 128, 128);
-    }
-
-    .message {
-        background: #fff;
-        padding: .2rem;
-        margin-bottom: .3rem
-    }
-
-    .message div {
-        line-height: 2
-    }
-
-    .message div span:nth-child(1) {
+    .input_search {
+        border: 0;
+        color: rgb(153, 153, 153);
+        background: #fafafa;
+        width: 4.8rem;
+        border-radius: 4px;
         font-family: "PingFang";
-        color: rgb(137, 137, 137);
-        display: inline-block;
-        margin-right: .1rem
+        line-height: 2.103;
+        padding: 0 0.2rem;
     }
 
-    /*  */
+    .input_search:focus {
+        outline: none;
+    }
+
+    .input_search::-webkit-input-placeholder {
+        padding-left: 0.3rem;
+    } // -------筛选--------
+    .chooseBox {
+        background: #fff;
+    }
+
+    .choose {
+        overflow: scroll;
+        height: 100vh;
+        padding-bottom: 2rem
+    }
+
+    .title {
+        text-align: center;
+        line-height: 3;
+        border-bottom: 1px solid #fafafa
+    }
+
+    .sbuTitle {
+        font-size: .28rem;
+        font-family: "PingFang";
+        color: rgb(51, 51, 51);
+        font-weight: bold;
+        line-height: 4;
+        padding: 0 .2rem;
+        border-bottom: 1px solid #fafafa;
+    }
+
+    .type {
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: 1px solid #fafafa;
+        padding: .2rem .2rem .3rem;
+    }
+
+    .type .checkBtn {
+        width: 1.6rem;
+        text-align: center;
+        padding: .1rem .15rem;
+        border-radius: 10%;
+        margin-right: .2rem;
+        margin-top: .2rem;
+        font-size: .24rem;
+        font-family: "PingFang";
+        cursor: pointer;
+    }
+
+    .type input {
+        display: none
+    }
+
+    .radioItem {
+        background: #eee;
+        color: rgb(102, 102, 102);
+        width: 1.6rem;
+        height: .6rem;
+        line-height: .6rem;
+        text-align: center;
+        border-radius: 10%;
+        margin-right: .2rem;
+        margin-top: .2rem;
+        font-size: .24rem;
+        font-family: "PingFang";
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .active {
+        background: #005982;
+        color: #fff
+    }
+
+    .sureChoose {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+    }
+
+    .chooseBtn {
+        width: 50%;
+        padding: .6rem 0;
+        font-size: .3rem;
+    }
+
+    .sure {
+        background: #005982;
+        color: #fff
+    }
+
+    /* 多选框 */
+
+    #moneyType {
+        width: 2rem
+    }
+
     .applyBtn {
         /* width: 90%; */
         background: #005982;
         color: #fff;
         margin-top: 0.4rem;
     }
-    .btnSend{
+
+    .btnSend {
         text-align: center;
     }
-    /deep/ .mu-dialog-body{
+
+    /deep/ .mu-dialog-body {
         padding: .7rem .5rem .5rem
     }
 
     .oneRows {
         width: 4.6rem
-    }
-    .avatar{
-        width: 1rem;
-        border-radius: 100%
     }
 </style>

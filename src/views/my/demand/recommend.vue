@@ -5,8 +5,7 @@
             <div :model="formData">
                 <mt-field label="姓名" v-model="formData.name"></mt-field>
                 <mt-field label="联系方式" type="tel" v-validate="'required|mobile'" name="mobile" v-model="formData.mobile"></mt-field>
-                <span v-show="errors.has('mobile')" class="error">{{ errors.first('mobile')}}</span>
-
+                <!-- <span v-show="errors.has('mobile')" class="error">{{ errors.first('mobile')}}</span> -->
                 <mt-field label="单位" type="url" v-model="formData.company"></mt-field>
                 <mt-field label="职位" type="number" v-model="formData.job"></mt-field>
                 <mt-field label="介绍" type="textarea" rows="4" v-model="formData.introduce"></mt-field>
@@ -90,21 +89,20 @@
     .error{
         color: #f00;
         font-size: .2rem
-    }
-
+    }，
     /deep/ .mint-field .mint-cell-title {
         width: 1.4rem;
         text-align: right;
         margin-right: .2rem
-    }
+    }，
 
     /deep/ .mint-field-core {
         border: 1px solid #ccc
-    }
+    }，
 
     /deep/ .mint-cell-wrapper {
         background: none;
-    }
+    }，
 
     /deep/ .mint-field-core {
         padding: 0 .1rem

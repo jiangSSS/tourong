@@ -72,6 +72,7 @@
                 this.loading = false
                 this.$axios.get('/jsp/wap/center/ctrl/jsonMyActivityList.jsp', { params: { pageNumber } }).then(res => {
                     console.log("我的活动", res);
+                    this.loading = true
                     if (res.success == 'true') {
                         this.pageList = res.data.pageList
                         this.count = Number(res.data.pagination.totalCount)

@@ -89,7 +89,7 @@
             if (pageList.length == 0) {
               this.com_show = true
             }
-          }else{
+          } else {
             this.com_show = true
           }
         });
@@ -207,7 +207,21 @@
   }
 
   .commentBtnBox {
+    position: fixed;
+    height: 1.3rem;
+    width: 100%;
+    bottom: 0;
     background: #fff;
+  }
+
+  .commentBtn {
+    width: 94%;
+    height: .8rem;
+    background: #005982;
+    color: #fff;
+    text-align: center;
+    position: fixed;
+    bottom: .25rem;
   }
 
   .userImg {
@@ -232,15 +246,5 @@
     color: rgb( 204, 204, 204);
     line-height: 2.5;
 
-  }
-
-  .commentBtn {
-    width: 94%;
-    height: .8rem;
-    background: #005982;
-    color: #fff;
-    text-align: center;
-    position: fixed;
-    bottom: .3rem;
   }
 </style>
