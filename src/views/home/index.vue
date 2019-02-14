@@ -37,7 +37,7 @@
                         <div class="title">资金</div>
                     </div>
                 </router-link>
-                <router-link to="/projectA">
+                <router-link to="/project">
                     <div>
                         <div>
                             <img src="../../../static/app/img/home/0b.jpg" alt="">
@@ -67,7 +67,7 @@
                 <div class="fll contentRight1" v-if="weekLists&&weekLists.addTimeStr">
                     <p class="row1">会员周报</p>
                     <div class="row2">
-                         <span class="numbers">{{weekLists[0].addTimeStr.substr(0,4)}}年第{{count}}期</span>
+                        <span class="numbers">{{weekLists[0].addTimeStr.substr(0,4)}}年第{{count}}期</span>
                         <span @click="$router.push('/weekList')"> 点击阅读</span>
                     </div>
                 </div>
@@ -92,7 +92,9 @@
             </div>
 
             <div>
-                <img src="../../../static/app/img/home/contentImg2.jpg" alt="">
+                <router-link to="/news">
+                    <img src="../../../static/app/img/home/contentImg2.jpg" alt="">
+                </router-link>
             </div>
             <div class="subtitle">
                 <span class="titleContent" @click="$router.push('/projectA')">优质项目
@@ -100,7 +102,7 @@
                 </span>
             </div>
             <div v-for="(item,index) in projectList.slice(0,2)" :key="index" class="wellProject">
-                <router-link :to="{path:'/projectA/projectDetail',query:{id:item.id}}">
+                <router-link :to="{path:'/project/projectDetail',query:{id:item.id}}">
                     <img :src="$url + item.recommendImgPath" alt="" class="wellImg">
                     <div class="wellTitle">
                         {{item.title}}
@@ -229,8 +231,8 @@
                     // freeMode:true
                 },
                 pageList: [],
-                count:1,
-                weekLists:[]
+                count: 1,
+                weekLists: []
             };
         },
         methods: {
@@ -254,21 +256,21 @@
                 });
             },
             getWeekData(pn) {
-                this.$axios.get(`/jsp/wap/center/ctrl/jsonWeeklyList.jsp`,{params:{pageNumber:pn}}).then(res => {
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonWeeklyList.jsp`, { params: { pageNumber: pn } }).then(res => {
                     console.log("周报列表", res)
                     this.weekLists = res.data.pageList
                     this.count = Number(res.data.pagination.totalCount)
                 })
             }
-            
+
         },
         created() {
             this.getNewsList();
             this.getSwiper();
             if (Cookies.get("userKey")) {
-                 this.getWeekData()
+                this.getWeekData()
             }
-           
+
         }
     };
 </script>
@@ -312,7 +314,7 @@
         display: flex;
         justify-content: space-between;
         padding: 0.15rem;
-        height: 1rem; 
+        height: 1rem;
         background: #fff;
         top: 0;
         .logo {
@@ -352,8 +354,7 @@
     .noData {
         text-align: center;
         color: #999;
-    } 
-    //  轮播图
+    } //  轮播图
     .swiper {
         img {
             height: 3.75rem;
@@ -364,8 +365,7 @@
 
     img {
         width: 100%;
-    } 
-    // tab卡
+    } // tab卡
     .tab {
         display: flex;
         justify-content: space-around;
@@ -382,7 +382,8 @@
             font-size: 0.25rem;
             margin-top: -0.05rem;
         }
-    } 
+    }
+
     .homeContent1 {
         width: 50%;
         vertical-align: text-top;
@@ -425,7 +426,7 @@
         line-height: 3;
         font-family: "MicrosoftYaHeiLight";
         color: rgb(137, 137, 137);
-        line-height: 1.333;  
+        line-height: 1.333;
     }
 
     .icon-xiangyou {
@@ -451,8 +452,7 @@
             padding-bottom: 0.2rem;
         }
         .wellImg {
-            width: 100%;
-            // height: 3rem;
+            width: 100%; // height: 3rem;
         }
         .wellContent {
             font-size: 0.24rem;
@@ -497,7 +497,7 @@
             font-family: "Microsoft YaHei";
             color: rgb(62, 58, 57);
             font-weight: bold;
-            padding-bottom: 0.1rem; 
+            padding-bottom: 0.1rem;
             overflow: hidden;
             height: 0.9rem;
             text-overflow: ellipsis;
@@ -511,6 +511,7 @@
             font-weight: bold;
         }
     }
+
     .rightList div {
         clear: both;
         line-height: 2;
@@ -526,7 +527,7 @@
     .rightList span:nth-child(2) {
         float: left;
         font-size: 0.24rem;
-        color: #333; 
+        color: #333;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -574,7 +575,8 @@
             width: 2.4rem;
         }
     }
-    .titleBox{
+
+    .titleBox {
         margin-top: .15rem
     }
 
@@ -589,9 +591,11 @@
             height: 2rem;
         }
     }
+
     .nums {
         width: 4.5rem;
     }
+
     .newsDesc {
         color: #666;
         float: right;
@@ -604,14 +608,17 @@
         font-size: 0.24rem;
         margin-top: 0.1rem;
     }
-    .issue{
+
+    .issue {
         display: flex;
         justify-content: space-around
     }
-    .issue img{
+
+    .issue img {
         vertical-align: middle
     }
-    .titleBox{
+
+    .titleBox {
         margin-top: .15rem
     }
 </style>

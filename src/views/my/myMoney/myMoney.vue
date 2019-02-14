@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </div>
-            <p v-show="pageList.length == 0" class="noAtt">你没有任何资金哦~</p>
+            <p v-show="pageList.length == 0" class="noAtt">你没有该资金哦~</p>
             <div class="apply" @click="$router.push('/issueMoney')">
                 <i class="iconfont icon-youxianzijin"></i>
                 <span>添加资金</span>

@@ -143,13 +143,13 @@
                             this.more = false
                             this.noMore = true
                         }
-                        this.loading = false;
+                        // this.loading = false;
                     }
                 })
             },
             // 活动列表
             getActivityList(status, category) {
-                this.loading = true
+                // this.loading = true
                 this.$axios.get(`/jsp/wap/trActivity/ctrl/jsonActivityPage.jsp?`, { params: { statuss: this.status, categorys: this.category } }).then(res => {
                     console.log("活动列表", res)
                     if (res.success == "true") {

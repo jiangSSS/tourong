@@ -3,7 +3,8 @@
         <Header></Header>
         <div class="detail" :model="formData">
             <div class="rows heightRows">
-                <span><i class="red">*</i> 投资主题</span>
+                <span>
+                    <i class="red">*</i> 投资主题</span>
                 <!-- <input class="oneInput" type="text" placeholder="例:广东某企业5000万元寻互联网项目" v-model="formData.title"> -->
                 <input class="oneInput" type="text" v-validate="'required|title'" name="项目主题" placeholder="例:广东某企业5000万元寻互联网项目" v-model="formData.title">
                 <div>
@@ -11,7 +12,8 @@
                 </div>
             </div>
             <div class="clearfix rows">
-                <div class="fll"><i class="red">*</i> 所在地区</div>
+                <div class="fll">
+                    <i class="red">*</i> 所在地区</div>
                 <i class="iconfont icon-xiangyou flr" @click="showArea = true"></i>
                 <div @click="showArea = true" class="flr">
                     <div class="areaa">{{province}},{{city}},{{county}}</div>
@@ -21,29 +23,33 @@
                 </van-popup>
             </div>
             <div class="rows heightRows">
-                <span><i class="red">*</i> 联系地址</span> 
+                <span>
+                    <i class="red">*</i> 联系地址</span>
                 <input class="oneInput" type="text" v-validate="'required|address'" name="地址" v-model="formData.linkmanAddress">
-                 <div>
+                <div>
                     <i v-show="errors.has('地址')" class="error langa flr">{{ errors.first('地址')}}</i>
                 </div>
             </div>
             <div class="rows heightRows">
-                <span><i class="red">*</i> 联系姓名</span>
+                <span>
+                    <i class="red">*</i> 联系姓名</span>
                 <input class="oneInput" type="text" v-validate="'required|linkmanName'" name="姓名" v-model="formData.linkmanName">
-                 <div>
+                <div>
                     <i v-show="errors.has('姓名')" class="error langa flr">{{ errors.first('姓名')}}</i>
                 </div>
             </div>
             <div class="rows heightRows">
-                <span><i class="red">*</i> 联系电话</span>
+                <span>
+                    <i class="red">*</i> 联系电话</span>
                 <input type="text" class="oneInput" v-validate="'required|mobile'" name="手机号码" v-model="formData.linkmanPhone">
                 <div>
                     <i v-show="errors.has('手机号码')" class="error langa flr">{{ errors.first('手机号码')}}</i>
                 </div>
             </div>
             <!--  -->
-              <div class="clearfix rows">
-                <div class="fll"><i class="red">*</i> 投资地区</div>
+            <div class="clearfix rows">
+                <div class="fll">
+                    <i class="red">*</i> 投资地区</div>
                 <i class="iconfont icon-xiangyou flr" @click="showArea2 = true"></i>
                 <div @click="showArea2 = true" class="flr">
                     <div class="areaa">{{province1}},{{city1}},{{county1}}</div>
@@ -54,26 +60,35 @@
             </div>
             <!--  -->
             <div class="rows heightRows">
-                <span><i class="red">*</i> 投资金额</span>
+                <span>
+                    <i class="red">*</i> 投资金额</span>
                 <select class="oneRows" v-model="formData.investAmount">
                     <option :value="item.dataValue" v-for="item in investAmountList" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
                 </select>
             </div>
             <div class="rows heightRows">
-                <span><i class="red">*</i> 投资行业</span>
+                <span>
+                    <i class="red">*</i> 投资行业</span>
                 <select class="oneRows" v-model="investIndustrys" multiple="multiple">
                     <option :value="item.dataValue" v-for="item in investIndustryList" name="type" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
                 </select>
             </div>
+            <div>
+                <multiselect v-model="investIndustrys" :options="investIndustryList" :value="investIndustryList.dataValue" :label="investIndustryList.dataName" :multiple="true">
+                    <!-- <template>{{ investIndustryList.dataName }}</template> -->
+                </multiselect>
+            </div>
             <div class="rows heightRows">
-                <span><i class="red">*</i> 投资阶段</span>
+                <span>
+                    <i class="red">*</i> 投资阶段</span>
                 <select class="oneRows" v-model="investStages" multiple="multiple">
                     <option :value="item.dataValue" v-for="item in investStageList" name="type" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
                 </select>
             </div>
             <div class="rows heightRows">
                 <!-- <span>资金来源</span> -->
-                <span><i class="red" style="visibility:hidden">*</i> 资金来源</span>
+                <span>
+                    <i class="red" style="visibility:hidden">*</i> 资金来源</span>
                 <select class="oneRows" v-model="capitalSources" multiple="multiple">
                     <option :value="item.dataValue" v-for="item in capitalSourceList" name="type" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
                 </select>
@@ -92,20 +107,22 @@
                 </div> -->
             </div>
             <!--  -->
-            <!--  -->
             <div class="rows heightRows">
                 <span>投资期限</span>
                 <span class="date-time-input" @click="getStartDate">
-                    <input type="text" class="dateYear" v-model="formData.validStartTimeStr" placeholder="请选择">
+                    <input type="text" class="dateYear" v-validate="'required|date'" name="日期" v-model="formData.validStartTimeStr" placeholder="请选择">
                 </span>
                 <date-time ref="dateStartTime" type="year" @confirm="startSelect"></date-time>
 
                 <span style="margin-left:.2rem">--</span>
                 <span class="date-time-input" @click="getEndDate">
-                    <input type="text" class="dateYear" v-model="formData.validEndTimeStr" placeholder="请选择">
+                    <input type="text" class="dateYear" v-validate="'required|date'" name="日期" v-model="formData.validEndTimeStr" placeholder="请选择">
                 </span>
                 <date-time ref="dateEndTime" type="year" @confirm="endSelect"></date-time>
                 <span>年</span>
+                <div>
+                    <i v-show="errors.has('日期')" class="error langa flr">{{ errors.first('日期')}}</i>
+                </div>
             </div>
             <div class="rows heightRows">
                 <span>风控要求</span>
@@ -133,7 +150,10 @@
                 <span style="margin-left:.2rem">折</span>
             </div>
             <div class="rows detailBox">
-                <div><span><i class="red">*</i> 投资要求概述</span></div>
+                <div>
+                    <span>
+                        <i class="red">*</i> 投资要求概述</span>
+                </div>
                 <textarea class="textarea" placeholder="" v-validate="'required|detail'" name="内容" v-model="formData.investRequire"></textarea>
                 <i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i>
             </div>
@@ -156,7 +176,7 @@
                         <mt-button type="default" class="btn">添加文件</mt-button>
                     </van-uploader>
                     <div v-for="(item,index) in fileList" :key="index">
-                        <div>{{item.name}}</div>
+                        <div class="fileItem">{{item.name}}</div>
                     </div>
                 </div>
             </div>
@@ -173,6 +193,8 @@
     import qs from "qs";
     import { Area, Popup, DatetimePicker } from 'vant';
     import DateTime from 'vue-date-time-m'
+    import Multiselect from 'vue-multiselect'
+    import "vue-multiselect/dist/vue-multiselect.min.css"
 
     import VeeValidate, { Validator } from "vee-validate";
     Validator.extend("mobile", {
@@ -202,9 +224,9 @@
     Validator.extend("repay", {
         getMessage: field => "请输入",
         validate: value => {
-            return 
+            return
             (
-                 value.length != 0
+                value.length != 0
             );
         }
     });
@@ -224,6 +246,14 @@
             );
         }
     });
+    Validator.extend("date", {
+        getMessage: field => "请选择",
+        validate: value => {
+            return (
+                value.length != 0
+            );
+        }
+    });
     // 修改错误提示
     const dict = {
         messages: {
@@ -235,7 +265,8 @@
     export default {
         components: {
             Header,
-            DateTime
+            DateTime,
+            Multiselect
         },
         props: {
             // dateTime 显示 年月日时分 默认值,
@@ -4312,7 +4343,7 @@
                     this.formData.validStartTimeStr = (res.data.capital.validStartTimeStr).slice(0, 4);
                     this.formData.validEndTimeStr = (res.data.capital.validEndTimeStr).slice(0, 4);
 
-                    var file = '';
+                    var file = {};
                     var fileList = [];
                     var fileList = res.data.capital.fileList;
                     if (fileList.length > 0) {
@@ -4323,6 +4354,7 @@
                         this.fileList.push(file);
                     }
                     console.log(this.fileList)
+                    this.fileList = res.data.capital.fileList
                 });
             },
             // 文件上传   
@@ -4390,6 +4422,7 @@
         float: left;
         text-align: right;
     }
+
     .dateYear {
         width: 1.6rem;
         height: .6rem;
@@ -4401,9 +4434,11 @@
         border: 0;
         color: #666
     }
-    .red{
+
+    .red {
         color: #f00
     }
+
     .error {
         color: #f00;
         font-size: .2rem
@@ -4585,24 +4620,37 @@
 
     .fileData {
         font-size: .2rem
-    }
-    // 提示信息
-     .langa {
+    } // 提示信息
+    .langa {
         position: absolute;
         margin-left: 1.6rem
     }
-    .lessa{
+
+    .lessa {
         position: absolute;
         bottom: .25rem;
     }
-    .detailBox{
+
+    .detailBox {
         position: relative;
     }
+
     .error {
         color: #f00;
         font-size: .2rem
     }
-    .heightRows{
+
+    .heightRows {
         height: 1rem;
+    }
+
+    .rows i {
+        font-style: normal
+    }
+    .fileItem{
+        font-size: .24rem;
+        height: .5rem;
+        line-height: .5rem;
+        padding-left: .2rem
     }
 </style>

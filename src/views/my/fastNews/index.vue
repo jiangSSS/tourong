@@ -322,14 +322,14 @@
 
     .like {
         // width: 1.8rem;
-        height: .7rem;
+        height: .6rem;
         border: 1px solid rgb( 0, 89, 130);
         color: rgb( 0, 89, 130); // font-weight: bold;
     }
 
     .islike {
         // width: 1.8rem;
-        height: .7rem;
+        height: .6rem;
         border: 1px solid rgb( 0, 89, 130);
         color: #fff;
         background: #005982; // font-weight: bold;
@@ -341,7 +341,7 @@
 
     .nolike {
         width: 1.8rem;
-        height: .7rem;
+        height: .6rem;
         border: 1px solid #f3f5f7;
         margin-right: .3rem
     }

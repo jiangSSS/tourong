@@ -240,8 +240,9 @@
             // 关闭筛选
             handleMaskClick() {this.$refs.drawerLayout.toggle(false);},
             // 上拉加载
-            loadMore() {
-                this.pn = this.pn + 1           
+            loadMore(sort) {
+                this.pn += 1   
+                // this.loading = true         
                 this.$axios.get('/jsp/wap/trProject/ctrl/jsonProjectPage.jsp', {
                     params: {
                         // sort:this.sort,
@@ -249,9 +250,11 @@
                         financingMoneys: this.financingMoneys,
                         industrys: this.industrys,
                         regions: this.regions,
-                        pageNumber: this.pn,               
+                        pageNumber: this.pn,    
+                        sort:this.sort         
                     }
                 }).then(res => {
+                    // this.pn += 1
                     this.loading = true 
                     if (res.success == "true") {
                         this.pageList = [...this.pageList, ...res.data.pageList]
@@ -276,11 +279,11 @@
                     }
                 }).then(res => {
                     console.log("项目列表", res)
-                     this.loading = true
+                    // this.loading = true
                     if (res.success == "true") {
                         this.pageList = res.data.pageList
                         this.totalCount = Number(res.data.pagination.totalCount)
-                        this.pn = 1
+                        // this.pn = 1
                           if(this.totalCount > this.pageList.length){
                             this.more = true
                             this.noMore = false
@@ -350,7 +353,7 @@
                         this.financingMoneyList = financingMoneyList
 
                         let financingWayList = res.data.financingWayList
-                        financingWayList.forEach(item => {
+                        financingWayList.forEach(item => { 
                             this.$set(item, 'checked', false)
                         });
                         financingWayList.unshift({dataName:'不限'})
@@ -437,7 +440,7 @@
 </script>
 <style scoped lang="scss">
     .detail {
-        padding-bottom: 1.2rem; // background: #fafafa;
+        padding-bottom: 1.2rem;
     }
     .actived{
         color: #005982

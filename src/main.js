@@ -53,9 +53,6 @@ Vue.use(VeeValidate, {
     zh_CN
   }
 });
-
-
-
 // 侧边划出插件
 import DrawerLayout from 'vue-drawer-layout'
 Vue.use(DrawerLayout)

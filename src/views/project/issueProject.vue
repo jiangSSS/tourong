@@ -34,7 +34,9 @@
                             <i class="red">*</i>项目简介：</div>
                         <!-- <textarea class="textarea" placeholder="请输入项目简介" v-model="formData.brief"></textarea> -->
                         <textarea class="textarea" placeholder="" v-validate="'required|detail'" name="内容" v-model="formData.brief"></textarea>
-                        <div><i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i></div>
+                        <div>
+                            <i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i>
+                        </div>
                     </div>
                     <div class="rows">
                         <span>
@@ -111,6 +113,108 @@
                                 <span class="delectA" @click.prevent="removeSharehold(shareholding)">删除</span>
                             </div>
                         </div>
+                        <div class="rows">
+                            <span class="" style="width:2rem!important">实际控制人：</span>
+                            <input class="oneInput" style="width:4.8rem!important" type="text" v-model="formData.owner">
+                        </div>
+                        <div class="rows">
+                            <div>
+                                <i class="red">*</i>主营业务：</div>
+                            <!-- <textarea class="textarea" placeholder="" v-model="formData.business"></textarea> -->
+                            <textarea class="textarea" placeholder="" v-validate="'required|detail'" name="内容" v-model="formData.business"></textarea>
+                            <div>
+                                <i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i>
+                            </div>
+                        </div>
+                        <div class="rows">
+                            <div>公司亮点：</div>
+                            <textarea class="textarea" placeholder="" v-model="formData.brightSpot"></textarea>
+                        </div>
+                        <div class="rows">
+                            <div>行业地位：</div>
+                            <textarea class="textarea" placeholder="" v-model="formData.position"></textarea>
+                        </div>
+                        <div class="rows">
+                            <span class="moneySpan clearfix">
+                                <i class="red fll">*</i>去年营业收入：</span>
+                            <span>
+                                <input class="moneyInput" v-model="formData.yearTurnoverFormat" type="text">
+                            </span>
+                            <span>
+                                <select v-model="formData.yearTurnoverType">
+                                    <option v-for="item in unit" :key="item.value" :label="item.label" :value="item.value">></option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="rows">
+                            <span class="aa">同比增长：</span>
+                            <input class="momeyaddInput" v-model="formData.yearTurnoverGrowth" type="text">
+                        </div>
+                        <div class="rows">
+                            <span class="moneySpan">
+                                <i class="red">*</i>去年净利润：</span>
+                            <span>
+                                <input class="moneyInput" v-model="formData.yearNetProfitFormat" type="text">
+                            </span>
+                            <span>
+                                <select v-model="formData.yearNetProfitType">
+                                    <option v-for="item in unit" :key="item.value" :label="item.label" :value="item.value">></option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="rows">
+                            <span class="aa">同比增长：</span>
+                            <input class="momeyaddInput" v-model="formData.yearNetProfitGrowth" type="text">
+                        </div>
+                        <div class="rows">
+                            <span class="moneySpan">企业净资产：</span>
+                            <span>
+                                <input class="moneyInput" v-model="formData.netAssetsFormat" type="text">
+                            </span>
+                            <span>
+                                <select v-model="formData.netAssetsType">
+                                    <option v-for="item in unit" :key="item.value" :label="item.label" :value="item.value">></option>
+                                </select>
+                            </span>
+                        </div>
+                        <!-- <div class="rows">
+                        <span class="aa">同比增长：</span>
+                        <input class="oneInput lessInput" type="text" v-model="formData.owner">
+                    </div> -->
+
+                        <div class="rows">
+                            <div>近三年财务数据：</div>
+                            <textarea class="textarea" placeholder="" v-model="formData.trienniumFinancialData"></textarea>
+                        </div>
+                        <div class="rows">
+                            <div>
+                                <i class="red">*</i>3-5年盈利预测：</div>
+                            <textarea class="textarea" placeholder="" v-validate="'required|detail'" name="内容" v-model="formData.profitForecast"></textarea>
+                            <div>
+                                <i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i>
+                            </div>
+                        </div>
+                        <div class="rows">
+                            <span class="moremore">团队平均年龄：</span>
+                            <input class="oneInput" style="width:4.4rem!important" type="text" v-model="formData.averageAge">
+                        </div>
+                        <div class="rows">
+                            <span class="langmore">企业网址：</span>
+                            <input class="oneInput lessmore" type="text" v-model="formData.websiteUrl">
+                        </div>
+                        <div class="rows">
+                            <span class="langmore">官方微信：</span>
+                            <input class="oneInput lessmore" type="text" v-model="formData.weChat">
+                        </div>
+                        <div class="rows">
+                            <span class="langmore">
+                                <i class="red">*</i>建企时间：</span>
+                            <!-- <input class="oneInput lessmore" type="text" v-model="formData.companyFoundTimeStr"> -->
+                            <span class="date-time-input" @click="getDate">
+                                <input type="text" class="oneInput lessmore" v-model="formData.companyFoundTimeStr" placeholder="请选择">
+                            </span>
+                            <date-time ref="dateTime" type="date" @confirm="select"></date-time>
+                        </div>
                     </div>
                     <div class="qq" v-else-if="formData.financeBody == 65">
                         <div class="rows">
@@ -158,104 +262,10 @@
                             <input class="oneInput" type="text" v-model="formData.address">
                         </div>
                     </div>
-                    <div class="rows">
-                        <span class="" style="width:2rem!important">实际控制人：</span>
-                        <input class="oneInput" style="width:4.8rem!important" type="text" v-model="formData.owner">
-                    </div>
-                    <div class="rows">
-                        <div>
-                            <i class="red">*</i>主营业务：</div>
-                        <!-- <textarea class="textarea" placeholder="" v-model="formData.business"></textarea> -->
-                        <textarea class="textarea" placeholder="" v-validate="'required|detail'" name="内容" v-model="formData.business"></textarea>
-                        <div><i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i></div>
-                    </div>
-                    <div class="rows">
-                        <div>公司亮点：</div>
-                        <textarea class="textarea" placeholder="" v-model="formData.brightSpot"></textarea>
-                    </div>
-                    <div class="rows">
-                        <div>行业地位：</div>
-                        <textarea class="textarea" placeholder="" v-model="formData.position"></textarea>
-                    </div>
-                    <div class="rows">
-                        <span class="moneySpan clearfix">
-                            <i class="red fll">*</i>去年营业收入：</span>
-                        <span>
-                            <input class="moneyInput" v-model="formData.yearTurnoverFormat" type="text">
-                        </span>
-                        <span>
-                            <select v-model="formData.yearTurnoverType">
-                                <option v-for="item in unit" :key="item.value" :label="item.label" :value="item.value">></option>
-                            </select>
-                        </span>
-                    </div>
-                    <div class="rows">
-                        <span class="aa">同比增长：</span>
-                        <input class="momeyaddInput" v-model="formData.yearTurnoverGrowth" type="text">
-                    </div>
-                    <div class="rows">
-                        <span class="moneySpan">
-                            <i class="red">*</i>去年净利润：</span>
-                        <span>
-                            <input class="moneyInput" v-model="formData.yearNetProfitFormat" type="text">
-                        </span>
-                        <span>
-                            <select v-model="formData.yearNetProfitType">
-                                <option v-for="item in unit" :key="item.value" :label="item.label" :value="item.value">></option>
-                            </select>
-                        </span>
-                    </div>
-                    <div class="rows">
-                        <span class="aa">同比增长：</span>
-                        <input class="momeyaddInput" v-model="formData.yearNetProfitGrowth" type="text">
-                    </div>
-                    <div class="rows">
-                        <span class="moneySpan">企业净资产：</span>
-                        <span>
-                            <input class="moneyInput" v-model="formData.netAssetsFormat" type="text">
-                        </span>
-                        <span>
-                            <select v-model="formData.netAssetsType">
-                                <option v-for="item in unit" :key="item.value" :label="item.label" :value="item.value">></option>
-                            </select>
-                        </span>
-                    </div>
-                    <!-- <div class="rows">
-                        <span class="aa">同比增长：</span>
-                        <input class="oneInput lessInput" type="text" v-model="formData.owner">
+                    <!-- <div v-if="formData.financeBody == 64">
+                       
                     </div> -->
 
-                    <div class="rows">
-                        <div>近三年财务数据：</div>
-                        <textarea class="textarea" placeholder="" v-model="formData.trienniumFinancialData"></textarea>
-                    </div>
-                    <div class="rows">
-                        <div>
-                            <i class="red">*</i>3-5年盈利预测：</div>
-                        <textarea class="textarea" placeholder="" v-validate="'required|detail'" name="内容" v-model="formData.profitForecast"></textarea>
-                        <div><i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i></div>
-                    </div>
-                    <div class="rows">
-                        <span class="moremore">团队平均年龄：</span>
-                        <input class="oneInput" style="width:4.4rem!important" type="text" v-model="formData.averageAge">
-                    </div>
-                    <div class="rows">
-                        <span class="langmore">企业网址：</span>
-                        <input class="oneInput lessmore" type="text" v-model="formData.websiteUrl">
-                    </div>
-                    <div class="rows">
-                        <span class="langmore">官方微信：</span>
-                        <input class="oneInput lessmore" type="text" v-model="formData.weChat">
-                    </div>
-                    <div class="rows">
-                        <span class="langmore">
-                            <i class="red">*</i>建企时间：</span>
-                        <!-- <input class="oneInput lessmore" type="text" v-model="formData.companyFoundTimeStr"> -->
-                        <span class="date-time-input" @click="getDate">
-                            <input type="text" class="oneInput lessmore" v-model="formData.companyFoundTimeStr" placeholder="请选择">
-                        </span>
-                        <date-time ref="dateTime" type="date" @confirm="select"></date-time>
-                    </div>
 
                 </div>
                 <div>
@@ -408,7 +418,9 @@
                         <div>
                             <i class="red">*</i>团队介绍：</div>
                         <textarea class="textarea" placeholder="" v-validate="'required|detail'" name="内容" v-model="formData.teamBrief"></textarea>
-                        <div><i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i></div>
+                        <div>
+                            <i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i>
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -448,8 +460,8 @@
                             <i class="red">*</i>Email：</span>
                         <input class="oneInput" type="text" v-validate="'required|email'" name="该邮箱" v-model="formData.directorEmail">
                         <div>
-                                <i v-show="errors.has('该邮箱')" class="error langa flr">{{ errors.first('该邮箱')}}</i>
-                            </div>
+                            <i v-show="errors.has('该邮箱')" class="error langa flr">{{ errors.first('该邮箱')}}</i>
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -460,7 +472,11 @@
                         <van-uploader :after-read="onRead" accept multiple action class="flr">
                             <mt-button type="default" class="btn">添加文件</mt-button>
                         </van-uploader>
-                        <div v-for="item in fileList" :key="item.index">{{item.name}}</div>
+                        <div v-for="(item,index) in fileList" :key="index">
+                            <div class="fileItem">
+                                {{item.name}}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div>
@@ -548,8 +564,8 @@
     });
     Validator.extend("formData.directorEmail", {
         // getMessage: field => "邮箱格式不正确",
-        messages:{
-            email:()=>'邮箱格式不正确'
+        messages: {
+            email: () => '邮箱格式不正确'
         },
         validate: value => {
             return;
@@ -4863,6 +4879,7 @@
                         });
                         this.fileList.push(file);
                     }
+                    this.fileList = res.data.project.fileList
                 });
             },
             // 融资方式分类填写
@@ -4946,7 +4963,8 @@
         position: absolute;
         margin-left: 2rem
     }
-    .lessa{
+
+    .lessa {
         position: absolute;
     }
 
@@ -5305,5 +5323,14 @@
 
     .heightRows {
         height: 1.1rem;
+    }
+    .rows i{
+        font-style: normal
+    }
+    .fileItem{
+        font-size: .24rem;
+        height: .5rem;
+        line-height: .5rem;
+        padding-left: .2rem
     }
 </style>

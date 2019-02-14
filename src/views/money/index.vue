@@ -269,7 +269,7 @@
             },
             // 获取更多
             loadMore(sort) {
-                this.pn = this.pn + 1;
+                this.pn += 1;
                 this.$axios.get("/jsp/wap/trCapital/ctrl/jsonCapitalPage.jsp", {
                     params: {
                         sort: this.sort,

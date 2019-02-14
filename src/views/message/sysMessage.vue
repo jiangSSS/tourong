@@ -9,7 +9,7 @@
                 <div class="messageTitle">{{item.content}}</div>
             </div>
         </div>
-        <!-- <div v-show="noShow" class="noChange">还没有系统消息哦</div> -->
+        <!-- <div v-if="this.systemData.length = 0" class="noChange">还没有系统消息哦</div> -->
         <div>
             <div class="noData" v-show="more">加载中...</div>
             <div class="noData" v-show="noMore">--- 没有更多数据了 ---</div>
@@ -35,23 +35,24 @@
         methods: {
             // 上拉加载
             loadMore() {
-                this.pn = this.pn + 1
+                // this.pn += 1
+                //  this.pn = this.pn + 1
                 // this.loading = true
-                this.$axios.get(`/jsp/wap/center/ctrl/jsonNoticeList.jsp`, { params: { pageNumber: this.pn } }).then(res => {
-                    this.loading = true
-                    if (res.success == "true") {
-                        
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonNoticeList.jsp`, { params: {pageNumber:this.pn} }).then(res => {     
+                    this.pn += 1
+                    this.loading = true                                   
+                    if (res.success == "true") {       
                         this.systemData = [...this.systemData, ...res.data.pageList]
                         this.totalCount = Number(res.data.pagination.totalCount)
-                        if (this.totalCount > this.systemData.length) {
+                        if (this.totalCount > this.systemData.length) {               
                             this.more = true
                             this.noMore = false
-
                         } else {
                             this.more = false
-                            this.noMore = true
+                            this.noMore = true           
+                            //  this.loading = false
                         }
-                        this.loading = false
+                        //  this.loading = false
                     }
                 })
             },
@@ -59,25 +60,23 @@
             getData() {
                 this.$axios.get(`/jsp/wap/center/ctrl/jsonNoticeList.jsp`).then(res => {
                     console.log("系统消息", res)
-                     this.loading = true
-                    if (res.success == "true") {
+                    // this.loading = true
+                    if (res.success == "true") {                      
                         this.systemData = res.data.pageList
-                        this.totalCount = Number(res.data.pagination.totalCount)
-                        this.pn = 1
-                        if (this.totalCount > this.systemData.length) {
-                            this.more = true
-                            this.noMore = false
+                        // this.totalCount = Number(res.data.pagination.totalCount)
+                        // this.pn = 1
+                        // if (this.totalCount > this.systemData.length) {
+                        //     this.more = true
+                        //     this.noMore = false
 
-                        } else {
-                            this.more = false
-                            this.noMore = true
-                        }
+                        // } else {
+                        //     this.more = false
+                        //     this.noMore = true
+                        // }
                         this.loading = false
                     }
                 })
             },
-
-            // 
         },
         created() {
             this.getData()

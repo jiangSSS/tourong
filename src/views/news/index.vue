@@ -36,8 +36,10 @@
                     </div>
                 </div>
                 <div>
-                    <div class="noData" v-if="this.totalCount > this.pageList.length">加载中...</div>
-                    <div class="noData" v-else>--- 没有更多数据了 ---</div>
+                    <!-- <div class="noData" v-if="this.totalCount > this.pageList.length">加载中...</div>
+                    <div class="noData" v-else>--- 没有更多数据了 ---</div> -->
+                    <div class="noData" v-show="more">加载中...</div>
+                    <div class="noData" v-show="noMore">--- 没有更多数据了 ---</div>
                 </div>
             </div>
         </div>
@@ -56,31 +58,38 @@
         },
         data() {
             return {
-                active: 1,
                 pageList: [],
                 pn: 1,
                 pageNumber: 1,
-                totalCount: [],
+                totalCount: '',
                 loading: false,
                 typeDataList: [],
-                categorys: ""
+                categorys: "",
+
+                more:false,
+                noMore:false
             };
         },
         methods: {
             loadMore() {
-                this.pn = this.pn + 1;
-               
+                this.pn += 1; 
                 this.$axios
                     .get("/jsp/wap/trNews/ctrl/jsonNewsPage.jsp", {
                         params: { dataValues: this.categorys, pageNumber: this.pn }
                     })
-                    .then(res => {
+                    .then(res => {                         
                         this.loading = true;
                         if (res.success == "true") {
                             this.pageList = [...this.pageList, ...res.data.pageList];
-                            this.totalCount = res.data.pagination.totalCount;
-                            this.loading = false;
-                      
+                            this.totalCount = Number(res.data.pagination.totalCount);
+                            if(this.totalCount > this.pageList.length){
+                                this.more = true
+                                this.noMore = false
+                            }else{
+                                this.more = false
+                                this.noMore = true
+                            }
+                            this.loading = false;                 
                         }
                     });
             },
@@ -92,11 +101,11 @@
                         params: { dataValues: this.categorys }
                     })
                     .then(res => {
+                        this.loading = true;
                         console.log("新闻列表", res);
                         if (res.success == "true") {
                             this.pageList = res.data.pageList;
-                            this.totalCount = res.data.pagination.totalCount;
-                            this.pn = 1;
+                            // this.pn = 1;
                             this.loading = false;
                         }
                     });
