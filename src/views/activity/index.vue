@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="father">
         <vue-drawer-layout ref="drawerLayout" :reverse="true" @mask-click="handleMaskClick">
             <div class="drawer" slot="drawer">
                 <div class="text">
@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <div class="content" slot="content">
+            <div id="son" class="content" slot="content">
                 <div class="text">
                     <div class="all">
                         <Header></Header>
@@ -73,12 +73,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <ToTop></ToTop> -->
+                                <ToTop></ToTop>
                                 <div>
                                     <div class="noData" v-show="more">加载中...</div>
                                     <div class="noData" v-show="noMore">--- 没有更多数据了 ---</div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="">
+                            <a class="totop" id="totop" @click="goTop" v-show="isShowToTop">
+                                <img src="../../../static/app/img/backTop.png" class="top" alt="">
+                            </a>
                         </div>
                         <Footer class="footer"></Footer>
                     </div>
@@ -121,6 +126,8 @@
                 totalCount: [],
                 categoryList: [],
                 statusList: [],
+
+                isShowToTop:false
             }
         },
         methods: {
@@ -227,6 +234,47 @@
                 });
                 this.getActivityList(this.category = "")
             },
+            goTop() {
+                this.timer = setInterval(() => {
+                    let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
+                    let speed = Math.floor(scrollTop / 6);
+                    this.$body.scrollTop = this.$docElement.scrollTop = this.scrollTop - (speed < 1 ? 1 : speed);
+                }, 30);
+            },
+            pageToTop() {
+                let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
+                if (scrollTop > 300) {
+                    this.isShowToTop = true;
+                } else {
+                    this.isShowToTop = false;
+                }
+                if (scrollTop === 0) {
+                    clearInterval(this.timer);
+                }
+            },
+            debounce(fn, delay, timeout) {
+                var timer = null;
+                var last = new Date().getTime();
+                delay = delay || 300;
+                timeout = timeout || 300;
+                return () => {
+                    if (timer) {
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(fn, delay);
+                    if (new Date().getTime() > last + timeout) {
+                        fn.apply(this, [].slice.call(Array, arguments));
+                        last = new Date().getTime();
+                        clearTimeout(timer);
+                    }
+                };
+            }
+        },
+          mounted () {
+            this.$docElement = document.getElementById('son')
+            this.$body = document.getElementById('father');
+            this.pageToTop();
+            document.getElementById('son').addEventListener('scroll', this.debounce(this.pageToTop));
         },
         created() {
             this.getActivityList(this.status, this.category)
@@ -490,5 +538,15 @@
         padding: 0 .2rem;
         line-height: 2;
         border-bottom: 1px dashed #fafafa;
+    }
+    .top{
+        width: .7rem;
+        height: .7rem;
+    }
+    .totop {
+        position: fixed;
+        right: .6rem;
+        bottom: 1.5rem;
+        cursor: pointer;
     }
 </style>

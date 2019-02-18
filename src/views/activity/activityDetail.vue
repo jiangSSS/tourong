@@ -76,9 +76,8 @@
             </div>
             <div>
                 <i class="iconfont icon-shouji"></i>
-                <input type="text" v-validate="'required|memberMobile'" name="mobile" v-model="formData.memberMobile" placeholder="请输入手机号">
-                <span v-show="errors.has('mobile')" class="error">{{ errors.first('mobile')}}</span>
-
+                <input type="text" v-validate="'required|memberMobile'" name="手机号码" v-model="formData.memberMobile" placeholder="请输入手机号">
+                <span v-show="errors.has('手机号码')" class="error">{{ errors.first('手机号码')}}</span>
             </div>
             <div>
                 <i class="iconfont icon-neirong"></i>
@@ -104,6 +103,14 @@
             return value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
         }
     });
+    // 修改错误提示
+    const dict = {
+        messages: {
+            required: (field) => '请输入' + field
+        }
+    }
+    const validator = new Validator({});
+    validator.localize('zh_CN', dict);
     export default {
         components: {
             Header,
@@ -145,7 +152,10 @@
                 if (this.activityDetail.status != 1) {
                     this.isShowApply = false
                 }
-                this.isShowApply = true;
+                // if (!(Cookies.get('userKey'))) {
+                //     console.log("111")
+                //     this.isShowApply = false
+                // }
             },
             cancelApply() {
                 this.isShowApply = false
@@ -265,7 +275,9 @@
 <style scoped lang="scss">
     .error {
         color: #f00;
-        font-size: .2rem
+        font-size: .2rem;
+        /* position: absolute; */
+        margin-right: 1.2rem
     }
 
     .containerAll {

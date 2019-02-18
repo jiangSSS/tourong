@@ -73,11 +73,10 @@
                     <option :value="item.dataValue" v-for="item in investIndustryList" name="type" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
                 </select>
             </div>
-            <div>
-                <multiselect v-model="investIndustrys" :options="investIndustryList" :value="investIndustryList.dataValue" :label="investIndustryList.dataName" :multiple="true">
-                    <!-- <template>{{ investIndustryList.dataName }}</template> -->
+            <!-- <div>
+                <multiselect v-model="investIndustrys" :options="investIndustryList"  :multiple="true">
                 </multiselect>
-            </div>
+            </div> -->
             <div class="rows heightRows">
                 <span>
                     <i class="red">*</i> 投资阶段</span>

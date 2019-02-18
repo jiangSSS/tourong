@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div id="father">
         <vue-drawer-layout ref="drawerLayout" :reverse="true" @mask-click="handleMaskClick">
             <div class="drawer" slot="drawer">
                 <div class="text">
                     <div class="chooseBox">
-                        <div class="title">投资筛选</div>
+                        <div class="title">资金筛选</div>
                         <div class="choose">
                             <div class="sbuTitle clearfix">
                                 <span class="fll">投资行业</span>
@@ -48,7 +48,6 @@
                                 <van-checkbox-group v-model="investRegionArea" @change="investRegionItem">
                                     <van-checkbox v-for="(item, index) in investRegionList" :key="index" :name="item" class="checkItem" checked-color="#005982">{{ item.dataName }}</van-checkbox>
                                 </van-checkbox-group>
-
                                 <!--  -->
                                 <!-- <span
                                 v-for="(item,index) in investRegionList"
@@ -58,7 +57,7 @@
                                 @click="investRegionItem(item.dataValue,index)"
                               >{{item.dataName}}</span> -->
                                 <!-- <span class="radioItem" v-for="(item,index) in investRegionList" :key="index" :class="{active:item.checked}" @click="investRegion(item.dataValue,index)">{{item.dataName}}</span> -->
-                            </div>
+                             </div>
                             <div class="sbuTitle clearfix">
                                 <span class="fll">投资金额</span>
                                 <i class="iconfont icon-xiangxia flr" v-if="!isShow4" @click="isShow4 = true"></i>
@@ -75,7 +74,7 @@
                     </div>
                 </div>
             </div>
-            <div class="content" slot="content">
+            <div id="son" class="content" slot="content">
                 <div class="text">
                     <div class="index">
                         <div class="header clearfix">
@@ -92,7 +91,6 @@
                                 <!-- <div>综合排序</div>
                                 <div>时间排序</div> -->
                                 <div class="titleA" v-for="(item,index) in sortList" :class="{actived:item.checked == true}" :key="index" @click="getAll(item.sort,index)">{{item.name}}</div>
-
                                 <div class="titleA" @click="handleToggleDrawer">筛选</div>
                             </div>
                             <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading">
@@ -116,10 +114,6 @@
                                     <div class="noData" v-show="more">加载中...</div>
                                     <div class="noData" v-show="noMore">--- 没有更多数据了 ---</div>
                                 </div>
-                                <div>
-                                    <!-- <div class="noData" v-if="this.totalCount > this.pageList.length">加载中...</div> -->
-                                    <!-- <div class="noData">--- 没有更多数据了 ---</div> -->
-                                </div>
                                 <mu-dialog width="400" center class="applyDialog" :open.sync="isShowApply">
                                     <select class="oneRows" v-model="projectId">
                                         <option :value="item.id" v-for="item in myProject" :key="item.index" :label="item.title">{{item.title}}</option>
@@ -129,6 +123,12 @@
                                 </mu-dialog>
                             </div>
                         </div>
+                        <!-- <vueToTop></vueToTop> -->
+                         <div class="">
+                            <a class="totop" id="totop" @click="goTop" v-show="isShowToTop">
+                                <img src="../../../static/app/img/backTop.png" class="top" alt="">
+                            </a>
+                        </div>
                         <Footer class="footer"></Footer>
                     </div>
                 </div>
@@ -136,7 +136,6 @@
         </vue-drawer-layout>
     </div>
 </template>
-
 <script>
     import Header from "@/components/Header.vue";
     import Footer from "@/components/Bottom.vue";
@@ -198,7 +197,9 @@
                         checked: false,
                         sort: 2
                     }
-                ]
+                ],
+
+                isShowToTop:false
             };
         },
         methods: {
@@ -318,11 +319,11 @@
                 })
                     .then(res => {
                         console.log("投资列表", res);
-                        this.loading = true
+                        // this.loading = true
                         if (res.success == "true") {
                             this.pageList = res.data.pageList;
                             this.totalCount = Number(res.data.pagination.totalCount);
-                            this.pn = 1;
+                            // this.pn = 1;
                             if (this.totalCount > this.pageList.length) {
                                 this.more = true
                                 this.noMore = false
@@ -366,6 +367,7 @@
                             });
                             regionList.unshift({ dataName: "不限" });
                             this.regionList = regionList;
+
                             let investTypeList = res.data.investTypeList;
                             investTypeList.forEach(item => {
                                 this.$set(item, "checked", false);
@@ -501,6 +503,47 @@
                 this.sortList[index].checked = true
                 this.getDatalList(sort, this.investAmounts, this.investIndustrys, this.investRegions, this.investTypes, this.regions)
             },
+             goTop() {
+                this.timer = setInterval(() => {
+                    let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
+                    let speed = Math.floor(scrollTop / 6);
+                    this.$body.scrollTop = this.$docElement.scrollTop = this.scrollTop - (speed < 1 ? 1 : speed);
+                }, 30);
+            },
+            pageToTop() {
+                let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
+                if (scrollTop > 300) {
+                    this.isShowToTop = true;
+                } else {
+                    this.isShowToTop = false;
+                }
+                if (scrollTop === 0) {
+                    clearInterval(this.timer);
+                }
+            },
+            debounce(fn, delay, timeout) {
+                var timer = null;
+                var last = new Date().getTime();
+                delay = delay || 300;
+                timeout = timeout || 300;
+                return () => {
+                    if (timer) {
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(fn, delay);
+                    if (new Date().getTime() > last + timeout) {
+                        fn.apply(this, [].slice.call(Array, arguments));
+                        last = new Date().getTime();
+                        clearTimeout(timer);
+                    }
+                };
+            }       
+        },
+        mounted () {
+            this.$docElement = document.getElementById('son')
+            this.$body = document.getElementById('father');
+            this.pageToTop();
+            document.getElementById('son').addEventListener('scroll', this.debounce(this.pageToTop));
         },
         created() {
             this.getDatalList(
@@ -522,7 +565,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
     .detail {
-        padding-bottom: 1.2rem !important
+        padding-bottom: 1.2rem 
     }
 
     img {
@@ -818,5 +861,15 @@
 
     .actived {
         color: #005982
+    }
+    .top{
+        width: .7rem;
+        height: .7rem;
+    }
+    .totop {
+        position: fixed;
+        right: .6rem;
+        bottom: 1.5rem;
+        cursor: pointer;
     }
 </style>

@@ -519,18 +519,44 @@ const router = new Router({
 // })
 
 
+// router.beforeEach((to, from, next) => {
+//   const toDepth = to.path.substring(to.path.length - 2, to.path.length)
+//   const fromDepth = from.path.substring(from.path.length - 2, from.path.length)
+//   if (toDepth < fromDepth) {
+//     // 有tab界面时需要添加此判断 from的KeepAlive不需要置为false
+//     // if (from.path !== '/Dtab1_04' && from.path !== '/Dtab2_04') {
+//     from.meta.keepAlive = true
+//     // }
+//     to.meta.keepAlive = false
+//   }
+//   next()
+// })
+
+// router.beforeEach((to, from, next) => {
+//   const toDepth = to.path.split('/').length
+//   const fromDepth = from.path.split('/').length
+//   if (toDepth < fromDepth) {
+//     console.log('后退。。。')
+//     from.meta.keepAlive = false
+//     to.meta.keepAlive = true
+//   }
+//   next()
+// })
+
+let routerList = []
 router.beforeEach((to, from, next) => {
-  const toDepth = to.path.substring(to.path.length - 2, to.path.length)
-  const fromDepth = from.path.substring(from.path.length - 2, from.path.length)
-  if (toDepth < fromDepth) {
-    // 有tab界面时需要添加此判断 from的KeepAlive不需要置为false
-    // if (from.path !== '/Dtab1_04' && from.path !== '/Dtab2_04') {
-    from.meta.keepAlive = true
-    // }
-    to.meta.keepAlive = false
-  }
-  next()
+    if (routerList.length && routerList.indexOf(to.name) === routerList.length - 1) {
+      // 后退
+      routerList.splice(routerList.length - 1, 1)
+      to.meta.isBack = true
+    } else {
+      // 前进
+      routerList.push(from.name || '/')
+      to.meta.isBack = false
+    }
+    next()
 })
+
 // ------------------------------------------
 router.afterEach((to, from, next) => {
   window.scrollTo(0, 0);

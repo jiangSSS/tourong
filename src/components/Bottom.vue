@@ -14,8 +14,8 @@
             <div class="tab-title">消息</div>
         </div>
         <router-link to="/money" class="tab-item" :class="{active:$route.name === 'money'}">
-            <i class="iconfont icon-diamond"></i>
-            <div class="tab-title">资金</div>
+            <i class="iconfont icon-zuanshi"></i>
+            <div class="tab-title">资金库</div>
         </router-link>
         <div @click="toPerson" class="tab-item" :class="{active:$route.name === 'my'}">
             <i class="iconfont icon-My"></i>

@@ -10,10 +10,32 @@
                     <div class="v3Box">
                         <img src="../../../static/app/img/my/vv.png" alt="" class="vipHeader">
                     </div>
-                    <div class="">
+                    <div class="callBox">
                         <img src="../../../static/app/img/my/call.png" alt="" class="vipHeader">
+                        <div class="callMe" @click="isShowApply = true">111</div>
                     </div>
                 </div>
+                <mu-dialog width="400" center class="applyDialog" :open.sync="isShowApply">
+                    <p class="dialogTitle">开通会员服务</p>
+                    <div class="rows">
+                        <i class="iconfont icon-My"></i>
+                        <input type="text" v-validate="'required|name'" name="姓名" placeholder="请输入姓名">
+                        <div v-show="errors.has('姓名')" class="error">{{ errors.first('姓名')}}</div>
+                    </div>
+                    <div class="rows">
+                        <i class="iconfont icon-shouji"></i>
+                        <input type="text" v-validate="'required|mobile'" name="手机号码" placeholder="请输入手机号码">
+                        <div v-show="errors.has('手机号码')" class="error">{{ errors.first('手机号码')}}</div>
+
+                    </div>
+                    <div class="rows">
+                        <i class="iconfont icon-gongsi1"></i>
+                        <input type="text" v-validate="'required|company'" name="单位名称" placeholder="请输入单位名称">
+                        <div v-show="errors.has('单位名称')" class="error">{{ errors.first('单位名称')}}</div>
+                    </div>
+                    <mu-button class="sureBtn" @click="closeApply">确认办理</mu-button>
+                    <mu-button class="applyBtn" @click="cancelApply">取消</mu-button>
+                </mu-dialog>
                 <div class="title">
                     <span>服务内容</span>
                 </div>
@@ -112,22 +134,96 @@
 
 <script>
     import Header from "@/components/Header.vue"
+    import VeeValidate, { Validator } from 'vee-validate'
+    import { Toast } from 'mint-ui'
+    Validator.extend('mobile', {
+        getMessage: name => '请输入正确的手机号码',
+        validate: value => {
+            return value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
+        }
+    });
+    Validator.extend('name', {
+        getMessage: name => '请输入姓名',
+        validate: value => {
+            return value.length != 0
+        }
+    });
+    Validator.extend('company', {
+        getMessage: name => '请输入单位名称',
+        validate: value => {
+            return value.length != 0
+        }
+    });
+    // 修改错误提示
+    const dict = {
+        messages: {
+            required: (field) => '请输入' + field
+        }
+    }
+    const validator = new Validator({});
+    validator.localize('zh_CN', dict);
     export default {
         components: {
             Header
         },
         data() {
             return {
-                active: 0
+                active: 0,
+                isShowApply: false
             }
+        },
+        methods: {
+            cancelApply() {
+                this.isShowApply = false
+            },
+            // 确认报名 关闭报名框
+            closeApply() {
+                this.$validator.validateAll().then((result) => {
+                    if (result) {
+                        // let activityId = this.$route.query.id
+                        // this.$axios.get(`/jsp/wap/trActivity/do/doSignUp.jsp`, {
+                        //     params: {
+                        //         activityId,
+                        //         memberName: this.formData.memberName,
+                        //         memberMobile: this.formData.memberMobile,
+                        //         remark: this.formData.remark
+                        //     }
+                        // }).then(res => {
+                        //     console.log("活动报名", res)
+
+                        //     if (res.success == "true") {
+                        //         let instance = Toast('报名成功');
+                        //         setTimeout(() => {
+                        //             instance.close();
+                        //         }, 2000);
+                        //         // }
+                        //     } else {
+                        //         let instance = Toast(res.message);
+                        //         setTimeout(() => {
+                        //             instance.close();
+                        //         }, 2000);
+                        //     }
+                        // })
+                        let instance = Toast('信息提交成功，平台将尽快为您办理！');
+                        setTimeout(() => {
+                            instance.close();
+                        }, 2000);
+                        setTimeout(() => {
+                            this.isShowApply = false;
+                        }, 500);
+                        return;
+                    }
+                });
+            },
         }
     }
 </script>
 
 <style scoped lang="scss">
-.all{
-    background: #fff
-}
+    .all {
+        background: #fff
+    }
+
     .detail {
         // padding-bottom: .5rem;
         padding-top: .9rem
@@ -169,5 +265,66 @@
     .title span {
         padding-bottom: .1rem;
         border-bottom: .03rem solid #005982
+    }
+
+    .callBox {
+        position: relative;
+    }
+
+    .callMe {
+        position: absolute;
+        left: 53%;
+        bottom: .3rem;
+        width: 2.4rem; // visibility: hidden;
+        opacity: 0;
+    }
+
+    .applyDialog {
+        text-align: center;
+        margin: 0 auto;
+        input {
+            border: 0;
+            border-bottom: 1px solid rgb(237, 237, 237); // line-height: 2.6;
+            margin-left: .1rem;
+            width: 80%;
+        }
+        .iconfont {
+            font-size: .6rem; // padding-top: 1rem;
+            display: inline-block
+        }
+        .iconfont::before {
+            line-height: .8rem
+        }
+    }
+
+    .rows {
+        // height: .8rem;
+    }
+
+    .dialogTitle {
+        font-weight: bold;
+        font-size: .34rem
+    }
+
+    .applyBtn {
+        /* width: 90%; */
+        background: #005982;
+        color: #fff;
+        text-align: left;
+        margin-top: .4rem;
+    }
+
+    .sureBtn {
+        background: #909399;
+        color: #fff;
+        text-align: left;
+        margin-top: .4rem;
+    }
+
+    .error {
+        color: #f00;
+        font-size: .2rem;
+        text-align: left;
+        margin-left: .9rem
     }
 </style>

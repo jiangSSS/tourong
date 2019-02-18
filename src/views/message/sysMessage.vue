@@ -9,8 +9,8 @@
                 <div class="messageTitle">{{item.content}}</div>
             </div>
         </div>
-        <!-- <div v-if="this.systemData.length = 0" class="noChange">还没有系统消息哦</div> -->
-        <div>
+        <div v-if="this.systemData.length == 0" class="noChange">还没有系统消息哦</div>
+        <div v-if="this.systemData.length != 0">
             <div class="noData" v-show="more">加载中...</div>
             <div class="noData" v-show="noMore">--- 没有更多数据了 ---</div>
         </div>

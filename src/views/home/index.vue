@@ -14,7 +14,7 @@
 
         <div class="detail">
             <div class="swiper">
-                <swiper :options="swiperOption">
+                <swiper v-if="banner.length > 0" :options="swiperOption">
                     <swiper-slide v-for="(item,index) in banner" :key="index">
                         <!-- <router-link :to="{name:'newsDetail',params:{id:item.url}}"> -->
                         <div>
@@ -97,19 +97,19 @@
                 </router-link>
             </div>
             <div class="subtitle">
-                <span class="titleContent" @click="$router.push('/projectA')">优质项目
+                <span class="titleContent" @click="$router.push('/project')">优质项目
                     <i class="iconfont icon-xiangyou"></i>
                 </span>
             </div>
-            <div v-for="(item,index) in projectList.slice(0,2)" :key="index" class="wellProject">
-                <router-link :to="{path:'/project/projectDetail',query:{id:item.id}}">
-                    <img :src="$url + item.recommendImgPath" alt="" class="wellImg">
-                    <div class="wellTitle">
-                        {{item.title}}
-                    </div>
-                    <div class="wellCompany">{{item.companyName}}</div>
-                    <div class="wellContent">{{item.brief}}</div>
-                </router-link>
+            <div v-for="(item,index) in projectList.slice(0,2)" :key="index" class="wellProject" @click="toProjectDetailPage(item.id)">
+                <!-- <router-link :to="{path:'/project/projectDetail',query:{id:item.id}}"> -->
+                <img :src="$url + item.recommendImgPath" alt="" class="wellImg">
+                <div class="wellTitle">
+                    {{item.title}}
+                </div>
+                <div class="wellCompany">{{item.companyName}}</div>
+                <div class="wellContent">{{item.brief}}</div>
+                <!-- </router-link> -->
 
             </div>
             <div class="moneyBoxa">
@@ -118,10 +118,10 @@
                         <i class="iconfont icon-xiangyou"></i>
                     </span>
                 </div>
-                <div class=" moneyBox" v-for="item in capitalList.slice(0,2)" :key="item.index">
-                    <router-link :to="{path:'/money/moneydetail',query:{id:item.id}}" class="clearfix">
-                        <div class="flr imgBox">
-                            <img :src="$url + item.recommendImgPath" class="wellMoney"> </div>
+                <div class="moneyBox" v-for="item in capitalList.slice(0,2)" :key="item.index">
+                    <!-- <router-link :to="{path:'/money/moneydetail',query:{id:item.id}}" class="clearfix"> -->
+                    <div @click="toMoneyDetailPage(item.id)" class="clearfix">
+                        <div class="flr imgBox"><img :src="$url + item.recommendImgPath" class="wellMoney"> </div>
                         <div class="fll rightContent">
                             <div class="rightTitle">{{item.title}}</div>
                             <div class="rightList">
@@ -151,7 +151,8 @@
                                 </div>
                             </div>
                         </div>
-                    </router-link>
+                    </div>          
+                    <!-- </router-link> -->
                 </div>
             </div>
             <div class="subtitle">
@@ -159,30 +160,30 @@
                     <i class="iconfont icon-xiangyou"></i>
                 </span>
             </div>
-            <div v-for="item in pageList.slice(0,4)" :key="item.index">
-                <router-link :to="{path:'/newsDetail',query:{id:item.id}}">
-                    <div class="clearfix rows">
-                        <div class="nums clearfix flr">
-                            <div class="clearfix titleBox">
-                                <img src="../../../static/app/img/my/dian.jpg" class="dian fll">
-                                <span class="fll messageTitle">{{item.title}}</span>
-                            </div>
-                            <div class="messageTime">
-                                <span class="fll timestatus">{{item.addTimeStr.slice(0,10)}}</span>
-                                <span class="flr rightTime">
-                                    <span>(来源：
-                                        <span>{{item.source}}</span> )</span>
-                                </span>
-                            </div>
-                            <div class="newsDesc">
-                                {{item.brief}}
-                            </div>
+            <div v-for="item in pageList.slice(0,4)" :key="item.index" @click="toNewsDetailPage(item.id)">
+                <!-- <router-link :to="{path:'/news/newsDetail',query:{id:item.id}}"> -->
+                <div class="clearfix rows">
+                    <div class="nums clearfix flr">
+                        <div class="clearfix titleBox">
+                            <img src="../../../static/app/img/my/dian.jpg" class="dian fll">
+                            <span class="fll messageTitle">{{item.title}}</span>
                         </div>
-                        <div class="newsImgBox fll">
-                            <img :src="$url + item.imgPath" class="newsImg">
+                        <div class="messageTime">
+                            <span class="fll timestatus">{{item.addTimeStr.slice(0,10)}}</span>
+                            <span class="flr rightTime">
+                                <span>(来源：
+                                    <span>{{item.source}}</span> )</span>
+                            </span>
+                        </div>
+                        <div class="newsDesc">
+                            {{item.brief}}
                         </div>
                     </div>
-                </router-link>
+                    <div class="newsImgBox fll">
+                        <img :src="$url + item.imgPath" class="newsImg">
+                    </div>
+                </div>
+                <!-- </router-link> -->
             </div>
             <p class="noData">--- 没有数据了 ---</p>
         </div>
@@ -194,6 +195,7 @@
     import "swiper/dist/css/swiper.css";
     import { swiper, swiperSlide } from "vue-awesome-swiper";
     import * as Cookies from 'js-cookie'
+    let vm = null;
     export default {
         components: {
             Footer,
@@ -226,9 +228,15 @@
                     //设置同屏显示的数量，默认为1，使用auto是随意的意思。
                     slidesPerView: 1,
                     //开启鼠标滚轮控制Swiper切换。可设置鼠标选项，或true使用默认值。
-                    mousewheel: false
+                    mousewheel: false,
                     //默认为false，普通模式：slide滑动时只滑动一格，并自动贴合wrapper，设置为true则变为free模式，slide会根据惯性滑动可能不止一格且不会贴合。
-                    // freeMode:true
+                    // freeMode:true,
+                    on: {
+                        click() {
+                            const realIndex = this.realIndex
+                            vm.toSwiper(realIndex)
+                        }
+                    }
                 },
                 pageList: [],
                 count: 1,
@@ -236,13 +244,26 @@
             };
         },
         methods: {
-            getSwiper() {
+            getData() {
                 this.$axios.get(`/jsp/wap/index/ctrl/jsonIndex.jsp`).then(res => {
                     console.log("轮播图", res);
                     this.banner = res.data.banner;
                     this.capitalList = res.data.capitalList;
                     this.projectList = res.data.projectList;
                 });
+            },
+            toSwiper(index) {
+                let id = this.banner[index].resourceId;
+                let type = this.banner[index].resourceType;
+                if (type == "1") {
+                    this.toProjectDetailPage(id);
+                } else if (type == "2") {
+                    this.toMoneyDetailPage(id);
+                } else if (type == "3") {
+                    this.toNewsDetailPage(id);
+                } else if (type == "4") {
+                    this.$router.push({name:'activityDetail',query:{id}})
+                }
             },
             tokefu() {
                 window.open("https://tb.53kf.com/code/app/10193554/1", "_blank");
@@ -261,16 +282,24 @@
                     this.weekLists = res.data.pageList
                     this.count = Number(res.data.pagination.totalCount)
                 })
-            }
-
+            },
+            toProjectDetailPage(id){
+                this.$router.push({name:'projectDetail',query:{id}})
+            },
+            toMoneyDetailPage(id){
+                this.$router.push({name:'moneyDetail',query:{id}})
+            },
+            toNewsDetailPage(id){
+                this.$router.push({name:'newsDetail',query:{id}})
+            },
         },
         created() {
             this.getNewsList();
-            this.getSwiper();
+            this.getData();
             if (Cookies.get("userKey")) {
                 this.getWeekData()
             }
-
+            vm = this
         }
     };
 </script>
@@ -479,7 +508,7 @@
 
     .moneyBox:nth-child(even) {
         .rightContent {
-            float: right;
+            // float: rgt;
         }
         .imgBox {
             float: left;

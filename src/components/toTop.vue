@@ -1,7 +1,7 @@
 <template>
     <div class="">
-        <a class="totop" id="totop" @click="goTop">
-            <img src="../../static/app/img/backTop.png" alt="">
+        <a class="totop" id="totop" @click="goTop" v-show="isShowToTop">
+            <img src="../../static/app/img/backTop.png" class="top" alt="">
         </a>
     </div>
 </template>
@@ -10,60 +10,74 @@
     export default {
         data() {
             return {
-                // toTopShow: true,
+                isShowToTop: false
                 // isTop: true,
                 // timer: null
             };
         },
         mounted() {
-            // this.goTop()
-            // window.addEventListener('onscroll', function () {
-            // })
-            // var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-            // console.log(scrollTop);
+            this.$docElement = document.documentElement;
+            this.$body = document.body;
+            this.pageToTop();
+            window.addEventListener('scroll', this.debounce(this.pageToTop));          
         },
-        //   destroyed() {
+    //     mounted: function () {
+    //   this.$docElement = document.getElementById('main-box')
+    //   this.$body = document.getElementById('index-box');
+    //   this.pageToTop();
+    //   document.getElementById('main-box').addEventListener('scroll', this.debounce(this.pageToTop));
+    // },
+        // destroyed() {
         //     window.removeEventListener("scroll", this.scrollToTop);
-        //   },
+        // },
         methods: {
             goTop() {
-                //   var scrollTop = 0;
-                //   if (document.documentElement && document.documentElement.scrollTop) {
-                //     scrollTop = document.documentElement.scrollTop;
-                //   } else if (document.body) {
-                //     scrollTop = document.body.scrollTop;
-                //   }
-                var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                console.log(scrollTop);
-                this.scrollTop = 0
-                //   console.log(scrollTop);
-                //   console.log(document.documentElement.scrollTop);
-                //   scrollTop = 0
-                //   document.body.scrollTop = 0;
-                //   let totop = document.getElementById("totop");
-                //   let scrollTop =
-                //     window.pageYOffset ||
-                //     document.documentElement.scrollTop ||
-                //     document.body.scrollTop;
-                //   let browserHeight = window.outerHeight;
-                //   if (scrollTop > browserHeight) {
-                //     totop.style.display = "block";
-                //   } else {
-                //     totop.style.display = "none";
-                //   }
+                this.timer = setInterval(() => {
+                    let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
+                    let speed = Math.floor(scrollTop / 6);
+                    this.$body.scrollTop = this.$docElement.scrollTop = scrollTop - (speed < 1 ? 1 : speed);
+                }, 30);
+            },
+            pageToTop() {
+                let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
+                if (scrollTop > 200) {
+                    this.isShowToTop = true;
+                } else {
+                    this.isShowToTop = false;
+                }
+                if (scrollTop === 0) {
+                    clearInterval(this.timer);
+                }
+            },
+            debounce(fn, delay, timeout) {
+                var timer = null;
+                var last = new Date().getTime();
+                delay = delay || 300;
+                timeout = timeout || 300;
+                return () => {
+                    if (timer) {
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(fn, delay);
+                    if (new Date().getTime() > last + timeout) {
+                        fn.apply(this, [].slice.call(Array, arguments));
+                        last = new Date().getTime();
+                        clearTimeout(timer);
+                    }
+                };
             }
-            // nexttick(){
-            //     var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-            //     console.log(scrollTop);
-            // }
         }
     };
 </script>
 <style scoped lang="scss">
     .totop {
         position: fixed;
-        left: 0.8rem;
+        right: .8rem;
         bottom: 1.5rem;
         cursor: pointer;
+    }
+    .top{
+        width: .7rem;
+        height: .7rem;
     }
 </style>

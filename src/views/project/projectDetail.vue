@@ -222,7 +222,6 @@
             }
         },
         methods: {
-
             getMyMoney(pn) {
                 this.$axios.get("/jsp/wap/center/ctrl/jsonIssueCapitalList.jsp", {
                     params: { pageNumber: pn }

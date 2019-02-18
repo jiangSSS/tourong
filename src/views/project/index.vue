@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="father">
         <vue-drawer-layout ref="drawerLayout" :reverse="true" @mask-click="handleMaskClick">
             <div class="drawer" slot="drawer">
                 <div class="text">
@@ -60,7 +60,7 @@
                     </div>
                 </div>
             </div>
-            <div class="content" slot="content">
+            <div id="son" class="content" slot="content">
                 <div class="text">
                     <div class="index">
                         <div class="header clearfix">
@@ -74,8 +74,8 @@
                         </div>
                         <div class="detail">
                             <div class="chooseTitle">
-                                <div class="titleA" v-for="(item,index) in sortList" :class="{actived:item.checked == true}" :key="index" @click="getAll(item.sort,index)">{{item.name}}</div>                                
-                                <div  class="titleA" @click="handleToggleDrawer">筛选</div>
+                                <div class="titleA" v-for="(item,index) in sortList" :class="{actived:item.checked == true}" :key="index" @click="getAll(item.sort,index)">{{item.name}}</div>
+                                <div class="titleA" @click="handleToggleDrawer">筛选</div>
                             </div>
                             <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading">
                                 <div class="projectList" v-for="(item,index) in pageList" :key="index">
@@ -108,17 +108,26 @@
                                 </mu-dialog>
                             </div>
                         </div>
-                        <Footer class="footer"></Footer>
+                        <!-- <vueToTop></vueToTop> -->
+                        <!-- <ToTop></ToTop> -->
+                        <div class="">
+                            <a class="totop" id="totop" @click="goTop" v-show="isShowToTop">
+                                <img src="../../../static/app/img/backTop.png" class="top" alt="">
+                            </a>
+                        </div>
                     </div>
+                    <Footer class="footer"></Footer>
                 </div>
             </div>
         </vue-drawer-layout>
+
     </div>
 </template>
 
 <script>
     import Header from "@/components/Header.vue";
     import Footer from "@/components/Bottom.vue";
+    import ToTop from "@/components/toTop.vue"
     import { Dialog } from "vant";
     import { Toast } from "mint-ui"
     import * as Cookies from 'js-cookie'
@@ -126,19 +135,20 @@
         components: {
             Footer,
             Header,
+            ToTop
             // Choose
         },
         data() {
             return {
-                area: [],                
+                area: [],
                 pageList: [],
                 loading: false,
                 pn: 1,
                 pageNumber: 1,
                 totalCount: '',
 
-                more:false,
-                noMore:false,
+                more: false,
+                noMore: false,
                 // 
                 isShow: false,
                 isShow1: false,
@@ -163,7 +173,7 @@
                 moneyId: "",
                 myMoney_Count: 0,
                 myMoney_pagination: false,
-                sort:'',
+                sort: '',
                 sortList: [
                     {
                         name: "综合排序",
@@ -175,7 +185,10 @@
                         checked: false,
                         sort: 2
                     }
-                ]
+                ],
+
+                isShowToTop: false,
+                isLoading: false
 
             };
         },
@@ -202,8 +215,8 @@
                             instance.close();
                         }, 2000);
                     } else {
-                    this.isShowApply = true;
-                    this.projectId = id;
+                        this.isShowApply = true;
+                        this.projectId = id;
                     }
                 }
                 else {
@@ -235,13 +248,22 @@
                     this.isShowApply = false;
                 }, 500);
             },
+            onRefresh() {
+                setTimeout(() => {
+                    let instance = Toast("刷新成功");
+                    setTimeout(() => {
+                        instance.close();
+                    }, 2000);
+                    this.isLoading = false;
+                }, 500);
+            },
             // 打开筛选
-            handleToggleDrawer() {this.$refs.drawerLayout.toggle();},
+            handleToggleDrawer() { this.$refs.drawerLayout.toggle(); },
             // 关闭筛选
-            handleMaskClick() {this.$refs.drawerLayout.toggle(false);},
+            handleMaskClick() { this.$refs.drawerLayout.toggle(false); },
             // 上拉加载
             loadMore(sort) {
-                this.pn += 1   
+                this.pn += 1
                 // this.loading = true         
                 this.$axios.get('/jsp/wap/trProject/ctrl/jsonProjectPage.jsp', {
                     params: {
@@ -250,32 +272,32 @@
                         financingMoneys: this.financingMoneys,
                         industrys: this.industrys,
                         regions: this.regions,
-                        pageNumber: this.pn,    
-                        sort:this.sort         
+                        pageNumber: this.pn,
+                        sort: this.sort
                     }
                 }).then(res => {
                     // this.pn += 1
-                    this.loading = true 
+                    this.loading = true
                     if (res.success == "true") {
                         this.pageList = [...this.pageList, ...res.data.pageList]
-                        this.totalCount = Number(res.data.pagination.totalCount)              
-                        if(this.totalCount > this.pageList.length){
+                        this.totalCount = Number(res.data.pagination.totalCount)
+                        if (this.totalCount > this.pageList.length) {
                             this.more = true
-                            this.noMore = false              
-                        }else{
+                            this.noMore = false
+                        } else {
                             this.more = false
-                            this.noMore = true                            
+                            this.noMore = true
                         }
-                        this.loading = false                 
-                    }        
+                        this.loading = false
+                    }
                 })
             },
             // 获取项目列表
-            getProjectList(sort,financingMoneys, financingWays, industrys, regions) {
+            getProjectList(sort, financingMoneys, financingWays, industrys, regions) {
                 this.loading = true
                 this.$axios.get(`/jsp/wap/trProject/ctrl/jsonProjectPage.jsp`, {
                     params: {
-                        sort,financingMoneys, financingWays, industrys, regions
+                        sort, financingMoneys, financingWays, industrys, regions
                     }
                 }).then(res => {
                     console.log("项目列表", res)
@@ -284,13 +306,13 @@
                         this.pageList = res.data.pageList
                         this.totalCount = Number(res.data.pagination.totalCount)
                         // this.pn = 1
-                          if(this.totalCount > this.pageList.length){
+                        if (this.totalCount > this.pageList.length) {
                             this.more = true
                             this.noMore = false
-                           
-                        }else{
+
+                        } else {
                             this.more = false
-                            this.noMore = true                            
+                            this.noMore = true
                         }
                         this.loading = false
                     }
@@ -349,28 +371,28 @@
                         financingMoneyList.forEach(item => {
                             this.$set(item, 'checked', false)
                         });
-                        financingMoneyList.unshift({dataName:'不限'})
+                        financingMoneyList.unshift({ dataName: '不限' })
                         this.financingMoneyList = financingMoneyList
 
                         let financingWayList = res.data.financingWayList
-                        financingWayList.forEach(item => { 
+                        financingWayList.forEach(item => {
                             this.$set(item, 'checked', false)
                         });
-                        financingWayList.unshift({dataName:'不限'})
+                        financingWayList.unshift({ dataName: '不限' })
                         this.financingWayList = financingWayList
 
                         let industryList = res.data.industryList
                         industryList.forEach(item => {
                             this.$set(item, 'checked', false)
                         });
-                        industryList.unshift({dataName:'不限'})
+                        industryList.unshift({ dataName: '不限' })
                         this.industryList = industryList
 
                         let regionList = res.data.regionList
                         regionList.forEach(item => {
                             this.$set(item, 'checked', false)
                         });
-                        regionList.unshift({dataName:'不限'})
+                        regionList.unshift({ dataName: '不限' })
                         this.regionList = regionList
                     }
                 })
@@ -380,12 +402,12 @@
                 this.area = []
                 this.result = []
                 var region = []
-                this.regionList.forEach(item=>{
+                this.regionList.forEach(item => {
                     region.pop(item.dataValue)
                 })
                 this.financingMoneyList.forEach(item => {
-                        item.checked = false
-                    });
+                    item.checked = false
+                });
                 this.financingWayList.forEach(item => {
                     this.$set(item, 'checked', false)
                 });
@@ -393,7 +415,7 @@
             },
             // 确定筛选
             handleSure() {
-                this.getProjectList(this.sort,this.financingMoneys, this.financingWays, this.industrys, this.regions)
+                this.getProjectList(this.sort, this.financingMoneys, this.financingWays, this.industrys, this.regions)
                 // 关闭筛选
                 this.$refs.drawerLayout.toggle(false);
             },
@@ -420,17 +442,58 @@
                 }
             },
             // 排序
-            getAll(sort,index) {
+            getAll(sort, index) {
                 this.sortList.forEach(item => {
                     item.checked = false
                 })
                 this.sortList[index].checked = true
-                this.getProjectList(sort,this.financingMoneys, this.financingWays, this.industrys, this.regions)
-               
+                this.getProjectList(sort, this.financingMoneys, this.financingWays, this.industrys, this.regions)
+
             },
+            goTop() {
+                this.timer = setInterval(() => {
+                    let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
+                    let speed = Math.floor(scrollTop / 6);
+                    this.$body.scrollTop = this.$docElement.scrollTop = this.scrollTop - (speed < 1 ? 1 : speed);
+                }, 30);
+            },
+            pageToTop() {
+                let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
+                if (scrollTop > 300) {
+                    this.isShowToTop = true;
+                } else {
+                    this.isShowToTop = false;
+                }
+                if (scrollTop === 0) {
+                    clearInterval(this.timer);
+                }
+            },
+            debounce(fn, delay, timeout) {
+                var timer = null;
+                var last = new Date().getTime();
+                delay = delay || 300;
+                timeout = timeout || 300;
+                return () => {
+                    if (timer) {
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(fn, delay);
+                    if (new Date().getTime() > last + timeout) {
+                        fn.apply(this, [].slice.call(Array, arguments));
+                        last = new Date().getTime();
+                        clearTimeout(timer);
+                    }
+                };
+            }
+        },
+        mounted() {
+            this.$docElement = document.getElementById('son')
+            this.$body = document.getElementById('father');
+            this.pageToTop();
+            document.getElementById('son').addEventListener('scroll', this.debounce(this.pageToTop));
         },
         created() {
-            this.getProjectList(this.sort,this.financingMoneys, this.financingWays, this.industrys, this.regions)
+            this.getProjectList(this.sort, this.financingMoneys, this.financingWays, this.industrys, this.regions)
             this.getTypeData()
             if (Cookies.get("userKey")) {
                 this.getMyMoney()
@@ -442,7 +505,8 @@
     .detail {
         padding-bottom: 1.2rem;
     }
-    .actived{
+
+    .actived {
         color: #005982
     }
 
@@ -713,5 +777,22 @@
 
     .oneRows {
         width: 4.6rem
+    }
+
+    .totop {
+        position: fixed;
+        right: .6rem;
+        bottom: 1.5rem;
+        cursor: pointer;
+    }
+
+    .icon-fanhuidingbu1 {
+        font-size: .4rem;
+        color: #666
+    }
+
+    .top {
+        width: .7rem;
+        height: .7rem;
     }
 </style>

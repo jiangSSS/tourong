@@ -52,8 +52,7 @@
             <div class="apply" @click="$router.push('/issueProject')">
                 <i class="iconfont icon-xiangmu"></i>
                 <span>添加项目</span>
-            </div>
-            <!-- <ToTop></ToTop> -->
+            </div>      
         </div>
     </div>
 </template>
@@ -63,13 +62,13 @@
     import { MessageBox } from 'mint-ui';
     import { Dialog } from "vant";
     import { Toast } from "mint-ui"
-    import ToTop from "@/components/toTop.vue"
+    // import ToTop from "@/components/toTop.vue"
     export default {
         components: {
             Header,
             MessageBox,
             Toast,
-            ToTop
+            // ToTop
         },
         data() {
             return {
