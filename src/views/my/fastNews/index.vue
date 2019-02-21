@@ -162,21 +162,26 @@
             deleteMon(index, id) {
                 this.$axios.get(`/jsp/wap/center/do/unlikeNewsflash.jsp?id=${id}`).then(res => {
                     this.capitalList.splice(index, 1)
+                    this.capitalList.length -= 1
+                   
                 })
             },
             deletePro(index, id) {
                 this.$axios.get(`/jsp/wap/center/do/unlikeNewsflash.jsp?id=${id}`).then(res => {
-                    this.projectList.splice(index, 1)
+                    this.projectList.splice(index, 1)               
+                    this.projectList.length -= 1
                 })
             },
             deleteNews(index, id) {
                 this.$axios.get(`/jsp/wap/center/do/unlikeNewsflash.jsp?id=${id}`).then(res => {
                     this.newsList.splice(index, 1)
+                    this.newsList.length -= 1
                 })
             },
             deleteAct(index, id) {
                 this.$axios.get(`/jsp/wap/center/do/unlikeNewsflash.jsp?id=${id}`).then(res => {
                     this.activityList.splice(index, 1)
+                    this.activityList.length -= 1            
                 })
             },
             likePro(index, id) {
@@ -221,7 +226,8 @@
     }
 
     .detail {
-        margin-top: .9rem
+        margin-top: .9rem;
+        background: #fff
     }
 
     .textContent {
@@ -244,7 +250,7 @@
     }
 
     .cancleBtn {
-        margin: 0.2rem 0.3rem 0 0;
+        margin: .05rem 0.3rem 0 0;
         padding: 0 0.2rem;
         height: 0.7rem;
         border: none;

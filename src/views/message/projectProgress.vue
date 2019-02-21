@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <div v-for="(item,index) in projectData" :key="index" class="messageBox">
+        <!-- <div v-for="(item,index) in projectData" :key="index" class="messageBox">
             <div class="messageTitle">{{item.title}}</div>
             <div class="messageDetail">{{item.content}}</div>
             <img :src=" $url + imgPaths" alt="" v-for="(imgPaths,idx) in item.imgPathList" :key="idx" class="imgList">
@@ -9,7 +9,16 @@
                 <span class="seconed">{{item.addTimeStr.slice(0,10)}}</span>
                 <span class="seconed">{{item.addTimeStr.slice(10,19)}}</span>
             </div>
-            <!-- <div class="messageTime">{{item.time}}</div> -->
+        </div> -->
+        <div v-for="(item,index) in projectData" :key="index" class="messageBox">
+            <div>
+                <div class="title" @click="toFocusProject(item.projectId)">{{item.title}}</div>
+                <div>
+                    <div class="messageTitle">{{item.content}}</div>
+                    <img :src=" $url + imgPaths" alt="" v-for="(imgPaths,idx) in item.imgPathList" :key="idx" class="imgList">
+                    <div class="messageTime">{{item.addTimeStr.substr(0,10)}}</div>
+                </div>
+            </div>
         </div>
         <div v-show="noShow" class="noChange">您关注的项目还未发布进展</div>
     </div>
@@ -20,23 +29,6 @@
     export default {
         data() {
             return {
-                messageList: [
-                    {
-                        title: "北京某互联网创新创业服务平台项目",
-                        detail: "感谢大家关注本项目，现已将正式投入研发，预计年底之前上线",
-                        time: "2018-01-01  12:11:10"
-                    },
-                    {
-                        title: "北京某互联网创新创业服务平台项目",
-                        detail: "感谢大家关注本项目，现已将正式投入研发，预计年底之前上线",
-                        time: "2018-01-01  12:11:10"
-                    },
-                    {
-                        title: "北京某互联网创新创业服务平台项目",
-                        detail: "感谢大家关注本项目，现已将正式投入研发，预计年底之前上线",
-                        time: "2018-01-01  12:11:10"
-                    },
-                ],
                 projectData: [],
                 noShow: false
             }
@@ -50,8 +42,11 @@
                         this.noShow = true
                     }
                 })
-            }
-        },
+            },
+            toFocusProject(id) {
+                this.$router.push({ name: 'projectDetail', query: { id } })
+            },
+        }, 
         created() {
             if (Cookies.get("userKey")) {
                  this.getData()
@@ -85,31 +80,36 @@
         background: #fff
     }
 
+    .title{
+        border-left: 3px solid #005982;
+        padding-left: .1rem;
+        margin: .2rem 0;
+        overflow: hidden; /*超出部分隐藏*/
+        white-space: nowrap; /*不换行*/
+        text-overflow: ellipsis;
+        font-size: .32rem;
+        color: #005982
+        
+    }
     .messageBox {
         background: #fff;
         padding: .2rem;
-        border-bottom: .2rem solid #f3f5f7;
+        border-bottom: .2rem solid #f3f5f7;    
         .messageTitle {
-            font-size: .32rem;
-            font-family: "PingFang";
-            color: rgb( 51, 51, 51);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            border-left: 3px solid #005982;
-            padding-left: .2rem;
-            margin: .2rem 0;
-            
-        }
-        .messageDetail {
             font-size: .28rem;
             font-family: "PingFang";
-            line-height: 2;
+            color: rgb( 51, 51, 51);
+        }
+        .messageDetail,
+            {
+            font-size: .28rem;
+            font-family: "PingFang";
             color: rgb( 102, 102, 102);
         }
         .messageTime {
             color: #999;
             font-size: .26rem;
+            margin: .1rem 0;
         }
     }
 

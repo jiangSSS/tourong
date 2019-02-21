@@ -17,15 +17,14 @@
                                         <img src="../../../static/app/img/my/edit.jpg" class="edit">
                                     </span>
                                 </div>
-                                <div class="userName">{{userInfo.name}}</div>
                             </div>
                             <div class="fll userInfo">
-                                <div>
-                                    <span>已认证:</span>
-                                    <span v-if="userInfo.authenticationName != ''">{{userInfo.authenticationName}}</span>
-                                    <span v-else>暂未认证</span>
+                                <div>       
+                                    <span v-if="userInfo.authenticationName != ''"><span>已认证:</span><span class="demand">{{userInfo.authenticationName}}</span> </span>
+                                    <span v-else class="demand">待审核</span>
                                 </div>
-                                <div>{{userInfo.mobile}}</div>
+                                <!-- <div>{{userInfo.mobile}}</div> -->
+                                <div class="userName">{{userInfo.name}}</div>                                
                                 <div>{{userInfo.company}}</div>
                             </div>
                             <div class="flr messageBox" @click="$router.push('/message/sysMessage')">
@@ -399,5 +398,8 @@
         background: #fff;
         border-top: .2rem solid #f3f5f7;
         border-bottom: .2rem solid #f3f5f7;
+    }
+    .demand{
+        color: #005982
     }
 </style>

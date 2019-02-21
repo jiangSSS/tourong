@@ -4,14 +4,13 @@
             <div class="searchBox" @click="$router.push('/searchList')">
                 <i class="iconfont icon-sousuo"></i>
             </div>
-            <div class="logoBox">
+            <div class="logoBox" @click="$router.push('/aaa')">
                 <img src="../../../static/app/img/home/logo.png" class="logo">
             </div>
             <div class="rightBox" @click="tokefu">
                 <img src="../../../static/app/img/home/header_right.jpg" class="header_right">
             </div>
         </div>
-
         <div class="detail">
             <div class="swiper">
                 <swiper v-if="banner.length > 0" :options="swiperOption">
@@ -79,15 +78,21 @@
                 </div>
             </div>
             <div class="issue">
-                <router-link to="/issueMoney">
+                <!-- <router-link to="/issueMoney"> -->
+                <div @click="issueMoney">
                     <img src="../../../static/app/img/home/c1.png" alt="">
-                </router-link>
-                <router-link to="/issueProject">
+                </div>
+                <!-- </router-link> -->
+                <!-- <router-link to="/issueProject"> -->
+                <div @click="issueProject">
                     <img src="../../../static/app/img/home/c2.png" alt="">
-                </router-link>
-                <router-link to="/demand">
+                </div>
+                <!-- </router-link> -->
+                <!-- <router-link to="/demand"> -->
+                <div @click="demand">
                     <img src="../../../static/app/img/home/c3.png" alt="">
-                </router-link>
+                </div>
+                <!-- </router-link> -->
 
             </div>
 
@@ -121,7 +126,8 @@
                 <div class="moneyBox" v-for="item in capitalList.slice(0,2)" :key="item.index">
                     <!-- <router-link :to="{path:'/money/moneydetail',query:{id:item.id}}" class="clearfix"> -->
                     <div @click="toMoneyDetailPage(item.id)" class="clearfix">
-                        <div class="flr imgBox"><img :src="$url + item.recommendImgPath" class="wellMoney"> </div>
+                        <div class="flr imgBox">
+                            <img :src="$url + item.recommendImgPath" class="wellMoney"> </div>
                         <div class="fll rightContent">
                             <div class="rightTitle">{{item.title}}</div>
                             <div class="rightList">
@@ -151,7 +157,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>          
+                    </div>
                     <!-- </router-link> -->
                 </div>
             </div>
@@ -195,6 +201,7 @@
     import "swiper/dist/css/swiper.css";
     import { swiper, swiperSlide } from "vue-awesome-swiper";
     import * as Cookies from 'js-cookie'
+    import { Toast } from "mint-ui"
     let vm = null;
     export default {
         components: {
@@ -244,6 +251,27 @@
             };
         },
         methods: {
+            issueMoney() {
+                if (Cookies.get("userKey")) {
+                    this.$router.push('/issueMoney')
+                } else {
+                    this.$router.push('/login')
+                }
+            },
+            issueProject() {
+                if (Cookies.get("userKey")) {
+                    this.$router.push('/issueProject')
+                } else {
+                    this.$router.push('/login')
+                }
+            },
+            demand() {
+                if (Cookies.get("userKey")) {
+                    this.$router.push('/demand')
+                } else {
+                    this.$router.push('/login')
+                }
+            },
             getData() {
                 this.$axios.get(`/jsp/wap/index/ctrl/jsonIndex.jsp`).then(res => {
                     console.log("轮播图", res);
@@ -262,7 +290,7 @@
                 } else if (type == "3") {
                     this.toNewsDetailPage(id);
                 } else if (type == "4") {
-                    this.$router.push({name:'activityDetail',query:{id}})
+                    this.$router.push({ name: 'activityDetail', query: { id } })
                 }
             },
             tokefu() {
@@ -283,14 +311,14 @@
                     this.count = Number(res.data.pagination.totalCount)
                 })
             },
-            toProjectDetailPage(id){
-                this.$router.push({name:'projectDetail',query:{id}})
+            toProjectDetailPage(id) {
+                this.$router.push({ name: 'projectDetail', query: { id } })
             },
-            toMoneyDetailPage(id){
-                this.$router.push({name:'moneyDetail',query:{id}})
+            toMoneyDetailPage(id) {
+                this.$router.push({ name: 'moneyDetail', query: { id } })
             },
-            toNewsDetailPage(id){
-                this.$router.push({name:'newsDetail',query:{id}})
+            toNewsDetailPage(id) {
+                this.$router.push({ name: 'newsDetail', query: { id } })
             },
         },
         created() {

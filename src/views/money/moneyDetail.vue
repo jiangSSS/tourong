@@ -31,8 +31,8 @@
                 <div class="user clearfix" @click="$router.push({name:'investors',query:{id}})">
                     <img class="avatar fll" :src="$url + memberInfo.photoImgPath" v-if="memberInfo&&memberInfo.photoImgPath"  alt>
                     <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=188149577,2949073731&fm=26&gp=0.jpg" v-else class="avatar fll">
-                    <span class="fll" v-if="memberInfo.name">{{memberInfo.name}}</span>
-                    <span class="fll" v-else>投资人</span>
+                    <span class="fll member" v-if="memberInfo.name">{{memberInfo.name}}</span>
+                    <span class="fll member" v-else>投资人</span>
                     <!-- <span class="fll">{{memberInfo.name}}</span> -->
                     <div class="flr">
                         <span class="">{{memberInfo.company}}</span>
@@ -114,6 +114,9 @@
                         <i class="iconfont icon-xiangyou"></i>
                     </div>
                 </div> -->
+                <div class="typeBox">
+                     <span v-for="(lab,idx) in moneyDetail.labelList" :key="idx" class="typeItem" @click="searchLabel(lab.labelId)">{{lab.labelName}}</span>
+                </div>
                 <div class="contentTell">
                     <div class="detaila">
                         <div class="peojectTitle">投资要求概述</div>
@@ -241,6 +244,9 @@
             toDetail(){
                 let id = this.$route.query.id
                 this.$router.push({name: 'moneyDetail', params:{id}})
+            },
+            searchLabel(labelId) {
+                this.$router.push({ name: 'labelMoney', query: { labelId } })
             },
             getMyProject(pn) {
                 this.$axios.get("/jsp/wap/center/ctrl/jsonIssueProjectList.jsp", {
@@ -546,5 +552,22 @@
     }
     .avatar{
         width:1rem;border-radius: 100%;
+    }
+    .member{
+        margin-left: .2rem
+    }
+    .typeItem{
+        background: #005982;
+        opacity: .8;
+        color: #fff;
+        display: inline-block;
+        padding: .1rem;
+        margin-right: .1rem;
+        border-radius: 6%
+    }
+    .typeBox{
+        padding: 0 .2rem;
+        margin-bottom: .3rem
+        
     }
 </style>

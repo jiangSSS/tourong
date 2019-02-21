@@ -111,13 +111,13 @@
                 <span class="date-time-input" @click="getStartDate">
                     <input type="text" class="dateYear" v-validate="'required|date'" name="日期" v-model="formData.validStartTimeStr" placeholder="请选择">
                 </span>
-                <date-time ref="dateStartTime" type="year" @confirm="startSelect"></date-time>
+                <date-time ref="dateStartTime" type="date" @confirm="startSelect"></date-time>
 
                 <span style="margin-left:.2rem">--</span>
                 <span class="date-time-input" @click="getEndDate">
                     <input type="text" class="dateYear" v-validate="'required|date'" name="日期" v-model="formData.validEndTimeStr" placeholder="请选择">
                 </span>
-                <date-time ref="dateEndTime" type="year" @confirm="endSelect"></date-time>
+                <date-time ref="dateEndTime" type="date" @confirm="endSelect"></date-time>
                 <span>年</span>
                 <div>
                     <i v-show="errors.has('日期')" class="error langa flr">{{ errors.first('日期')}}</i>
@@ -4130,12 +4130,12 @@
                 fileNames: [],
                 filePaths: [],
 
-                province: "北京市",
-                province1: "北京市",
-                city1: '北京市',
-                city: '北京市',
-                county1: "海淀区",
-                county: "海淀区",
+                province: "省",
+                province1: "省",
+                city1: '市',
+                city: '市',
+                county1: "区",
+                county: "区",
                 show: true,
 
             };
@@ -4330,7 +4330,10 @@
                         this.county1 = capital.investRegionNameStr.split(",")[2];
                     }
                     this.investAmountList = res.data.investAmountList;
-                    this.investIndustryList = res.data.investIndustryList;
+                    // this.investIndustryList = res.data.investIndustryList;
+                     let investIndustryList = res.data.investIndustryList
+                     investIndustryList.unshift({ dataName: '不限' })
+                    this.investIndustryList = investIndustryList
                     this.investStageList = res.data.investStageList;
                     this.capitalSourceList = res.data.capitalSourceList;
                     this.investTypeList = res.data.investTypeList;
@@ -4423,7 +4426,7 @@
     }
 
     .dateYear {
-        width: 1.6rem;
+        width: 1.8rem;
         height: .6rem;
         margin-left: .2rem
     }

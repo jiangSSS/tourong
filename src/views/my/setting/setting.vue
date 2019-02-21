@@ -5,7 +5,7 @@
         <div class="detail">
             <!-- <router-link to="/weekList"><img src="../../../static/app/img/my0.jpg" alt=""></router-link> -->
             <div class="logoBox">
-            <img src="../../../static/app/img/my/logoa.jpg" class="logo" alt="">
+            <img src="../../../../static/app/img/my/logoa.jpg" class="logo" alt="">
                 
             </div>
             <router-link to="" >
@@ -14,7 +14,7 @@
                 <i class="iconfont icon-xiangyou flr"></i>
                 </div>    
             </router-link>
-            <router-link to="" >
+            <router-link to="aboutUs" >
                 <div class="myDetail">
                     <span class="myName">关于投融咨询App</span>
                 <i class="iconfont icon-xiangyou flr"></i>
@@ -26,7 +26,7 @@
                 <i class="iconfont icon-xiangyou flr"></i>
                 </div>    
             </router-link>
-            <router-link to="" >
+            <router-link to="callMe" >
                 <div class="myDetail">
                     <span class="myName">联系我们</span>
                 <i class="iconfont icon-xiangyou flr"></i>

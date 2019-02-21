@@ -33,15 +33,15 @@
                         <input type="text" v-validate="'required|company'" name="单位名称" placeholder="请输入单位名称">
                         <div v-show="errors.has('单位名称')" class="error">{{ errors.first('单位名称')}}</div>
                     </div>
-                    <mu-button class="sureBtn" @click="closeApply">确认办理</mu-button>
-                    <mu-button class="applyBtn" @click="cancelApply">取消</mu-button>
+                    <mu-button class="applyBtn" @click="closeApply">确认办理</mu-button>
+                    <mu-button class="sureBtn" @click="cancelApply">取消</mu-button>
                 </mu-dialog>
                 <div class="title">
                     <span>服务内容</span>
                 </div>
                 <van-tabs v-model="active">
                     <van-tab title="信息服务">
-                        <div>
+                        <div class="tabBox">
                             <div style="color:#999;font-family:Consolas, &quot;font-size:14px;padding:.3rem">
                                 <div>
                                     1、寻找项目。根据资金方需求，在全球范围内寻找并筛选符合其发展战略方向的各类投资项目信息；
@@ -68,7 +68,7 @@
                         </div>
                     </van-tab>
                     <van-tab title="商业衔接服务">
-                        <div>
+                        <div class="tabBox">
                             <div style="color:#999;font-family:Consolas, &quot;font-size:14px;padding:.3rem">
                                 <div>
                                     对信息简报和即时快报中推送的项目、投资人、专家及高级人才，平台可提供商业衔接服务，安排项目方、投资人、专家及高级人才、政府相关部门等进行直接接洽，接洽的方式包括电话沟通、视频沟通、见面洽谈和现场考察等。
@@ -77,7 +77,7 @@
                         </div>
                     </van-tab>
                     <van-tab title="商业需求推广服务">
-                        <div>
+                        <div class="tabBox">
                             <div style="color:#999;font-family:Consolas, &quot;font-size:14px;padding:.3rem">
                                 <div>
                                     根据上市公司、私募机构等要求，平台按照精准推送的原则将其投资、融资、战略合作等需求信息定向发送给符合条件的潜在合作者。
@@ -86,7 +86,7 @@
                         </div>
                     </van-tab>
                     <van-tab title="研修服务">
-                        <div>
+                        <div class="tabBox">
                             <div style="color:#999;font-family:Consolas, &quot;font-size:14px;padding: .3rem">
                                 <div>
                                     1、小型专题研讨会。平台定期举行小型专题研讨会，会议将邀请国内外企业家、科技专家、投行高管、政府官员、跨界专家、法律和财税大咖等就特定行业、企业经典案例和热点事件等进行专题研讨和分享。
@@ -99,7 +99,7 @@
                         </div>
                     </van-tab>
                     <van-tab title="定制化增值服务">
-                        <div>
+                        <div class="tabBox">
                             <div style="color:#999;font-family:Consolas, &quot;font-size:14px;padding:.3rem">
                                 <div>
                                     1、资金解决建议方案及指定项目的投融资撮合；
@@ -223,7 +223,9 @@
     .all {
         background: #fff
     }
-
+    .tabBox{
+        height: 6.5rem;
+    }
     .detail {
         // padding-bottom: .5rem;
         padding-top: .9rem

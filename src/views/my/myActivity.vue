@@ -9,7 +9,9 @@
                             <div class="clearfix activity">
                                 <div class="fll activityTitle">{{item.title}}</div>
                                 <div class="flr">
-                                    <i class="iconfont icon-xiangyou"></i>
+                                    <!-- <i class="iconfont icon-xiangyou"></i> -->
+                                    <span  v-if="item.regStatus == 1" class="suc">审核通过</span>
+                                    <span v-else class="noSuc">待审核</span>
                                 </div>
                             </div>
                         </router-link>
@@ -133,5 +135,11 @@
     .noAtt {
         text-align: center;
         margin-top: 4rem
+    }
+    .suc{
+        color: #ff9440
+    }
+    .noSuc{
+        color: #999
     }
 </style>

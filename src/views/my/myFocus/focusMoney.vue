@@ -1,7 +1,7 @@
 <template>
     <div class="">
             <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading">
-        <div class="step" v-for="item in investData" :key="item.index">
+        <div class="step" v-for="(item,index) in investData" :key="index">
             <div class="itemBox">
                 <div class="clearfix">
                     <div class="peojectTitle fll" @click="$router.push({name:'moneyDetail',query:{id:item.id}})">
@@ -71,35 +71,7 @@
                 loading:false,
                 pn: 1,
                 pageNumber: 1,
-                totalCount: [],
-                projectData: [
-                    {
-                        name: "服务平台项目北京某互联网创新创业",
-                        progress: [
-                            {
-                                title: "开发完成，已准备上线",
-                                time: "2018-01-01 12:11:10"
-                            },
-                            {
-                                title: "签好合同，已准备工作阶段",
-                                time: "2018-01-01 12:11:10"
-                            },
-                        ],
-                    },
-                    {
-                        name: "服务平台项目北京某互联网创新创业",
-                        progress: [
-                            {
-                                title: "开发完成，已准备上线",
-                                time: "2018-01-01 12:11:10"
-                            },
-                            {
-                                title: "签好合同，已准备工作阶段",
-                                time: "2018-01-01 12:11:10"
-                            },
-                        ],
-                    },
-                ],
+                // totalCount: [],
             }
         },
         methods: {
@@ -107,6 +79,7 @@
                 this.$axios.get(`/jsp/wap/trCapital/do/doUnfollow.jsp?id=${id}`).then(res => {
                     if (res.success == 'true') {
                         this.investData.splice(index, 1)
+                        this.count -= 1
                     }
                 })
                 let instance = Toast('取消成功');
@@ -116,8 +89,7 @@
             },
             // 上拉加载
             loadMore() {
-                this.pn = this.pn + 1
-               
+                this.pn = this.pn + 1           
                 this.$axios.get('/jsp/wap/center/ctrl/jsonFollowList.jsp?type=2', {
                     params: {
                         pageNumber: this.pn
@@ -126,7 +98,7 @@
                      this.loading = true
                     if (res.success == "true") {
                         this.investData = [...this.investData, ...res.data.pageList]
-                        this.totalCount = res.data.pagination.totalCount
+                        this.count = res.data.pagination.totalCount
                         this.loading = false
                     }
                 })

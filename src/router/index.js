@@ -317,6 +317,14 @@ const router = new Router({
           },
         },
         {
+          path: "focusActivity",
+          name: "focusActivity",
+          component: () => import("@/views/my/myFocus/focusActivity.vue"),
+          meta: {
+            title: "我的关注"
+          },
+        },
+        {
           path: "label",
           name: "label",
           component: () => import("@/views//my/myFocus/label.vue"),
@@ -335,11 +343,43 @@ const router = new Router({
       }
     },
     {
+      path: "/projectDeliver",
+      name: "projectDeliver",
+      component: () => import("@/views/my/myProject/sendProject.vue"),
+      meta: {
+        title: "项目约谈"
+      }
+    },
+    {
+      path: "/sendMoney",
+      name: "sendMoney",
+      component: () => import("@/views/my/myMoney/sendMoney.vue"),
+      meta: {
+        title: "资金投递"
+      }
+    },
+    {
       path: "/manageProject",
       name: "manageProject",
       component: () => import("@/views/my/myProject/manageProject.vue"),
       meta: {
         title: "项目进展"
+      }
+    },
+    {
+      path: "/uploadMoney",
+      name: "uploadMoney",
+      component: () => import("@/views/my/mymoney/uploadMoney.vue"),
+      meta: {
+        title: "快速上传资金"
+      }
+    },
+    {
+      path: "/uploadProject",
+      name: "uploadproject",
+      component: () => import("@/views/my/myProject/uploadProject.vue"),
+      meta: {
+        title: "快速上传项目"
       }
     },
     {
@@ -385,7 +425,7 @@ const router = new Router({
     {
       path: "/setting",
       name: "setting",
-      component: () => import("@/views/my/setting.vue"),
+      component: () => import("@/views/my/setting/setting.vue"),
       meta: {
         title: "系统设置"
       }
@@ -427,6 +467,22 @@ const router = new Router({
       component: () => import("@/views/my/service.vue"),
       meta: {
         title: "在线客服"
+      }
+    },
+    {
+      path: "/callMe",
+      name: "callMe",
+      component: () => import("@/views/my/setting/callMe.vue"),
+      meta: {
+        title: "联系我们"
+      }
+    },
+    {
+      path: "/aboutUs",
+      name: "aboutUs",
+      component: () => import("@/views/my/setting/aboutApp.vue"),
+      meta: {
+        title: "关于我们"
       }
     },
     {
@@ -485,6 +541,22 @@ const router = new Router({
             title:"搜索列表"
           }
         },
+        {
+          path: "labelProject",
+          name: "labelProject",
+          component: () => import("@/views/search/labelProject.vue"),
+          meta:{
+            title:"搜索列表"
+          }
+        },
+        {
+          path: "labelMoney",
+          name: "labelMoney",
+          component: () => import("@/views/search/labelMoney.vue"),
+          meta:{
+            title:"搜索列表"
+          }
+        },
       ]
     },
     {
@@ -495,14 +567,14 @@ const router = new Router({
       //   title:"搜索活动"
       // }
     },
-    // {
-    //   path: "/xxz",
-    //   name: "xxz",
-    //   component: () => import("@/views/activity/aa.vue"),
-    //   meta:{
-    //     title:"搜索列表"
-    //   }
-    // },
+    {
+      path: "/aaa",
+      name: "aaa",
+      component: () => import("@/nativeShare/demo.vue"),
+      meta:{
+        title:"搜索列表"
+      }
+    },
   ],
 
 })

@@ -2,9 +2,12 @@
     <div class="">
         <div v-for="(item,index) in MoneyData" :key="index" class="messageBox">
             <div>
-                <div class="messageTitle">{{item.content}}</div>
-                <div class="messageDetail">{{item.detail}}</div>
-                <div class="messageTime">{{item.time}}</div>
+                <div class="title" @click="toFocusMoney(item.projectId)">{{item.title}}</div>
+                <div>
+                    <div class="messageTitle">{{item.content}}</div>
+                    <img :src=" $url + imgPaths" alt="" v-for="(imgPaths,idx) in item.imgPathList" :key="idx" class="imgList">
+                    <div class="messageTime">{{item.addTimeStr.substr(0,10)}}</div>
+                </div>
             </div>
         </div>
         <div v-show="noShow" class="noChange">您关注的资金还未发布动态</div>
@@ -15,23 +18,6 @@
     export default {
         data() {
             return {
-                messageList: [
-                    {
-                        title: "北京某互联网创新创业服务平台项目",
-                        detail: "感谢大家关注本项目，现已将正式投入研发，预计年底之前上线",
-                        time: "2018-01-01  12:11:10"
-                    },
-                    {
-                        title: "北京某互联网创新创业服务平台项目",
-                        detail: "感谢大家关注本项目，现已将正式投入研发，预计年底之前上线",
-                        time: "2018-01-01  12:11:10"
-                    },
-                    {
-                        title: "北京某互联网创新创业服务平台项目",
-                        detail: "感谢大家关注本项目，现已将正式投入研发，预计年底之前上线",
-                        time: "2018-01-01  12:11:10"
-                    },
-                ],
                 MoneyData: [],
                 noShow: false
             }
@@ -45,7 +31,10 @@
                         this.noShow = true
                     }
                 })
-            }
+            },
+            toFocusMoney(id){
+                this.$router.push({name:"moneyDetail",query:{id}})
+            },    
         },
         created() {
             this.getData()
@@ -76,13 +65,23 @@
         text-align: center;
         background: #fff
     }
-
+    .title{
+        border-left: 3px solid #005982;
+        padding-left: .1rem;
+        margin: .2rem 0;
+        overflow: hidden; /*超出部分隐藏*/
+        white-space: nowrap; /*不换行*/
+        text-overflow: ellipsis;
+        font-size: .32rem;
+        color: #005982
+        
+    }
     .messageBox {
         background: #fff;
         padding: .2rem;
-        border-bottom: .2rem solid #f3f5f7;
+        border-bottom: .2rem solid #f3f5f7;    
         .messageTitle {
-            font-size: .32rem;
+            font-size: .28rem;
             font-family: "PingFang";
             color: rgb( 51, 51, 51);
         }
@@ -95,6 +94,7 @@
         .messageTime {
             color: #999;
             font-size: .26rem;
+            margin: .1rem 0;
         }
     }
 

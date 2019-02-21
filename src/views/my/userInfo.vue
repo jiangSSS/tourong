@@ -4176,7 +4176,7 @@
   .subBtn {
     position: fixed;
     top: 0.2rem;
-    right: 0.3rem;
+    right: 0.6rem;
     background: #fff;
     border: 0;
     font-size: 0.34rem;

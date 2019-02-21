@@ -29,7 +29,7 @@
           </div>
           <van-uploader :after-read="onRead2" accept multiple action class="flr">
             <div class="btn">点击上传简历</div>
-          </van-uploader>       
+          </van-uploader>
         </div>
         <div class="fileList" v-for="item in fileList1" :key="item.index">{{item.name}}</div>
         <div class="clearfix ">
@@ -39,7 +39,7 @@
           </div>
           <van-uploader :after-read="onRead3" accept multiple action class="flr">
             <div class="btn">点击上传荣誉</div>
-          </van-uploader>       
+          </van-uploader>
         </div>
         <div class="fileList" v-for="item in fileList2" :key="item.index">{{item.name}}</div>
         <div class="clearfix ">
@@ -53,13 +53,6 @@
         </div>
         <div class="fileList" v-for="item in fileList3" :key="item.index">{{item.name}}</div>
         <!--  -->
-        <div class="">
-          <div class="rows">
-            <!-- <span class="star">* </span> -->
-            <span>介绍</span>
-          </div>
-          <textarea placeholder="请输入介绍" v-model="attestForm.brief" class="textarea"></textarea>
-        </div>
       </div>
       <div v-if="attestForm.type == 2">
         <div class="clearfix ">
@@ -159,7 +152,7 @@
     },
     data() {
       return {
-        type: [{ name: "项目方", checked: false }, { name: "投资人", checked: false }, { name: "专家", checked: false }],
+        type: [{ name: "项目方", checked: true }, { name: "投资人", checked: false }, { name: "专家", checked: false }],
         attestForm: {
           brief: "",
           type: "1",
@@ -207,7 +200,7 @@
                 item.checked = false
               })
               this.attestForm.type = ""
-              this.fileList = []
+              // this.fileList = []
               this.attestForm.cardFilePath = []
               this.attestForm.cvFilePath = []
               this.attestForm.honorFilePath = []
@@ -341,6 +334,22 @@
       //   });
       // },
 
+    },
+    created() {
+      // let authenticationType = this.$store.state.userinfo.authenticationType
+      // console.log(authenticationType);
+      // let Type = authenticationType.split(',')
+      // Type.forEach(item => {
+      //   if (item == 1) {
+      //     this.project = true
+      //   }
+      //   if (item == 2) {
+      //     this.money = true
+      //   }
+      //   if (item == 3) {
+      //     this.member = true
+      //   }
+      // })
     }
   }
 </script>

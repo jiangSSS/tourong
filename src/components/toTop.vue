@@ -19,7 +19,8 @@
             this.$docElement = document.documentElement;
             this.$body = document.body;
             this.pageToTop();
-            window.addEventListener('scroll', this.debounce(this.pageToTop));          
+            // window.addEventListener('scroll', this.debounce(this.pageToTop));          
+            window.addEventListener('scroll', this.pageToTop);          
         },
     //     mounted: function () {
     //   this.$docElement = document.getElementById('main-box')
@@ -32,11 +33,11 @@
         // },
         methods: {
             goTop() {
-                this.timer = setInterval(() => {
+                // this.timer = setInterval(() => {
                     let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
                     let speed = Math.floor(scrollTop / 6);
-                    this.$body.scrollTop = this.$docElement.scrollTop = scrollTop - (speed < 1 ? 1 : speed);
-                }, 30);
+                    this.$body.scrollTop = this.$docElement.scrollTop = this.scrollTop - (speed < 1 ? 1 : speed);
+                // }, 30);
             },
             pageToTop() {
                 let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
@@ -45,27 +46,27 @@
                 } else {
                     this.isShowToTop = false;
                 }
-                if (scrollTop === 0) {
-                    clearInterval(this.timer);
-                }
+                // if (scrollTop === 0) {
+                //     clearInterval(this.timer);
+                // }
             },
-            debounce(fn, delay, timeout) {
-                var timer = null;
-                var last = new Date().getTime();
-                delay = delay || 300;
-                timeout = timeout || 300;
-                return () => {
-                    if (timer) {
-                        clearTimeout(timer);
-                    }
-                    timer = setTimeout(fn, delay);
-                    if (new Date().getTime() > last + timeout) {
-                        fn.apply(this, [].slice.call(Array, arguments));
-                        last = new Date().getTime();
-                        clearTimeout(timer);
-                    }
-                };
-            }
+            // debounce(fn, delay, timeout) {
+            //     var timer = null;
+            //     var last = new Date().getTime();
+            //     delay = delay || 300;
+            //     timeout = timeout || 300;
+            //     return () => {
+            //         if (timer) {
+            //             clearTimeout(timer);
+            //         }
+            //         timer = setTimeout(fn, delay);
+            //         if (new Date().getTime() > last + timeout) {
+            //             fn.apply(this, [].slice.call(Array, arguments));
+            //             last = new Date().getTime();
+            //             clearTimeout(timer);
+            //         }
+            //     };
+            // }
         }
     };
 </script>

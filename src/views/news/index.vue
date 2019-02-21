@@ -35,8 +35,8 @@
                         </div>
                     </div>
                 </div>
-                    <vueToTop></vueToTop>
-                    <!-- <ToTop></ToTop> -->
+                    <!-- <vueToTop></vueToTop> -->
+                    <ToTop></ToTop>
                 <div>
                     <!-- <div class="noData" v-if="this.totalCount > this.pageList.length">加载中...</div>
                     <div class="noData" v-else>--- 没有更多数据了 ---</div> -->

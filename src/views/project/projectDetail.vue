@@ -38,12 +38,12 @@
                         <i class="iconfont icon-xiangyou"></i>
                     </div>
                 </div> -->
-                  <div class="user clearfix" @click="$router.push({name:'projectInvestors',query:{id}})">
+                <div class="user clearfix" @click="$router.push({name:'projectInvestors',query:{id}})">
                     <!-- <img class="fll" src="../../../static/app/img/usrname.jpg" style="width:1rem"> -->
-                    <img class="avatar fll" :src="$url + memberInfo.photoImgPath" v-if="memberInfo&&memberInfo.photoImgPath"  alt>
+                    <img class="avatar fll" :src="$url + memberInfo.photoImgPath" v-if="memberInfo&&memberInfo.photoImgPath" alt>
                     <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=188149577,2949073731&fm=26&gp=0.jpg" v-else class="avatar fll">
-                    <span class="fll" v-if="memberInfo.name">{{memberInfo.name}}</span>
-                    <span class="fll" v-else>投资人</span>
+                    <span class="fll member" v-if="memberInfo.name">{{memberInfo.name}}</span>
+                    <span class="fll member" v-else>投资人</span>
                     <!-- <span class="fll">{{memberInfo.name}}</span> -->
                     <div class="flr">
                         <span class="">{{memberInfo.company}}</span>
@@ -119,6 +119,10 @@
 
                     </div>
                 </div>
+                <div class="typeBox">
+                     <span v-for="(lab,idx) in projectDetail.labelList" :key="idx" class="typeItem" @click="searchLabel(lab.labelId)">{{lab.labelName}}</span>
+                </div>
+               
                 <!-- <div class="user clearfix" @click="$router.push('/money/progress')">
                     <div class="fll">查看项目进展</div>
                     <div class="flr">
@@ -158,7 +162,9 @@
                 </div> -->
                 <div class="contentTell ">
                     <div class="detaila" @click="toMayProject">
-                        <div class="peojectTitle">可能感兴趣的项目<i class="iconfont icon-xiangyou flr"></i></div>
+                        <div class="peojectTitle">可能感兴趣的项目
+                            <i class="iconfont icon-xiangyou flr"></i>
+                        </div>
                     </div>
                     <!-- <div class="mayProject" v-for="(item,index) in mayProject" :key="index">
                         <div class="mayTitle">
@@ -215,10 +221,10 @@
                 myMoney: [],
                 projectId: "",
                 moneyId: "",
-                memberInfo:[],
+                memberInfo: [],
                 myMoney_Count: 0,
 
-                memberId:""
+                memberId: ""
             }
         },
         methods: {
@@ -291,7 +297,7 @@
                 this.id = this.$route.query.id
                 this.$axios.get(`/jsp/wap/trProject/ctrl/jsonProjectDetail.jsp?id=${this.id}`, ).then(res => {
                     console.log("项目详情", res)
-                    this.projectDetail = res.data.project   
+                    this.projectDetail = res.data.project
                     this.memberInfo = res.data.memberInfo
                     this.memberId = res.data.memberInfo.id
                     this.capitalList = res.data.capitalList
@@ -347,11 +353,13 @@
                     console.log("项目进展", res)
                 })
             },
-            toMayProject(){
+            toMayProject() {
                 let id = this.$route.query.id
-                this.$router.push({name:'mayProject',query:{id}})
-            }
-
+                this.$router.push({ name: 'mayProject', query: { id } })
+            },
+            searchLabel(labelId) {
+                this.$router.push({ name: 'labelProject', query: { labelId } })
+            },
         },
         created() {
             this.getProjectDetail()
@@ -382,6 +390,7 @@
         line-height: 1.6;
         padding: .3rem 0 0 0;
     }
+
     .sendBtn {
         border: 1px solid #005982;
         border-radius: 2px;
@@ -398,10 +407,12 @@
         margin-right: .3rem;
         text-align: center;
     }
+
     .isFollow {
         color: #fff;
         background: #005982
     }
+
     .time {
 
         font-size: .3rem;
@@ -409,11 +420,13 @@
         color: rgb(137, 137, 137);
         line-height: 2;
     }
+
     .projectHeader {
         background: #fff;
         padding: .8rem .2rem .1rem;
         margin-bottom: .3rem
     }
+
     .user {
         line-height: 3;
         padding: .2rem;
@@ -425,19 +438,20 @@
         font-size: .3rem;
         color: rgb( 51, 51, 51);
     }
+
     .customer {
         color: rgb( 0, 89, 130);
     }
+
     .contentTell {
         background: #fff;
-        padding: .2rem;
-        // margin-bottom: .3rem;
+        padding: .2rem; // margin-bottom: .3rem;
         .detaila {
             background: #fff;
             padding: .2rem 0;
             border-bottom: 1px solid #f3f5f7;
             .peojectTitle {
-                border-left: 3px solid #005982; 
+                border-left: 3px solid #005982;
                 padding-left: .2rem;
                 font-size: .3rem;
                 font-family: "PingFang";
@@ -451,56 +465,87 @@
             line-height: 1.5;
         }
     }
+
     .coreDetail {
         color: rgb(128, 128, 128);
     }
+
     .coreName {
         font-weight: 700;
         padding: .2rem 0 0;
     }
+
     .mayProject {
         padding: .1rem 0;
 
     }
+
     .mayTitle {
         color: rgb(128, 128, 128);
     }
+
     .mayTime {
         line-height: 2;
         color: rgb(128, 128, 128);
     }
+
     .message {
         background: #fff;
         padding: .2rem;
         margin-bottom: .3rem
     }
+
     .message div {
         line-height: 2
     }
+
     .message div span:nth-child(1) {
         font-family: "PingFang";
         color: rgb(137, 137, 137);
         display: inline-block;
         margin-right: .1rem
     }
+
     /*  */
+
     .applyBtn {
         background: #005982;
         color: #fff;
         margin-top: 0.4rem;
     }
-    .btnSend{
+
+    .btnSend {
         text-align: center;
     }
-    /deep/ .mu-dialog-body{
+
+    /deep/ .mu-dialog-body {
         padding: .7rem .5rem .5rem
     }
 
     .oneRows {
         width: 4.6rem
     }
-    .avatar{
+
+    .avatar {
         width: 1rem;
         border-radius: 100%
+    }
+
+    .member {
+        margin-left: .2rem
+    }
+    .typeItem{
+        background: #005982;
+        opacity: .8;
+        color: #fff;
+        display: inline-block;
+        padding: .1rem;
+        margin-right: .1rem;
+        border-radius: 6%
+    }
+    .typeBox{
+        padding: 0 .2rem;
+        margin-bottom: .3rem
+        
     }
 </style>

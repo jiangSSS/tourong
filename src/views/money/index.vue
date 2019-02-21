@@ -110,10 +110,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <!-- <div>
                                     <div class="noData" v-show="more">加载中...</div>
                                     <div class="noData" v-show="noMore">--- 没有更多数据了 ---</div>
-                                </div>
+                                </div> -->
+                                <div class="noData" v-if="this.totalCount > pageList.length">加载中...</div>
+                                <div class="noData" v-else>--- 没有更多数据了 ---</div>
+                                <!-- <div class="noData" v-if="this.pageList.length == 0">--- 没有更多数据了 ---</div> -->
                                 <mu-dialog width="400" center class="applyDialog" :open.sync="isShowApply">
                                     <select class="oneRows" v-model="projectId">
                                         <option :value="item.id" v-for="item in myProject" :key="item.index" :label="item.title">{{item.title}}</option>
@@ -160,8 +163,8 @@
                 moneyId: "",
                 myMoney_Count: 0,
 
-                more: false,
-                noMore: false,
+                // more: false,
+                // noMore: false,
                 //
                 isShow: false,
                 isShow1: false,
@@ -214,7 +217,7 @@
                     if (myProject.length > 0) {
                         this.projectId = myProject[0].id
                     }
-                    this.myProject_Count = Number(res.data.pagination.totalCount);
+                    // this.myProject_Count = Number(res.data.pagination.totalCount);
                 });
             },
             // 投递
@@ -273,26 +276,27 @@
                 this.pn += 1;
                 this.$axios.get("/jsp/wap/trCapital/ctrl/jsonCapitalPage.jsp", {
                     params: {
-                        sort: this.sort,
+                        // sort: this.sort,
                         investAmounts: this.investAmounts,
                         investIndustrys: this.investIndustrys,
                         investRegions: this.investRegions,
                         investTypes: this.investTypes,
                         regions: this.regions,
-                        pageNumber: this.pn
+                        pageNumber: this.pn,
+                        sort: this.sort,
                     }
                 }).then(res => {
                     this.loading = true
                     if (res.success == "true") {
                         this.pageList = [...this.pageList, ...res.data.pageList];
                         this.totalCount = Number(res.data.pagination.totalCount);
-                        if (this.totalCount > this.pageList.length) {
-                            this.more = true
-                            this.noMore = false
-                        } else {
-                            this.more = false
-                            this.noMore = true
-                        }
+                        // if (this.totalCount > this.pageList.length) {
+                        //     this.more = true
+                        //     this.noMore = false
+                        // } else {
+                        //     this.more = false
+                        //     this.noMore = true
+                        // }
                         this.loading = false;
                     }
                 });
@@ -324,13 +328,13 @@
                             this.pageList = res.data.pageList;
                             this.totalCount = Number(res.data.pagination.totalCount);
                             // this.pn = 1;
-                            if (this.totalCount > this.pageList.length) {
-                                this.more = true
-                                this.noMore = false
-                            } else {
-                                this.more = false
-                                this.noMore = true
-                            }
+                            // if (this.totalCount > this.pageList.length) {
+                            //     this.more = true
+                            //     this.noMore = false
+                            // } else {
+                            //     this.more = false
+                            //     this.noMore = true
+                            // }
                             this.loading = false;
                         }
                     });
@@ -365,8 +369,8 @@
                             regionList.forEach(item => {
                                 this.$set(item, "checked", false);
                             });
-                            regionList.unshift({ dataName: "不限" });
-                            this.regionList = regionList;
+                            // regionList.unshift({ dataName: "不限" });
+                            // this.regionList = regionList;
 
                             let investTypeList = res.data.investTypeList;
                             investTypeList.forEach(item => {
@@ -463,12 +467,11 @@
             },
             // 确定
             handleSure() {
-                this.getDatalList(this.investAmounts, this.investIndustrys, this.investRegions, this.investTypes, this.regions);
+                this.getDatalList(this.sort,this.investAmounts, this.investIndustrys, this.investRegions, this.investTypes, this.regions);
                 this.$refs.drawerLayout.toggle(false);
             },
             //  搜索
             search() {
-                this.loading = true;
                 this.$axios.get("/jsp/wap/trCapital/ctrl/jsonCapitalPage.jsp", {
                     params: {
                         investIndustrys: this.investIndustrys,
@@ -483,7 +486,6 @@
                         this.pageList = res.data.pageList;
                         this.totalCount = res.data.pagination.totalCount;
                         this.pn = 1;
-                        this.loading = false;
                     }
                 });
             },
@@ -504,11 +506,9 @@
                 this.getDatalList(sort, this.investAmounts, this.investIndustrys, this.investRegions, this.investTypes, this.regions)
             },
              goTop() {
-                this.timer = setInterval(() => {
                     let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
                     let speed = Math.floor(scrollTop / 6);
                     this.$body.scrollTop = this.$docElement.scrollTop = this.scrollTop - (speed < 1 ? 1 : speed);
-                }, 30);
             },
             pageToTop() {
                 let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
@@ -517,33 +517,13 @@
                 } else {
                     this.isShowToTop = false;
                 }
-                if (scrollTop === 0) {
-                    clearInterval(this.timer);
-                }
             },
-            debounce(fn, delay, timeout) {
-                var timer = null;
-                var last = new Date().getTime();
-                delay = delay || 300;
-                timeout = timeout || 300;
-                return () => {
-                    if (timer) {
-                        clearTimeout(timer);
-                    }
-                    timer = setTimeout(fn, delay);
-                    if (new Date().getTime() > last + timeout) {
-                        fn.apply(this, [].slice.call(Array, arguments));
-                        last = new Date().getTime();
-                        clearTimeout(timer);
-                    }
-                };
-            }       
         },
         mounted () {
             this.$docElement = document.getElementById('son')
             this.$body = document.getElementById('father');
             this.pageToTop();
-            document.getElementById('son').addEventListener('scroll', this.debounce(this.pageToTop));
+            document.getElementById('son').addEventListener('scroll', this.pageToTop);
         },
         created() {
             this.getDatalList(

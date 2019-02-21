@@ -14,6 +14,9 @@
                 <router-link :to="{name:'focusMoney'}">资金</router-link>
             </div>
             <div class="nav fll">
+                <router-link :to="{name:'focusActivity'}">活动</router-link>
+            </div>
+            <div class="nav fll">
                 <router-link :to="{name:'label'}">标签设置</router-link>
             </div>
         </div>

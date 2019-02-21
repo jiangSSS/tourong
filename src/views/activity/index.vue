@@ -235,11 +235,9 @@
                 this.getActivityList(this.category = "")
             },
             goTop() {
-                this.timer = setInterval(() => {
-                    let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
-                    let speed = Math.floor(scrollTop / 6);
-                    this.$body.scrollTop = this.$docElement.scrollTop = this.scrollTop - (speed < 1 ? 1 : speed);
-                }, 30);
+                let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
+                let speed = Math.floor(scrollTop / 6);
+                this.$body.scrollTop = this.$docElement.scrollTop = this.scrollTop - (speed < 1 ? 1 : speed);
             },
             pageToTop() {
                 let scrollTop = this.$body.scrollTop + this.$docElement.scrollTop;
@@ -248,33 +246,13 @@
                 } else {
                     this.isShowToTop = false;
                 }
-                if (scrollTop === 0) {
-                    clearInterval(this.timer);
-                }
             },
-            debounce(fn, delay, timeout) {
-                var timer = null;
-                var last = new Date().getTime();
-                delay = delay || 300;
-                timeout = timeout || 300;
-                return () => {
-                    if (timer) {
-                        clearTimeout(timer);
-                    }
-                    timer = setTimeout(fn, delay);
-                    if (new Date().getTime() > last + timeout) {
-                        fn.apply(this, [].slice.call(Array, arguments));
-                        last = new Date().getTime();
-                        clearTimeout(timer);
-                    }
-                };
-            }
         },
           mounted () {
             this.$docElement = document.getElementById('son')
             this.$body = document.getElementById('father');
             this.pageToTop();
-            document.getElementById('son').addEventListener('scroll', this.debounce(this.pageToTop));
+            document.getElementById('son').addEventListener('scroll', this.pageToTop);
         },
         created() {
             this.getActivityList(this.status, this.category)

@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 
-
+import $ from 'webpack-zepto';
 // 重置默认样式
 import "normalize.css/normalize.css"
 import "./style/index.scss"

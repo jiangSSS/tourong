@@ -4,7 +4,7 @@
         <Header></Header>
         <div class="containerAll">
             <div class="detail">
-                <div class="headerWarp" @click="$router.push('/xxz')">
+                <div class="headerWarp">
                     <div class="title">{{activityDetail.title}}</div>
                     <div>
                         <span>主办：</span>
@@ -14,12 +14,16 @@
                         <span>地点：</span>
                         <span>{{activityDetail.address}}</span>
                     </div>
-                    <div>
+                   <div class="clearfix">
+                        <div class="sendBtn flr likeBtn" v-if="follow" @click="isFollow">已关注</div>
+                    <div class="sendBtn flr" v-else @click="noFollow">关注</div>
+                    <div class="fll">
                         <span>活动时间：</span>
-                        <span>{{activityDetail.regStartTimeStr}}</span>
-                        <span>至</span>
-                        <span>{{activityDetail.regEndTimeStr}}</span>
+                        <span v-if="activityDetail&&activityDetail.regStartTimeStr">{{activityDetail.regStartTimeStr.slice(0,10)}}</span>
+                        <span>~</span>
+                        <span v-if="activityDetail&&activityDetail.regEndTimeStr">{{activityDetail.regEndTimeStr.slice(0,10)}}</span>
                     </div>
+                   </div>
                 </div>
                 <div>
                     <div class="contentImg">
@@ -27,6 +31,7 @@
                     </div>
                     <div class="contentText" v-html="activityDetail.content"></div>
                 </div>
+                    
             </div>
         </div>
         <div class="social-share"></div>
@@ -47,10 +52,15 @@
                 <i class="iconfont icon-share"></i>
                 <span>分享</span>
             </div>
+            <!-- <div id="shareBtn" class="soshm">
+                <i class="iconfont icon-share"></i>
+                <span>分享</span>
+            </div> -->
 
         </div>
         <!-- <van-popup v-model="share" position="bottom" :overlay="true" class="shareBox">
             <div class="social-share"></div>
+            <button id="shareBtn"></button>
         </van-popup> -->
         <van-popup v-model="share" position="bottom" :overlay="true" class="shareBox">
             <share :config="config"></share>
@@ -85,7 +95,7 @@
 
             </div>
             <mu-button class="applyBtn" @click="closeApply()">确认</mu-button>
-            <mu-button class="applyBtn" @click="cancelApply">取消</mu-button>
+            <mu-button class="applyBtn" @click="isShowApply = false">取消</mu-button>
         </mu-dialog>
     </div>
 </template>
@@ -94,8 +104,9 @@
     import Header from "@/components/Header.vue"
     import Footer from "@/components/Bottom.vue"
     import { Toast } from 'mint-ui'
-    import { Popup } from 'vant';
+    import { Popup } from 'vant'
     import * as Cookies from 'js-cookie'
+    import "soshm/dist/soshm.min.js"
     import VeeValidate, { Validator } from 'vee-validate'
     Validator.extend('memberMobile', {
         getMessage: name => '必须是11位手机号码',
@@ -129,6 +140,7 @@
                 },
                 good: 0,
                 id: "",
+                follow: 0,
                 countComment: "",
                 // 分享
                 share: false,
@@ -146,19 +158,20 @@
                 },
             }
         },
+        // mounted() {
+        //     document.getElementById('shareBtn').addEventListener('click', function () {
+        //         soshm.popIn({
+        //             title: '弹窗分享',
+        //             sites: ['weixin', 'weixintimeline', 'weibo', 'yixin', 'qzone', 'tqq', 'qq']
+        //         });
+        //     }, false);
+        // },
         methods: {
             // 打开报名框
             handleApply() {
                 if (this.activityDetail.status != 1) {
                     this.isShowApply = false
                 }
-                // if (!(Cookies.get('userKey'))) {
-                //     console.log("111")
-                //     this.isShowApply = false
-                // }
-            },
-            cancelApply() {
-                this.isShowApply = false
             },
             // 确认报名 关闭报名框
             closeApply() {
@@ -243,6 +256,7 @@
                     }
                 })
             },
+            
             // 取消点赞
             isGood() {
                 this.$axios.get(`/jsp/wap/trActivity/do/cancelGreat.jsp?id=${this.id}`).then(res => {
@@ -263,12 +277,61 @@
                 this.$axios.get(`/jsp/wap/trActivity/ctrl/jsonCommentPage.jsp?id=${this.id}`).then(res => {
                     this.countComment = Number(res.data.pagination.totalCount)
                 })
-            }
+            },
+            //  getFollow() {
+            //     this.$axios.get(`/jsp/wap/trActivity/do/isGreat.jsp?id=${this.id}`).then(res => {
+            //         console.log("是否点赞", res)
+            //         this.follow = Number(res.data)
+            //     })
+            // },
+             getFollow() {
+                this.$axios.get(`/jsp/wap/trActivity/ctrl/jsonIsFollow.jsp?id=${this.id}`).then(res => {
+                    console.log("是否关注", res)
+                    this.follow = Number(res.data)
+                })
+            },
+            // 关注
+            noFollow() {
+                this.$axios.get(`/jsp/wap/trActivity/do/doFollow.jsp?id=${this.id}`).then(res => {
+                    console.log("投资关注", res)
+                    if (res.success == "true") {
+                        let instance = Toast('关注成功');
+                        setTimeout(() => {
+                            instance.close();
+                        }, 1000);
+                        this.follow = 1
+                    } else {
+                        let instance = Toast(res.message);
+                        setTimeout(() => {
+                            instance.close();
+                        }, 1000);
+                    }
+                })
+            },
+            // 取消关注
+            isFollow() {
+                this.$axios.get(`/jsp/wap/trActivity/do/doUnfollow.jsp?id=${this.id}`).then(res => {
+                    console.log("取消关注", res)
+                    if (res.success == "true") {
+                        let instance = Toast('已取消关注');
+                        setTimeout(() => {
+                            instance.close();
+                        }, 2000);
+                        this.follow = 0
+                    } else {
+                        let instance = Toast('取消失败');
+                        setTimeout(() => {
+                            instance.close();
+                        }, 2000);
+                    }
+                })
+            },
         },
         created() {
             this.getActivityDetail()
             this.getGood()
             this.getComment()
+            this.getFollow()
         }
     }
 </script>
@@ -421,5 +484,26 @@
         width: 40%;
         text-align: center;
         margin: .3rem auto 0
+    }
+    .sendBtn {
+        border: 1px solid #005982;
+        border-radius: 2px;
+        display: inline-block;
+        color: #005982;
+        padding: .1rem;
+        height: .6rem;
+        width: 1.2rem;
+        line-height: .4rem;
+        font-family: "PingFang";
+        font-size: .23rem;
+        font-weight: bold;
+        opacity: 1;
+        margin-right: .3rem;
+        text-align: center;
+    }
+
+    .likeBtn {
+        background: #005982;
+        color: #fff
     }
 </style>

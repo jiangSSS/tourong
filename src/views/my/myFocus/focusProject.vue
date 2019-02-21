@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <div v-infinite-scroll="loadMore" infinite-scroll-disabled="loading">
-            <div class="step" v-for="item in projectList" :key="item.index">
+            <div class="step" v-for="(item,index) in projectList" :key="index">
                 <div class="itemBox">
                     <div class="clearfix">
                         <div class="peojectTitle fll" @click="$router.push({name:'projectDetail',query:{id:item.id}})">
@@ -43,88 +43,7 @@
                 count: 1,
                 loading: false,
                 pageNumber: 1,
-                totalCount: [],
                 projectList: [],
-                projectData: [
-                    {
-                        name: "北京某互联网创新创业服务平台项目",
-                        progress: [
-                            {
-                                title: "开发完成，已准备上线",
-                                time: "2018-01-01 12:11:10"
-                            },
-                            {
-                                title: "签好合同，已准备工作阶段",
-                                time: "2018-01-01 12:11:10"
-                            },
-                        ],
-                    },
-                    {
-                        name: "北京某互联网创新创业服务平台项目",
-                        progress: [
-                            {
-                                title: "开发完成，已准备上线",
-                                time: "2018-01-01 12:11:10"
-                            },
-                            {
-                                title: "签好合同，已准备工作阶段",
-                                time: "2018-01-01 12:11:10"
-                            },
-                        ],
-                    },
-                    {
-                        name: "北京某互联网创新创业服务平台项目",
-                        progress: [
-                            {
-                                title: "开发完成，已准备上线",
-                                time: "2018-01-01 12:11:10"
-                            },
-                            {
-                                title: "签好合同，已准备工作阶段",
-                                time: "2018-01-01 12:11:10"
-                            },
-                        ],
-                    },
-                    {
-                        name: "北京某互联网创新创业服务平台项目",
-                        progress: [
-                            {
-                                title: "开发完成，已准备上线",
-                                time: "2018-01-01 12:11:10"
-                            },
-                            {
-                                title: "签好合同，已准备工作阶段",
-                                time: "2018-01-01 12:11:10"
-                            },
-                        ],
-                    },
-                    {
-                        name: "北京某互联网创新创业服务平台项目",
-                        progress: [
-                            {
-                                title: "开发完成，已准备上线",
-                                time: "2018-01-01 12:11:10"
-                            },
-                            {
-                                title: "签好合同，已准备工作阶段",
-                                time: "2018-01-01 12:11:10"
-                            },
-                        ],
-                    },
-                    {
-                        name: "北京某互联网创新创业服务平台项目",
-                        progress: [
-                            {
-                                title: "开发完成，已准备上线",
-                                time: "2018-01-01 12:11:10"
-                            },
-                            {
-                                title: "签好合同，已准备工作阶段",
-                                time: "2018-01-01 12:11:10"
-                            },
-                        ],
-                    },
-                ],
             }
         },
         methods: {
@@ -132,6 +51,7 @@
                 this.$axios.get(`/jsp/wap/trProject/do/doUnfollow.jsp?id=${id}`).then(res => {
                     if (res.success == 'true') {
                         this.projectList.splice(index, 1)
+                        this.count -= 1
                     }
                 })
                 let instance = Toast('取消成功');
@@ -141,8 +61,7 @@
             },
             // 上拉加载
             loadMore() {
-                this.pn = this.pn + 1
-               
+                this.pn = this.pn + 1    
                 this.$axios.get('/jsp/wap/center/ctrl/jsonFollowList.jsp?type=1', {
                     params: {
                         pageNumber: this.pn
@@ -151,7 +70,7 @@
                      this.loading = true
                     if (res.success == "true") {
                         this.projectList = [...this.projectList, ...res.data.pageList]
-                        this.totalCount = res.data.pagination.totalCount
+                        this.count = res.data.pagination.totalCount
                         this.loading = false
                     }
                 })

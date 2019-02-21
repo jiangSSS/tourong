@@ -262,11 +262,6 @@
                             <input class="oneInput" type="text" v-model="formData.address">
                         </div>
                     </div>
-                    <!-- <div v-if="formData.financeBody == 64">
-                       
-                    </div> -->
-
-
                 </div>
                 <div>
                     <div class="peojectTitle">项目融资信息</div>
@@ -278,6 +273,19 @@
                 </div>
                 <div class="wayBox">
                     <div v-if="fin_way == 0">
+                        <!-- <div class="rows heightRows">
+                            <span>
+                                <i class="red">*</i> 融资金额：</span>
+                            <select class="oneRows" v-model="formData.financingMoney ">
+                                <option :value="item.dataValue" v-for="item in financingMoneyList" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
+                            </select>
+                        </div> -->
+                              <div class="rows">
+                            <span class="langmore">
+                                <i class="red">*</i>融资金额：</span>
+                            <input class="oneInput money" type="text" v-model="formData.financingAmount">
+                            <span class="wanyuan">万元</span>
+                        </div>
                         <div class="rows">
                             <span class="langmore">
                                 <i class="red">*</i>公司估值：</span>
@@ -327,11 +335,18 @@
                     </div>
                     <div v-if="fin_way == 1">
                         <div class="rows">
-                            <span class="">
+                            <span class="langmore">
                                 <i class="red">*</i>融资金额：</span>
                             <input class="oneInput money" type="text" v-model="formData.financingAmount">
                             <span class="wanyuan">万元</span>
                         </div>
+                        <!-- <div class="rows heightRows">
+                            <span>
+                                <i class="red">*</i> 融资金额：</span>
+                            <select class="oneRows" v-model="formData.financingMoney ">
+                                <option :value="item.dataValue" v-for="item in financingMoneyList" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
+                            </select>
+                        </div> -->
                         <div class="rows">
                             <span class="">
                                 <i class="red">*</i>品种：</span>
@@ -405,6 +420,19 @@
                         </div>
                     </div>
                     <div v-if="fin_way == 2">
+                        <!-- <div class="rows heightRows">
+                            <span>
+                                <i class="red">*</i> 融资金额：</span>
+                            <select class="oneRows" v-model="formData.financingMoney ">
+                                <option :value="item.dataValue" v-for="item in financingMoneyList" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
+                            </select>
+                        </div> -->
+                              <div class="rows">
+                            <span class="langmore">
+                                <i class="red">*</i>融资金额：</span>
+                            <input class="oneInput money" type="text" v-model="formData.financingAmount">
+                            <span class="wanyuan">万元</span>
+                        </div>
                         <div class="rows">
                             <div>
                                 <i class="red">*</i>融资说明：</div>
@@ -4465,7 +4493,8 @@
                     yearNetProfitGrowth: '',
                     netAssetsFormat: '',
                     netAssetsType: '',
-                    teamList: []
+                    teamList: [],
+                    financingMoney: ''
                 },
                 financeBodyList: [],
                 stageList: [],
@@ -4501,9 +4530,10 @@
                 creditWays: [],
                 intentCapitalList: [],
                 intentCapitals: [],
+                financingMoneyList: [],
                 stage: '',
                 // stage:[],
-                fin_way: 0,
+                fin_way: 1,
                 unit: [{ label: '万元', value: '2' }, { label: '亿元', value: "1" }],
 
                 city1: "北京市",
@@ -4799,7 +4829,7 @@
                     this.formData.companyFoundTimeStr = res.data.project.companyFoundTimeStr
                     // this.formData.financingMoney = res.data.project.financingMoney
                     this.formData.financingAmount = res.data.project.financingAmount
-
+                    this.financingMoneyList = res.data.financingMoneyList;
                     this.formData.registeredCapital = res.data.project.registeredCapital
 
                     this.formData.expiryDateStartTimeStr = res.data.project.expiryDateStartTimeStr
@@ -5324,10 +5354,12 @@
     .heightRows {
         height: 1.1rem;
     }
-    .rows i{
+
+    .rows i {
         font-style: normal
     }
-    .fileItem{
+
+    .fileItem {
         font-size: .24rem;
         height: .5rem;
         line-height: .5rem;

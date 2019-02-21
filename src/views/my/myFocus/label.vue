@@ -27,69 +27,6 @@
   export default {
     data() {
       return {
-        label: [
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "融资",
-            like: 1
-          },
-          {
-            name: "健康医疗",
-            like: 0
-          },
-          {
-            name: "互联网",
-            like: 1
-          },
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "投资",
-            like: 1
-          },
-
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "投资",
-            like: 0
-          },
-          {
-            name: "投资",
-            like: 0
-          }
-        ],
         labelData: [],
         followLabel: [],
         checked: false,
@@ -100,11 +37,13 @@
         this.checked = false
         if (this.labelData[index].isFollow == '0') {
           this.$axios.get('/jsp/wap/center/do/doFollowIndustry.jsp', { params: { industryValue } }).then(res => {
+            console.log("1111",res)
             this.labelData[index].isFollow = '1'
             this.followLabel.push(this.labelData[index])
           })
         } else {
           this.$axios.get('/jsp/wap/center/do/doUnfollowIndustry.jsp', { params: { industryValue } }).then(res => {
+            console.log('222',res)
             this.labelData[index].isFollow = '0'
             this.followLabel.remove(this.labelData[index])
           })
@@ -119,6 +58,7 @@
           })
           var industryValue = industry.join(',')
           this.$axios.get('/jsp/wap/center/do/doFollowIndustry.jsp', { params: { industryValue } }).then(res => {
+
             this.labelData.forEach(item => {
               item.isFollow = '1'
             })
@@ -133,6 +73,7 @@
       },
       getData() {
         this.$axios.get('/jsp/wap/center/ctrl/jsonIndustry.jsp').then(res => {
+          console.log(res)
           var label = res.data
           label.forEach(item => {
             if (item.isFollow == '1') {
