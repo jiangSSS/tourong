@@ -113,6 +113,11 @@
                 <div class="contentTell ">
                     <div class="detaila">
                         <!-- @click="tomoreMoney" -->
+                        <div class="peojectTitle">投资能力&风险承担能力介绍</div>
+                        <div class="abilityBrief">
+                            暂无介绍
+                        </div>
+
                         <div class="peojectTitle">TA的更多资金
                             <!-- <i class="iconfont icon-xiangyou flr"></i> -->
                         </div>
@@ -442,5 +447,9 @@
     .noData {
         color: #ccc;
         text-align: center;
+    }
+    .abilityBrief{
+        padding: .2rem;
+        color: #999
     }
 </style>

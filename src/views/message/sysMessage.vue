@@ -35,11 +35,8 @@
         methods: {
             // 上拉加载
             loadMore() {
-                // this.pn += 1
-                //  this.pn = this.pn + 1
-                // this.loading = true
-                this.$axios.get(`/jsp/wap/center/ctrl/jsonNoticeList.jsp`, { params: {pageNumber:this.pn} }).then(res => {     
-                    this.pn += 1
+                this.pn += 1
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonNoticeList.jsp`, { params: {pageNumber:this.pn} }).then(res => {                
                     this.loading = true                                   
                     if (res.success == "true") {       
                         this.systemData = [...this.systemData, ...res.data.pageList]
@@ -60,11 +57,11 @@
             getData() {
                 this.$axios.get(`/jsp/wap/center/ctrl/jsonNoticeList.jsp`).then(res => {
                     console.log("系统消息", res)
-                    // this.loading = true
+                    this.loading = true
                     if (res.success == "true") {                      
                         this.systemData = res.data.pageList
-                        // this.totalCount = Number(res.data.pagination.totalCount)
-                        // this.pn = 1
+                        this.totalCount = Number(res.data.pagination.totalCount)
+                        this.pn = 1
                         // if (this.totalCount > this.systemData.length) {
                         //     this.more = true
                         //     this.noMore = false

@@ -1,32 +1,86 @@
 <template>
     <div class="all">
-        <!-- <Header></Header> -->
-        <div class="container_warp">
-            <div :model="formData">
-                <mt-field label="姓名" v-model="formData.name"></mt-field>
-                <mt-field label="联系方式" type="tel" v-validate="'required|mobile'" name="mobile" v-model="formData.mobile"></mt-field>
-                <!-- <span v-show="errors.has('mobile')" class="error">{{ errors.first('mobile')}}</span> -->
-                <mt-field label="单位" type="url" v-model="formData.company"></mt-field>
-                <mt-field label="职位" type="number" v-model="formData.job"></mt-field>
-                <mt-field label="介绍" type="textarea" rows="4" v-model="formData.introduce"></mt-field>
-            </div>
-            <!-- <textarea class="textarea" placeholder="请详细填写你的需求" v-model="content" name="" id="" cols="30" rows="10"></textarea> -->
-            <mt-button type="default" class="submit" @click="submit">提交</mt-button>
-        </div>
+        <van-cell-group>
+            
+            <van-field v-model="formData.name" label="姓名" v-validate="'required|name'" name="姓名"  placeholder="请填写姓名" />
+            <!-- <span v-show="errors.has('姓名')" class="error">{{ errors.first('姓名')}}</span> -->
+            <van-field v-model="formData.mobile" label="联系方式" v-validate="'required|mobile'" name="电话号码" placeholder="请填写电话号码" />
+            <!-- <span v-show="errors.has('电话号码')" class="error">{{ errors.first('电话号码')}}</span> -->
+            <van-field v-model="formData.company" label="单位" v-validate="'required|company'" name="单位名称" placeholder="请填写单位名称" />
+            <!-- <span v-show="errors.has('单位名称')" class="error">{{ errors.first('单位名称')}}</span> -->
+            <van-field v-model="formData.job" label="职位" v-validate="'required|job'" name="所在职位" placeholder="请填写所在职位" />
+            <!-- <span v-show="errors.has('所在职位')" class="error">{{ errors.first('所在职位')}}</span> -->
+            <van-field v-model="formData.introduce" label="介绍" v-validate="'required|introduce'" name="介绍" type="textarea" placeholder="请填写介绍" rows="4" autosize />
+            <!-- <span v-show="errors.has('介绍')" class="error">{{ errors.first('介绍')}}</span> -->
+        </van-cell-group>
+        <div class="submitBox">
+            <mt-button type="default" class="submit" @click="submit">提交</mt-button> 
+        </div>       
     </div>
 </template>
 
 <script>
     import Header from "@/components/Header.vue"
-    import { Dialog } from "vant";
+    import { Dialog, Field } from "vant";
     import { Toast } from "mint-ui"
-    import VeeValidate, { Validator } from 'vee-validate'
-    Validator.extend('mobile', {
-        getMessage: name => '必须是11位手机号码',
+    import VeeValidate, { Validator } from "vee-validate";
+    Validator.extend("mobile", {
+        getMessage: field => "必须是11位手机号码",
         validate: value => {
-            return value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
+            return (
+                value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
+            );
         }
     });
+    Validator.extend("introduce", {
+        getMessage: field => "请输入",
+        validate: value => {
+            return (
+                value.length != 0
+            );
+        }
+    });
+    Validator.extend("company", {
+        getMessage: field => "请输入",
+        validate: value => {
+            return (
+                value.length != 0
+            );
+        }
+    });
+    Validator.extend("job", {
+        getMessage: field => "请输入",
+        validate: value => {
+            return (
+                value.length != 0
+            );
+        }
+    });
+    Validator.extend("name", {
+        getMessage: field => "请输入",
+        validate: value => {
+            return (
+                value.length != 0
+            );
+        }
+    });
+    Validator.extend("formData.directorEmail", {
+        // getMessage: field => "邮箱格式不正确",
+        messages: {
+            email: () => '邮箱格式不正确'
+        },
+        validate: value => {
+            return;
+        }
+    });
+    // 修改错误提示
+    const dict = {
+        messages: {
+            required: (field) => '请输入' + field
+        }
+    }
+    const validator = new Validator({});
+    validator.localize('zh_CN', dict);
     export default {
         components: {
             Header,
@@ -73,7 +127,7 @@
                         })
                         return;
                     }
-                    let instance = Toast('请输入正确的手机号');
+                    let instance = Toast('请完善信息');
                     setTimeout(() => {
                         instance.close();
                     }, 2000);
@@ -86,44 +140,14 @@
     .all {
         background: #fff;
     }
-    .error{
+    .red{
+        color: #f00
+    }
+    .error {
         color: #f00;
-        font-size: .2rem
-    }，
-    /deep/ .mint-field .mint-cell-title {
-        width: 1.4rem;
-        text-align: right;
-        margin-right: .2rem
-    }，
-
-    /deep/ .mint-field-core {
-        border: 1px solid #ccc
-    }，
-
-    /deep/ .mint-cell-wrapper {
-        background: none;
-    }，
-
-    /deep/ .mint-field-core {
-        padding: 0 .1rem
-    }
-
-    .container_warp {
-        padding-top: .4rem;
-        text-align: center;
-        width: 100%
-    }
-
-    .textarea {
-        width: 94%;
-        padding: .2rem;
-        background: #f3f5f7;
-        border: none;
-        resize: none;
-    }
-
-    .textarea:focus {
-        outline: none;
+        font-size: .2rem;
+        display: inline-block;
+        margin-left: 2.2rem
     }
 
     .submit {
@@ -132,5 +156,8 @@
         background: #005982;
         color: #fff;
         margin-top: .6rem
+    }
+    .submitBox{
+        text-align: center;
     }
 </style>

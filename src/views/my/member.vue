@@ -52,6 +52,13 @@
           </van-uploader>
         </div>
         <div class="fileList" v-for="item in fileList3" :key="item.index">{{item.name}}</div>
+        <div class="">
+          <div class="rows">
+            <!-- <span class="star">* </span> -->
+            <span>投资能力&风险承担能力介绍</span>
+          </div>
+          <textarea placeholder="请输入内容" v-model="attestForm.abilityBrief" class="textarea"></textarea>
+        </div>
         <!--  -->
       </div>
       <div v-if="attestForm.type == 2">
@@ -102,6 +109,13 @@
             <span>历史投资案例</span>
           </div>
           <textarea placeholder="请输入内容" v-model="attestForm.brief" class="textarea"></textarea>
+        </div>
+        <div class="">
+          <div class="rows">
+            <!-- <span class="star">* </span> -->
+            <span>投资能力&风险承担能力介绍</span>
+          </div>
+          <textarea placeholder="请输入内容" v-model="attestForm.abilityBrief" class="textarea"></textarea>
         </div>
       </div>
       <div v-if="attestForm.type == 3">
@@ -155,6 +169,7 @@
         type: [{ name: "项目方", checked: true }, { name: "投资人", checked: false }, { name: "专家", checked: false }],
         attestForm: {
           brief: "",
+          abilityBrief:"",
           type: "1",
           cardFilePath: [],
           cvFilePath: [],
@@ -186,7 +201,7 @@
         var honorFilePath = this.attestForm.honorFilePath.join(',')
         var licenseFilePath = this.attestForm.licenseFilePath.join(',')
         this.$axios.get('/jsp/wap/center/do/doAuthentication.jsp', {
-          params: { type: this.attestForm.type, brief: this.attestForm.brief, cardFilePath, cvFilePath, honorFilePath, licenseFilePath }
+          params: { type: this.attestForm.type, brief: this.attestForm.brief, abilityBrief:this.attestForm.abilityBrief,cardFilePath, cvFilePath, honorFilePath, licenseFilePath }
         }).then(res => {
           console.log("提交认证", res)
           if (res.success == "true") {
@@ -196,6 +211,7 @@
             }, 2000);
             setTimeout(() => {
               this.attestForm.brief = ""
+              this.attestForm.abilityBrief = ""
               this.type.forEach(item => {
                 item.checked = false
               })
@@ -371,7 +387,7 @@
     resize: none;
     border: 1px solid #f3f5f7;
     width: 100%;
-    height: 4rem;
+    height: 2rem;
     padding: .1rem .2rem
   }
 

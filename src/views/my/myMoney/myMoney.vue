@@ -94,7 +94,7 @@
         methods: {
             loadMore(status, pageNumber) {
                 this.pn = this.pn + 1
-                this.$axios.get(`/jsp/wap/center/ctrl/jsonMyCapitalList.jsp`, { params: { status, pageNumber: this.pn } }).then(res => {
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonMyCapitalList.jsp`, { params: { status:this.status, pageNumber: this.pn } }).then(res => {
                     this.loading = true
                     if (res.success == "true") {
                         this.pageList = [...this.pageList, ...res.data.pageList]
@@ -105,7 +105,7 @@
             },
             getData(status, pageNumber) {
                 this.loading = true
-                this.$axios.get(`/jsp/wap/center/ctrl/jsonMyCapitalList.jsp`, { params: { status, pageNumber } }).then(res => {
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonMyCapitalList.jsp`, { params: { status, pageNumber:this.pn } }).then(res => {
                     console.log("我的资金", res)
                     this.pageList = res.data.pageList
                     this.count = Number(res.data.pagination.totalCount)
@@ -154,11 +154,7 @@
             },
             toMoneyDetailPage(id, status) {
                 if (status == '10') {
-                    let { href } = this.$router.resolve({
-                        name: "moneyDetail",
-                        query: { id }
-                    });
-                    window.open(href, '_blank');
+                     this.$router.push({ name: 'moneyDetail', query: { id } })
                 }   else if(status == '0'){
                     let instance = Toast('资金尚未发布成功');
                     setTimeout(() => {

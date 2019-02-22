@@ -4,7 +4,7 @@
             <div class="projectBox">
                 <div class="clearfix">
                     <div class="projectTitle fll">{{item.name}}</div>
-                    <mu-button icon color="Normal" class="delete" @click="handleDelete(index)">
+                    <mu-button icon color="Normal" class="delete" @click="handleDelete(item.id,index)">
                         <i class="iconfont icon-shanchu"></i>
                         <mu-icon value="删除" class="mu-icon"></mu-icon>
                     </mu-button>

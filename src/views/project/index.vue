@@ -89,7 +89,7 @@
                                             <span>{{item.addTimeStr}}</span>
                                         </div>
                                         <div class="sendBtn flr" @click="handleCustomer(item.id)">
-                                            约见项目方
+                                            投递资金
                                         </div>
                                     </div>
                                 </div>

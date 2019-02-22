@@ -46,12 +46,12 @@
                         </div>
                     </div>
                 </div>
-                <p v-show="pageList.length == 0" class="noAtt">你没有该资金哦~</p>
+                <p v-show="pageList.length == 0" class="noAtt">你没有该项目哦~</p>
                 <div class="apply" @click="$router.push('/issueProject')">
                     <i class="iconfont icon-youxianzijin"></i>
-                    <span>添加资金</span>
+                    <span>添加项目</span>
                 </div>
-                <div class="subBtn" @click="$router.push('/sendProject')">资金约谈</div>
+                <div class="subBtn" @click="$router.push('/projectDeliver')">项目投递</div>
             </div>
     
         </div>
@@ -94,7 +94,7 @@
             methods: {
                 loadMore(status, pageNumber) {
                     this.pn = this.pn + 1
-                    this.$axios.get(`/jsp/wap/center/ctrl/jsonMyProjectList.jsp`, { params: { status, pageNumber: this.pn } }).then(res => {
+                    this.$axios.get(`/jsp/wap/center/ctrl/jsonMyProjectList.jsp`, { params: { status:this.status, pageNumber: this.pn } }).then(res => {
                         this.loading = true
                         if (res.success == "true") {
                             this.pageList = [...this.pageList, ...res.data.pageList]
@@ -105,8 +105,8 @@
                 },
                 getData(status, pageNumber) {
                     this.loading = true
-                    this.$axios.get(`/jsp/wap/center/ctrl/jsonMyProjectList.jsp`, { params: { status, pageNumber } }).then(res => {
-                        console.log("我的资金", res)
+                    this.$axios.get(`/jsp/wap/center/ctrl/jsonMyProjectList.jsp`, { params: { status, pageNumber:this.pn } }).then(res => {
+                        console.log("我的项目", res)
                         this.pageList = res.data.pageList
                         this.count = Number(res.data.pagination.totalCount)
                         this.pn = 1
@@ -137,7 +137,7 @@
                 // 删除一个项目
                 delete_item(id, index) {
                     MessageBox.confirm('', {
-                        message: '即将删除该资金, 是否继续?',
+                        message: '即将删除该项目, 是否继续?',
                         title: '提示',
                         showCancelButton: true
                     }).then(action => {
@@ -159,12 +159,12 @@
                     if (status == '10') {
                         this.$router.push({ name: 'projectDetail', query: { id } })
                     }   else if(status == '0'){
-                        let instance = Toast('资金尚未发布成功');
+                        let instance = Toast('项目尚未发布成功');
                         setTimeout(() => {
                             instance.close();
                         }, 2000);
                     }   else{
-                        let instance = Toast('资金尚未通过审核');
+                        let instance = Toast('项目尚未通过审核');
                         setTimeout(() => {
                             instance.close();
                         }, 2000);

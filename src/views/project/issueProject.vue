@@ -273,18 +273,14 @@
                 </div>
                 <div class="wayBox">
                     <div v-if="fin_way == 0">
-                        <!-- <div class="rows heightRows">
+                        <div class="rows">
                             <span>
-                                <i class="red">*</i> 融资金额：</span>
-                            <select class="oneRows" v-model="formData.financingMoney ">
-                                <option :value="item.dataValue" v-for="item in financingMoneyList" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
-                            </select>
-                        </div> -->
-                              <div class="rows">
-                            <span class="langmore">
                                 <i class="red">*</i>融资金额：</span>
-                            <input class="oneInput money" type="text" v-model="formData.financingAmount">
-                            <span class="wanyuan">万元</span>
+                            <select class="moneyaa" v-model="formData.financingMoney">
+                                <option :value="item.dataValue" v-for="item in financingMoneyList" :label="item.dataName" :key="item.dataValue" name="type">
+                                    {{item.dataName}}
+                                </option>
+                            </select>
                         </div>
                         <div class="rows">
                             <span class="langmore">
@@ -335,18 +331,14 @@
                     </div>
                     <div v-if="fin_way == 1">
                         <div class="rows">
-                            <span class="langmore">
-                                <i class="red">*</i>融资金额：</span>
-                            <input class="oneInput money" type="text" v-model="formData.financingAmount">
-                            <span class="wanyuan">万元</span>
-                        </div>
-                        <!-- <div class="rows heightRows">
                             <span>
-                                <i class="red">*</i> 融资金额：</span>
-                            <select class="oneRows" v-model="formData.financingMoney ">
-                                <option :value="item.dataValue" v-for="item in financingMoneyList" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
+                                <i class="red">*</i>融资金额：</span>
+                            <select class="moneyaa" v-model="formData.financingMoney">
+                                <option :value="item.dataValue" v-for="item in financingMoneyList" :label="item.dataName" :key="item.dataValue" name="type">
+                                    {{item.dataName}}
+                                </option>
                             </select>
-                        </div> -->
+                        </div>
                         <div class="rows">
                             <span class="">
                                 <i class="red">*</i>品种：</span>
@@ -420,18 +412,14 @@
                         </div>
                     </div>
                     <div v-if="fin_way == 2">
-                        <!-- <div class="rows heightRows">
+                        <div class="rows">
                             <span>
-                                <i class="red">*</i> 融资金额：</span>
-                            <select class="oneRows" v-model="formData.financingMoney ">
-                                <option :value="item.dataValue" v-for="item in financingMoneyList" :key="item.dataValue" :label="item.dataName">{{item.dataName}}</option>
-                            </select>
-                        </div> -->
-                              <div class="rows">
-                            <span class="langmore">
                                 <i class="red">*</i>融资金额：</span>
-                            <input class="oneInput money" type="text" v-model="formData.financingAmount">
-                            <span class="wanyuan">万元</span>
+                            <select class="moneyaa" v-model="formData.financingMoney">
+                                <option :value="item.dataValue" v-for="item in financingMoneyList" :label="item.dataName" :key="item.dataValue" name="type">
+                                    {{item.dataName}}
+                                </option>
+                            </select>
                         </div>
                         <div class="rows">
                             <div>
@@ -441,11 +429,15 @@
                     </div>
                 </div>
                 <div>
-                    <div class="peojectTitle">核心团队</div>
-                    <div class="rows">
+                    <div class="peojectTitle clearfix">
+                        <span class="fll">核心团队</span>
+                        <span class="flr" @click="addTeam">添加成员</span>
+                    </div>
+                    <div class="rows" v-for="(team, index) in formData.teamList" :key="index">
                         <div>
-                            <i class="red">*</i>团队介绍：</div>
-                        <textarea class="textarea" placeholder="" v-validate="'required|detail'" name="内容" v-model="formData.teamBrief"></textarea>
+                            <i class="red">*</i>成员介绍：</div>
+                        <textarea class="teamText" placeholder="" v-validate="'required|detail'" name="内容" v-model="team.introduce"></textarea>
+                        <!-- <span @click.prevent="removeTeam(team)">删除</span> -->
                         <div>
                             <i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i>
                         </div>
@@ -4435,7 +4427,8 @@
                 formData: {
                     title: "",
                     brief: "",
-                    financeBody: '',
+                    financeBody: "",
+                    financingWay: "",
                     companyName: "",
                     address: "",
                     registeredCapital: "",
@@ -4467,34 +4460,41 @@
                     regionProvinceId: "110000",
                     regionCityId: "110100",
                     regionCountyId: "110114",
-                    financingWay: "",
+                    provinceId: "110000",
+                    cityId: "110100",
+                    countyId: "110114",
                     stage: "",
                     industryName: "",
                     stockStructureImgPath: "",
-                    financingAmount: '',
+                    financingMoney: "",
                     dueTime: "",
                     interestRates: "",
-                    loanUses: '',
-                    repaymentsSource: '',
-                    standard: '',
-                    sourcesFunds: '',
-                    marketCompetitivePower: '',
-                    guessSovency: '',
-                    financingExplain: '',
-                    companyAssessed: '',
-                    shareholdingList: [{ name: '', value: '' }],
-                    registeredCapitalType: '',
-                    registeredCapitalFormat: '',
+                    loanUses: "",
+                    repaymentsSource: "",
+                    standard: "",
+                    sourcesFunds: "",
+                    marketCompetitivePower: "",
+                    guessSovency: "",
+                    financingExplain: "",
+                    companyAssessed: "",
+                    shareholdingList: [{ name: "", value: "" }],
+                    registeredCapitalType: "",
+                    registeredCapitalFormat: "",
                     yearTurnoverFormat: "",
-                    yearTurnoverType: '',
-                    yearTurnoverGrowth: '',
+                    yearTurnoverType: "",
+                    yearTurnoverGrowth: "",
                     yearNetProfitFormat: "",
-                    yearNetProfitType: '',
-                    yearNetProfitGrowth: '',
-                    netAssetsFormat: '',
-                    netAssetsType: '',
+                    yearNetProfitType: "",
+                    yearNetProfitGrowth: "",
+                    netAssetsFormat: "",
+                    netAssetsType: "",
                     teamList: [],
-                    financingMoney: ''
+                    issuerSecrecyType: "",
+                    name: "",
+                    job: "",
+                    company: "",
+                    userIndustrys: '',
+                    intention: ''
                 },
                 financeBodyList: [],
                 stageList: [],
@@ -4621,6 +4621,7 @@
                                 title: this.formData.title,
                                 brief: this.formData.brief,
                                 financeBody: this.formData.financeBody,
+                                financingMoney: this.formData.financingMoney,
                                 companyName: this.formData.companyName,
                                 address: this.formData.address,
                                 registeredCapital: this.formData.registeredCapital,
@@ -4693,6 +4694,7 @@
                                 title: this.formData.title,
                                 brief: this.formData.brief,
                                 financeBody: this.formData.financeBody,
+                                financingMoney: this.formData.financingMoney,
                                 companyName: this.formData.companyName,
                                 address: this.formData.address,
                                 registeredCapital: this.formData.registeredCapital,
@@ -4841,19 +4843,19 @@
                             this.$set(item, 'checked', false)
                         })
                         this.financingWayList = financingWayList
-                    } else if (this.formData.financingWay == '61') {
+                    } else if (this.formData.financingWay == 'G') {
                         financingWayList.forEach(item => {
                             this.$set(item, 'checked', false)
                         })
                         financingWayList[0].checked = true
                         this.financingWayList = financingWayList
-                    } else if (this.formData.financingWay == '62') {
+                    } else if (this.formData.financingWay == 'Z') {
                         financingWayList.forEach(item => {
                             this.$set(item, 'checked', false)
                         })
                         financingWayList[1].checked = true
                         this.financingWayList = financingWayList
-                    } else if (this.formData.financingWay == '63') {
+                    } else if (this.formData.financingWay == 'B') {
                         financingWayList.forEach(item => {
                             this.$set(item, 'checked', false)
                         })
@@ -4888,11 +4890,11 @@
                         this.creditWays = res.data.project.creditWay.replace(/[\[\]]/g, "").split(",");
                     }
                     // -----------------------------------------------------------
-                    if (this.formData.financingWay == '61') {
+                    if (this.formData.financingWay == 'G') {
                         this.fin_way = 0
-                    } else if (this.formData.financingWay == '62') {
+                    } else if (this.formData.financingWay == 'Z') {
                         this.fin_way = 1
-                    } else if (this.formData.financingWay == '63') {
+                    } else if (this.formData.financingWay == 'B') {
                         this.fin_way = 2
                     }
                     // ----------------------------------------------------------
@@ -4972,6 +4974,17 @@
                 if (index !== -1) {
                     this.formData.shareholdingList.splice(index, 1)
                 }
+            },
+            // removeTeam(item) {
+            //     var index = this.formData.teamList.indexOf(item);
+            //     if (index !== -1) {
+            //         this.formData.teamList.splice(index, 1);
+            //     }
+            // },
+            addTeam() {
+                this.formData.teamList.push({
+                    introduce: ""
+                });
             },
             addSharehold() {
                 this.formData.shareholdingList.push({
@@ -5157,6 +5170,16 @@
         width: 100%;
         resize: none;
         height: 2rem;
+        border: 1px solid #ccc;
+        border-radius: 2%
+    }
+
+    .teamText {
+        margin-top: .2rem;
+        /* width: 6.8rem; */
+        width: 100%;
+        resize: none;
+        height: 1rem;
         border: 1px solid #ccc;
         border-radius: 2%
     }
@@ -5364,5 +5387,9 @@
         height: .5rem;
         line-height: .5rem;
         padding-left: .2rem
+    }
+
+    .moneyaa {
+        width: 4.6rem !important
     }
 </style>

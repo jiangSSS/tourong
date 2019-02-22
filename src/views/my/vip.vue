@@ -16,25 +16,27 @@
                     </div>
                 </div>
                 <mu-dialog width="400" center class="applyDialog" :open.sync="isShowApply">
-                    <p class="dialogTitle">开通会员服务</p>
-                    <div class="rows">
-                        <i class="iconfont icon-My"></i>
-                        <input type="text" v-validate="'required|name'" name="姓名" placeholder="请输入姓名">
-                        <div v-show="errors.has('姓名')" class="error">{{ errors.first('姓名')}}</div>
-                    </div>
-                    <div class="rows">
-                        <i class="iconfont icon-shouji"></i>
-                        <input type="text" v-validate="'required|mobile'" name="手机号码" placeholder="请输入手机号码">
-                        <div v-show="errors.has('手机号码')" class="error">{{ errors.first('手机号码')}}</div>
+                    <div :model="formData">
+                        <p class="dialogTitle">开通会员服务</p>
+                        <div class="rows">
+                            <i class="iconfont icon-My"></i>
+                            <input type="text" v-validate="'required|name'" name="姓名" v-model="formData.name" placeholder="请输入姓名">
+                            <div v-show="errors.has('姓名')" class="error">{{ errors.first('姓名')}}</div>
+                        </div>
+                        <div class="rows">
+                            <i class="iconfont icon-shouji"></i>
+                            <input type="text" v-validate="'required|mobile'" name="手机号码" v-model="formData.mobile" placeholder="请输入手机号码">
+                            <div v-show="errors.has('手机号码')" class="error">{{ errors.first('手机号码')}}</div>
 
+                        </div>
+                        <div class="rows">
+                            <i class="iconfont icon-gongsi1"></i>
+                            <input type="text" v-validate="'required|company'" name="单位名称" v-model="formData.company" placeholder="请输入单位名称">
+                            <div v-show="errors.has('单位名称')" class="error">{{ errors.first('单位名称')}}</div>
+                        </div>
+                        <mu-button class="applyBtn" @click="closeApply">确认办理</mu-button>
+                        <mu-button class="sureBtn" @click="cancelApply">取消</mu-button>
                     </div>
-                    <div class="rows">
-                        <i class="iconfont icon-gongsi1"></i>
-                        <input type="text" v-validate="'required|company'" name="单位名称" placeholder="请输入单位名称">
-                        <div v-show="errors.has('单位名称')" class="error">{{ errors.first('单位名称')}}</div>
-                    </div>
-                    <mu-button class="applyBtn" @click="closeApply">确认办理</mu-button>
-                    <mu-button class="sureBtn" @click="cancelApply">取消</mu-button>
                 </mu-dialog>
                 <div class="title">
                     <span>服务内容</span>
@@ -169,7 +171,12 @@
         data() {
             return {
                 active: 0,
-                isShowApply: false
+                isShowApply: false,
+                formData: {
+                    name: "",
+                    mobile: "",
+                    company: ""
+                }
             }
         },
         methods: {
@@ -180,37 +187,23 @@
             closeApply() {
                 this.$validator.validateAll().then((result) => {
                     if (result) {
-                        // let activityId = this.$route.query.id
-                        // this.$axios.get(`/jsp/wap/trActivity/do/doSignUp.jsp`, {
-                        //     params: {
-                        //         activityId,
-                        //         memberName: this.formData.memberName,
-                        //         memberMobile: this.formData.memberMobile,
-                        //         remark: this.formData.remark
-                        //     }
-                        // }).then(res => {
-                        //     console.log("活动报名", res)
-
-                        //     if (res.success == "true") {
-                        //         let instance = Toast('报名成功');
-                        //         setTimeout(() => {
-                        //             instance.close();
-                        //         }, 2000);
-                        //         // }
-                        //     } else {
-                        //         let instance = Toast(res.message);
-                        //         setTimeout(() => {
-                        //             instance.close();
-                        //         }, 2000);
-                        //     }
-                        // })
-                        let instance = Toast('信息提交成功，平台将尽快为您办理！');
-                        setTimeout(() => {
-                            instance.close();
-                        }, 2000);
-                        setTimeout(() => {
-                            this.isShowApply = false;
-                        }, 500);
+                        this.$axios.get(`/jsp/wap/index/do/doApplyVip.jsp`, { params: { name: this.formData.name, mobile: this.formData.mobile, company: this.formData.company } }).then(res => {
+                            console.log("会员", res)
+                            if (res.success == "true") {
+                                let instance = Toast('信息提交成功，平台将尽快为您办理！');
+                                setTimeout(() => {
+                                    instance.close();
+                                }, 2000);
+                                setTimeout(() => {
+                                    this.isShowApply = false;
+                                }, 500);
+                            }else{
+                                let instance = Toast(res.message);
+                                setTimeout(() => {
+                                    instance.close();
+                                }, 2000);
+                            }
+                        })
                         return;
                     }
                 });
@@ -218,14 +211,15 @@
         }
     }
 </script>
-
 <style scoped lang="scss">
     .all {
         background: #fff
     }
-    .tabBox{
+
+    .tabBox {
         height: 6.5rem;
     }
+
     .detail {
         // padding-bottom: .5rem;
         padding-top: .9rem
