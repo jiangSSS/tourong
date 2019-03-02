@@ -76,25 +76,25 @@
                     {
                         name: "全部",
                         checked: true,
-                        status: ''
+                        status: 10
                     },
                     {
                         name: "草稿箱",
                         checked: false,
                         status: 0
                     },
-                    {
-                        name: '其他',
-                        checked: false,
-                        status: 1
-                    },
+                        // {
+                        //     name: '其他',
+                        //     checked: false,
+                        //     status: 5
+                        // },
                 ]
             };
         },
         methods: {
-            loadMore(status, pageNumber) {
+            loadMore(status,pageNumber) {
                 this.pn = this.pn + 1
-                this.$axios.get(`/jsp/wap/center/ctrl/jsonMyCapitalList.jsp`, { params: { status:this.status, pageNumber: this.pn } }).then(res => {
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonMyCapitalList.jsp`, { params: {status:this.status, pageNumber: this.pn } }).then(res => {
                     this.loading = true
                     if (res.success == "true") {
                         this.pageList = [...this.pageList, ...res.data.pageList]
@@ -109,7 +109,7 @@
                     console.log("我的资金", res)
                     this.pageList = res.data.pageList
                     this.count = Number(res.data.pagination.totalCount)
-                    this.pn = 1
+                    // this.pn = 1
                     this.loading = false
                 })
             },
@@ -167,22 +167,15 @@
                     }, 2000);
                 }
             },
-            // getA() {
-            //     this.getData(this.status = 0)
-            //     // this.financingWayList[index].checked = !this.financingWayList[index].checked
-            // },
-            // getB() {
-            //     this.getData(this.status = 1)
-            // },
-            // getAll() {
-            //     this.getData(this.status = "")
-            // }
             getAll(status, index) {
                 this.title.forEach(item => {
                     item.checked = false
                 })
                 this.title[index].checked = true
-                this.getData(status)
+                // this.getData(status)
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonMyCapitalList.jsp`,{params:{status}}).then(res=>{
+                     this.pageList = res.data.pageList
+                })
             },
         },
         created() {

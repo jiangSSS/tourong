@@ -5,10 +5,11 @@
             <div class="detail">
                 <div class="projectHeader">
                     <div class="projectTitle">{{projectDetail.title}}</div>
-                    <div class="time">
+                    <div class="time" v-if="projectDetail&&projectDetail.projectId">
                         <span>编号：</span>
                         <span>{{projectDetail.projectId}}</span>
                     </div>
+
                     <div class="clearfix">
                         <div class="fll time">
                             <i class="iconfont icon-shijian"></i>
@@ -20,8 +21,8 @@
                         <div class="sendBtn flr" @click="handleTell">我要约谈</div>
                     </div>
                     <mu-dialog width="400" center class="applyDialog" :open.sync="isShowApply">
-                        <select class="oneRows" v-model="moneyId">
-                            <option :value="item.id" v-for="item in myMoney" :key="item.index" :label="item.title">{{item.title}}</option>
+                        <select class="oneRows" v-model="capitalId">
+                            <option :value="item.id" v-for="item in myMoney" :key="item.id" :label="item.title">{{item.title}}</option>
                         </select>
                         <div class="btnSend">
                             <mu-button class="applyBtn" @click="closeApply">确认</mu-button>
@@ -120,9 +121,9 @@
                     </div>
                 </div>
                 <div class="typeBox">
-                     <span v-for="(lab,idx) in projectDetail.labelList" :key="idx" class="typeItem" @click="searchLabel(lab.labelId)">{{lab.labelName}}</span>
+                    <span v-for="(lab,idx) in projectDetail.labelList" :key="idx" class="typeItem" @click="searchLabel(lab.labelId)">{{lab.labelName}}</span>
                 </div>
-               
+
                 <!-- <div class="user clearfix" @click="$router.push('/money/progress')">
                     <div class="fll">查看项目进展</div>
                     <div class="flr">
@@ -218,13 +219,12 @@
                 id: "",
 
                 isShowApply: false,
-                myMoney: [],
                 projectId: "",
-                moneyId: "",
+                capitalId: "",
                 memberInfo: [],
-                myMoney_Count: 0,
 
-                memberId: ""
+                memberId: "",   
+                myMoney: [],
             }
         },
         methods: {
@@ -235,13 +235,12 @@
                     this.myMoney = res.data.pageList;
                     var myMoney = res.data.pageList
                     if (myMoney.length > 0) {
-                        this.moneyId = myMoney[0].id
+                        this.capitalId = myMoney[0].id
                     }
-                    this.myMoney_Count = Number(res.data.pagination.totalCount);
                 });
             },
             // 约见项目方
-            handleTell(id) {
+            handleTell() {
                 if (Cookies.get("userKey")) {
                     if (this.myMoney.length == 0) {
                         let instance = Toast('您还没有发布资金，请先发布资金');
@@ -262,8 +261,8 @@
             },
             // 确认投递 关闭投递框
             closeApply() {
-                this.$axios.get("/jsp/wap/trCapital/do/doDeliver.jsp", {
-                    params: { id: this.moneyId, projectId: this.projectId }
+                this.$axios.get("/jsp/wap/trProject/do/doBespoke.jsp", {
+                    params: { id: this.id, capitalId: this.capitalId }
                 })
                     .then(res => {
                         if (res.success == "true") {
@@ -282,6 +281,7 @@
                     this.isShowApply = false;
                 }, 500);
             },
+
             // 模态框
             // handleTell() {
             //     Dialog.alert({
@@ -365,6 +365,7 @@
             this.getProjectDetail()
             this.getFollow()
             this.getProgress()/*  */
+            this.getMyMoney()
         }
     }
 </script>
@@ -398,7 +399,7 @@
         color: #005982;
         padding: .1rem;
         height: .6rem;
-        width: 1.2rem;
+        width: 1.4rem;
         line-height: .4rem;
         font-family: "PingFang";
         font-size: .23rem;
@@ -534,7 +535,8 @@
     .member {
         margin-left: .2rem
     }
-    .typeItem{
+
+    .typeItem {
         background: #005982;
         opacity: .8;
         color: #fff;
@@ -543,9 +545,9 @@
         margin-right: .1rem;
         border-radius: 6%
     }
-    .typeBox{
+
+    .typeBox {
         padding: 0 .2rem;
         margin-bottom: .3rem
-        
     }
 </style>

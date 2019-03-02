@@ -27,7 +27,13 @@
         //   message: "提交成功,客服人员会尽快与您联系。"
         // }).then(() => {
           // on close
-          this.$axios.get(`/jsp/wap/center/do/doExpertFind.jsp`, { params: { content: this.content } }).then(res => {
+          if(this.content == ""){
+             let instance = Toast("请填写需求");
+              setTimeout(() => {
+                instance.close();
+              }, 2000);
+          }else{
+            this.$axios.get(`/jsp/wap/center/do/doFeedback.jsp`, { params: { content: this.content } }).then(res => {
             console.log(res)
             if (res.success = "true") {
               // this.content = res.data
@@ -45,8 +51,11 @@
               }, 2000);
             }
           })
+          }
+          
         // });
-      }
+         
+      },
     }
   }
 </script>
@@ -55,7 +64,7 @@
     background: #fff;
   }
   .container_warp {
-    padding-top: 1rem;
+    padding-top: .5rem;
     text-align: center;
     width: 100%;
   }

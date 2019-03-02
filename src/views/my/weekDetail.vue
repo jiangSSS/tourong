@@ -4,7 +4,7 @@
         <div class="detail">
             <div class="clearfix weekTitle">
                 <div class="peojectTitle fll">项目精选</div>
-                <span class="flr cancleBtn" @click="$router.push('/projectA')">更多
+                <span class="flr cancleBtn" @click="$router.push('/project')">更多
                     <i class="iconfont icon-xiangyou"></i>
                 </span>
             </div>
@@ -27,7 +27,7 @@
             <!-- 资金 -->
             <div class="clearfix weekTitle">
                 <div class="peojectTitle fll">资金对接</div>
-                <span class="flr cancleBtn" @click="$router.push('/moneyDetail')">更多
+                <span class="flr cancleBtn" @click="$router.push('/money')">更多
                     <i class="iconfont icon-xiangyou"></i>
                 </span>
             </div>
@@ -56,7 +56,7 @@
             </div>
             <div class="weekList" v-for="item in messageData" :key="item.index">
                 <router-link :to="{name:'newsDetail',query:{id:item.resourceId}}">
-                    <div class="projectBox">
+                    <div v-if="item.img" class="projectBox">
                         <div class="clearfix rows">
                             <div class="fll">
                                 <img :src="$url + item.imgPaths" alt="" class="imgList">
@@ -67,6 +67,22 @@
                                 </div>
                                 <div class="newsDesc">
                                     {{item.content}}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                      <div v-else class="projectBox">
+                        <div class="clearfix rows">
+                            <div class="fll">
+                                <img :src="$url + item.imgPaths" alt="" class="imgList">
+                            </div>
+                            <div class="nums fll">
+                                <div class="titleBox">
+                                    <div class="messageTitle">{{item.title}}</div>
+                                </div>
+                                <div class="newsDesc" v-html="item.content">
+                                    
                                 </div>
                             </div>
 
@@ -92,8 +108,8 @@
                                 <div class="titleBox">
                                     <div class="messageTitle">{{item.title}}</div>
                                 </div>
-                                <div class="newsDesc">
-                                    {{item.content}}
+                                <div class="newsDesc" v-html="item.content">
+                                    <!-- {{item.content}} -->
                                 </div>
                             </div>
 
@@ -198,7 +214,8 @@
         font-weight: 700;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap
+        white-space: nowrap;
+        max-width: 7.5rem;
     }
 
     .newsDesc {
@@ -210,6 +227,7 @@
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
+        max-height: 1.7rem
 
     }
 

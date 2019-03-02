@@ -12,7 +12,8 @@
                     </div>
                     <div class="callBox">
                         <img src="../../../static/app/img/my/call.png" alt="" class="vipHeader">
-                        <div class="callMe" @click="isShowApply = true">111</div>
+                        <div class="callMe" v-if="isVip != '0'">111</div>
+                        <div class="callMe" @click="isShowApply = true" v-else>111</div>
                     </div>
                 </div>
                 <mu-dialog width="400" center class="applyDialog" :open.sync="isShowApply">
@@ -176,7 +177,8 @@
                     name: "",
                     mobile: "",
                     company: ""
-                }
+                },
+                isVip: '0'
             }
         },
         methods: {
@@ -197,7 +199,7 @@
                                 setTimeout(() => {
                                     this.isShowApply = false;
                                 }, 500);
-                            }else{
+                            } else {
                                 let instance = Toast(res.message);
                                 setTimeout(() => {
                                     instance.close();
@@ -208,6 +210,18 @@
                     }
                 });
             },
+            getUserInfo() {
+                this.$axios.get('/jsp/wap/center/ctrl/jsonUserInfo.jsp').then(res => {
+                    console.log("0", res)
+                    if (res.success == 'true') {
+                        this.isVip = res.data.userInfo.isVip
+                        this.$store.commit('CHANGE_USERINFO', res.data.userInfo)
+                    }
+                })
+            },
+        },
+        created() {
+            this.getUserInfo()
         }
     }
 </script>

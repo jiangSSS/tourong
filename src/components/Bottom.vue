@@ -5,18 +5,19 @@
             <i class="iconfont icon-shouye"></i>
             <div class="tab-title">首页</div>
         </router-link>
-        <router-link to="/project" class="tab-item" :class="{active:$route.name === 'project'}">
+        <div @click="toProject" class="tab-item" :class="{active:$route.name === 'project'}">
             <i class="iconfont icon-icon-project"></i>
             <div class="tab-title">项目库</div>
-        </router-link>
+        </div>
         <div @click="toMessage" class="tab-item" :class="{active:$route.name === 'sysMessage'}">
             <i class="iconfont icon-xiaoxi"></i>
             <div class="tab-title">消息</div>
+             <span class="newNum" v-if="this.num != '0'">{{num}}</span>
         </div>
-        <router-link to="/money" class="tab-item" :class="{active:$route.name === 'money'}">
+        <div @click="toMoney" class="tab-item" :class="{active:$route.name === 'money'}">
             <i class="iconfont icon-zuanshi"></i>
             <div class="tab-title">资金库</div>
-        </router-link>
+        </div>
         <div @click="toPerson" class="tab-item" :class="{active:$route.name === 'my'}">
             <i class="iconfont icon-My"></i>
             <div class="tab-title">我的</div>
@@ -34,10 +35,18 @@
         },
         data() {
             return {
-                
+                num:"",
             }
         },
         methods: {
+            toProject(){
+                this.$router.push('/project')
+                // this.getProjectList()
+            },
+             toMoney(){
+                this.$router.push('/money')
+                // this.getProjectList()
+            },
             toPerson() {
                 if (Cookies.get('userKey')) {
                     this.$router.push('/my')
@@ -52,6 +61,15 @@
                     this.$router.push('/login')
                 }
             },
+            getMessageCount() {
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonSysMsgNum.jsp`).then(res => {
+                    console.log("未读数量", res)
+                    this.num = res.data
+                })
+            },
+        },
+        created(){
+            this.getMessageCount()
         }
     }
 </script>
@@ -64,7 +82,7 @@
         left: 0;
         right: 0;
         width: 100%;
-        background-size: 100%; // height: 1.3rem;
+        background-size: 100%;
         display: flex;
         background: #fff;
         padding: .1rem 0;
@@ -72,10 +90,16 @@
             text-decoration: none;
             color: #666
         }
-        .tab-item {
+       
+        .active {
+            color: #005982
+        }
+    }
+     .tab-item {
             width: 2.5rem;
             flex: 1;
             text-align: center;
+            position: relative;
             .iconfont {
                 font-size: .4rem;
             }
@@ -85,8 +109,14 @@
                 margin-top: -.1rem
             }
         }
-        .active {
-            color: #005982
+        .newNum{
+            position: absolute;
+            background: #e75225;
+            top: -.1rem;
+            right: 0;
+            color: #fff;
+            font-size: .18rem;
+            width: .5rem;
+            border-radius: 100%;
         }
-    }
 </style>

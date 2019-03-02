@@ -3,11 +3,11 @@
         <div v-for="(item,index) in pageList" :key="index">
             <div class="projectBox">
                 <div class="clearfix">
-                    <div class="projectTitle fll">{{item.name}}</div>
-                    <mu-button icon color="Normal" class="delete" @click="handleDelete(item.id,index)">
+                    <div class="projectTitle fll">{{item.typeStr}}</div>
+                    <!-- <mu-button icon color="Normal" class="delete" @click="handleDelete(item.id,index)">
                         <i class="iconfont icon-shanchu"></i>
                         <mu-icon value="删除" class="mu-icon"></mu-icon>
-                    </mu-button>
+                    </mu-button> -->
                 </div>
                 <div class="textContent">
                     <div class="content">
@@ -16,7 +16,7 @@
 
                     </div>
                     <div class="clearfix time">
-                        <div class="fll startTime">{{item.addTimeStr.slice(0,10)}}</div>
+                        <div class="fll startTime">{{item.addTimeStr}}</div>
                     </div>
                 </div>
             </div>
@@ -40,32 +40,32 @@
                     this.pageList = res.data.pageList
                 })
             },
-            handleDelete(id, index) {
-                MessageBox.confirm('', {
-                    message: '即将删除该需求, 是否继续?',
-                    title: '提示',
-                    showCancelButton: true
-                }).then(action => {
-                    if (action == 'confirm') {     //确认的回调
-                        this.$axios.get(`/jsp/wap/center/do/doDelProject.jsp?id=${id}`).then(res => {
-                            this.pageList.splice(index, 1)
-                            this.count -= 1
-                            let instance = Toast("删除成功");
-                            setTimeout(() => {
-                                instance.close();
-                            }, 2000);
-                        })
-                    } else {
-                        let instance = Toast(res.message);
-                        setTimeout(() => {
-                            instance.close();
-                        }, 2000);
-                    }
-                }).catch(err => {
-                    if (err == 'cancel') {     //取消的回调
-                    }
-                });
-            },
+            // handleDelete(id, index) {
+            //     MessageBox.confirm('', {
+            //         message: '即将删除该需求, 是否继续?',
+            //         title: '提示',
+            //         showCancelButton: true
+            //     }).then(action => {
+            //         if (action == 'confirm') {     //确认的回调
+            //             this.$axios.get(`/jsp/wap/center/do/doDelProject.jsp?id=${id}`).then(res => {
+            //                 this.pageList.splice(index, 1)
+            //                 this.count -= 1
+            //                 let instance = Toast("删除成功");
+            //                 setTimeout(() => {
+            //                     instance.close();
+            //                 }, 2000);
+            //             })
+            //         } else {
+            //             let instance = Toast(res.message);
+            //             setTimeout(() => {
+            //                 instance.close();
+            //             }, 2000);
+            //         }
+            //     }).catch(err => {
+            //         if (err == 'cancel') {     //取消的回调
+            //         }
+            //     });
+            // },
         },
         created() {
             this.getData()

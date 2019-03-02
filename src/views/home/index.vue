@@ -97,8 +97,8 @@
             </div>
 
             <div>
-                <router-link to="/news">
-                    <img src="../../../static/app/img/home/contentImg2.jpg" alt="">
+                <router-link to="/activity">
+                    <img src="../../../static/app/img/home/c4.jpg" alt="">
                 </router-link>
             </div>
             <div class="subtitle">
@@ -283,14 +283,18 @@
             toSwiper(index) {
                 let id = this.banner[index].resourceId;
                 let type = this.banner[index].resourceType;
-                if (type == "1") {
-                    this.toProjectDetailPage(id);
-                } else if (type == "2") {
-                    this.toMoneyDetailPage(id);
-                } else if (type == "3") {
-                    this.toNewsDetailPage(id);
-                } else if (type == "4") {
-                    this.$router.push({ name: 'activityDetail', query: { id } })
+                if (id != '') {
+                    if (type == "1") {
+                        this.toProjectDetailPage(id);
+                    } else if (type == "2") {
+                        this.toMoneyDetailPage(id);
+                    } else if (type == "3") {
+                        this.toNewsDetailPage(id);
+                    } else if (type == "4") {
+                        this.$router.push({ name: 'activityDetail', query: { id } })
+                    }
+                }else{
+                    
                 }
             },
             tokefu() {

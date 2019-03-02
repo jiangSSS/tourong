@@ -16,6 +16,9 @@
             <div class="nav fll">
                 <router-link :to="{name:'recommend'}">推荐专家</router-link>
             </div>
+            <div class="nav fll">
+                <router-link :to="{name:'other'}">其他需求</router-link>
+            </div>
            
              <div class="nav fll">
                 <router-link :to="{name:'lookDemand'}">需求列表</router-link>
@@ -71,7 +74,7 @@
 
     .navTab a {
         color: #666;
-        font-size: .32rem;
+        font-size: .28rem;
         padding: .2rem
     }
 

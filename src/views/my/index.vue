@@ -17,30 +17,43 @@
                                         <img src="../../../static/app/img/my/edit.jpg" class="edit">
                                     </span>
                                 </div>
+                                <div class="userName">{{userInfo.name}}</div>                                
                             </div>
                             <div class="fll userInfo">
-                                <div>       
+                                <!-- <div>       
                                     <span v-if="userInfo.authenticationName != ''"><span>已认证:</span><span class="demand">{{userInfo.authenticationName}}</span> </span>
                                     <span v-else class="demand">待审核</span>
+                                </div> -->
+                                <div class="attest">
+                                    <span class="num" :class="{actived:userInfo.authenticationName}">
+                                        <i class="iconfont icon-touzi"></i>投资方</span>
+                                    <span class="num" :class="{actived:userInfo.authenticationName}">
+                                        <i class="iconfont icon-xiangmu1"></i>项目方</span>
+                                    <span class="num" :class="{actived:userInfo.authenticationName}">
+                                        <i class="iconfont icon-zhuanjia"></i>专家</span>
                                 </div>
+                                
                                 <!-- <div>{{userInfo.mobile}}</div> -->
-                                <div class="userName">{{userInfo.name}}</div>                                
                                 <div>{{userInfo.company}}</div>
+                                <div v-if="isVip != '0'" class="isVipColor" @click="$router.push({name:'vip'})">
+                                    <i></i> 会员权益中心</div>
+                                <div v-else class="equity" @click="$router.push({name:'vip'})">
+                                    <i></i> 会员权益中心</div>
                             </div>
                             <div class="flr messageBox" @click="$router.push('/message/sysMessage')">
                                 <i class="iconfont icon-xiaoxi message"></i>
-                                <span class="newNum" v-if="this.messageCount != 0">{{messageCount}}</span>
+                                <span class="newNum" v-if="this.num != '0'">{{num}}</span>
                             </div>
                         </div>
                         <div class="weekLsit">
                             <router-link to="/weekList">
-                                 <div class="vip">VIP会员特权</div>
+                                <div class="vip">VIP会员特权</div>
                                 <div to="/weeklist" class="beforeWeek">
-                                          <span class="numbers" v-if="weekLists.length != 0">{{weekLists[0].addTimeStr.substr(0,4)}}年第{{count}}期</span>
-                                          <span class="numbers" v-else>暂无周报</span>
+                                    <span class="numbers" v-if="weekLists&&weekLists.length != 0">{{weekLists[0].addTimeStr.substr(0,4)}}年第{{count}}期</span>
+                                    <span class="numbers" v-else>暂无周报</span>
                                 </div>
                                 <div to="/weeklist" class="goo">111</div>
-                            </router-link>      
+                            </router-link>
                         </div>
                     </div>
                 </div>
@@ -163,9 +176,11 @@
         data() {
             return {
                 userInfo: [],
-                messageCount:"",
-                weekLists:[],
-                count:1
+                messageCount: "",
+                weekLists: [],
+                count: 1,
+                num: "",
+                isVip:"0"
             }
         },
         methods: {
@@ -173,6 +188,7 @@
                 this.$axios.get(`/jsp/wap/center/ctrl/jsonUserInfo.jsp`).then(res => {
                     console.log("用户信息", res)
                     this.userInfo = res.data.userInfo
+                    this.isVip = res.data.userInfo.isVip
                 })
             },
             loginOut() {
@@ -190,20 +206,18 @@
                 window.open('https://tb.53kf.com/code/app/10193554/1', '_blank')
             },
             getMessageCount() {
-                this.$axios.get(`/jsp/wap/center/ctrl/jsonNoticeList.jsp`).then(res => {
-                    console.log("系统消息", res)
-                    if (res.success == "true") {
-                        this.messageCount = Number(res.data.pagination.totalCount)
-                    }
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonSysMsgNum.jsp`).then(res => {
+                    console.log("未读数量", res)
+                    this.num = res.data
                 })
             },
             getWeekData(pn) {
-                this.$axios.get(`/jsp/wap/center/ctrl/jsonWeeklyList.jsp`,{params:{pageNumber:pn}}).then(res => {
+                this.$axios.get(`/jsp/wap/center/ctrl/jsonWeeklyList.jsp`, { params: { pageNumber: pn } }).then(res => {
                     console.log("周报列表", res)
                     this.weekLists = res.data.pageList
                     this.count = Number(res.data.pagination.totalCount)
                 })
-            }
+            },
 
         },
         created() {
@@ -399,7 +413,45 @@
         border-top: .2rem solid #f3f5f7;
         border-bottom: .2rem solid #f3f5f7;
     }
-    .demand{
+
+    .demand {
         color: #005982
+    }
+
+    .actived {
+        color: #005982
+    }
+    .equity {
+        padding: 0 .3rem 0 .4rem;
+        font-size: .3rem;
+        line-height: 1.5;
+        position: relative;
+        i {
+            display: inline-block;
+            width: .35rem;
+            height: .35rem;
+            background: url(../../../static/app/img/my/zuanshi1.png) no-repeat center;
+            background-size: contain;
+            position: absolute;
+            top: .05rem;
+            left: 0rem;
+        }
+    }
+        .isVipColor {
+        color: #ee7c00; 
+        padding: 0 .3rem 0 .4rem;
+        font-size: .3rem;
+        line-height: 1.5;
+        position: relative;
+        i {
+            display: inline-block;
+            width: .35rem;
+            height: .35rem;
+            background: url(../../../static/app/img/my/zuanshi2.png) no-repeat center;
+            background-size: contain;
+            position: absolute;
+            top: .05rem;
+            left: 0rem;
+        }
     }
 </style>

@@ -219,7 +219,7 @@
                         }, 2000);
                     } else {
                         this.isShowApply = true;
-                        this.projectId = id;
+                        this.id = id;
                     }
                 }
                 else {
@@ -231,8 +231,8 @@
             },
             // 确认投递 关闭投递框
             closeApply() {
-                this.$axios.get("/jsp/wap/trCapital/do/doDeliver.jsp", {
-                    params: { id: this.moneyId, projectId: this.projectId }
+                this.$axios.get("/jsp/wap/trProject/do/doBespoke.jsp", {
+                    params: { id: this.id, moneyId: this.moneyId }
                 })
                     .then(res => {
                         if (res.success == "true") {
@@ -639,7 +639,7 @@
         border: 0;
         color: rgb(153, 153, 153);
         background: #fafafa;
-        width: 4.8rem;
+        width: 4.6rem;
         border-radius: 4px;
         font-family: "PingFang";
         line-height: 2.103;

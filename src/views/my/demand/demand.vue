@@ -76,7 +76,7 @@
   }
 
   .container_warp {
-    padding-top: 1rem;
+    padding-top: .5rem;
     text-align: center;
     width: 100%;
   }

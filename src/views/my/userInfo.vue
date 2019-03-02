@@ -6,11 +6,18 @@
     <div class="detail" :model="formData">
       <div class="clearfix rows">
         <div class="fll">真实照片</div>
-        <div class="flr" style="height:.98rem">
+        <!-- <div class="flr" style="height:.98rem">
           <van-uploader :after-read="onRead" class="avatarImg" action>
             <img v-if="formData.headImgPath" :src="$url + formData.headImgPath" class="avatar">
           </van-uploader>
-        </div>
+        </div> -->
+       <div class="flr" style="height:1rem">
+          <van-uploader :after-read="onRead">
+          <!-- <van-icon name="photograph" /> -->
+          <img v-if="formData.headImgPath" :src="$url + formData.headImgPath" class="avatar">
+          <input type="text" v-if="formData.headImgPath == ''" placeholder="请上传头像">
+        </van-uploader>
+       </div>
       </div>
       <div class="clearfix rows">
         <div class="fll">账号</div>
@@ -4146,10 +4153,15 @@
     line-height: 1rem;
   }
 
-  /deep/ .van-uploader__input {
-    margin-left: -0.6rem;
-    margin-top: -0.4rem;
-    height: 0.98rem !important;
+  // /deep/ .van-uploader__input {
+  //   position: absolute;
+  //   right: 2.5rem;
+  //   top: 0;
+  //   height: 1rem;;
+  // }
+  /deep/ .van-uploader{
+    height: 1rem;
+    margin-right: .5rem;
   }
 
   /deep/ .d-date-time .d-date-time-content .d-date-time-months i {
@@ -4176,7 +4188,7 @@
   .subBtn {
     position: fixed;
     top: 0.2rem;
-    right: 0.6rem;
+    right: 0.3rem;
     background: #fff;
     border: 0;
     font-size: 0.34rem;

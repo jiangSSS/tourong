@@ -3,7 +3,7 @@
         <Header></Header>
         <div class="tab">
             <van-tabs v-model="active">
-                <van-tab title="发出的约谈">
+                <van-tab title="发出的投递">
                     <div class="project">
                         <div v-infinite-scroll="loadMore2" infinite-scroll-disabled="loading">
                             <div v-for="(item, index) in myPageList" :key="index" class="project_list">
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                 </van-tab>
-                <van-tab title="收到的约谈">
+                <van-tab title="收到的投递">
                     <div class="project">
                         <div v-infinite-scroll="loadMore1" infinite-scroll-disabled="loadings">
                             <div v-for="(item, index) in pageList" :key="index" class="project_list">

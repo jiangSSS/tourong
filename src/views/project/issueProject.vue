@@ -265,11 +265,18 @@
                 </div>
                 <div>
                     <div class="peojectTitle">项目融资信息</div>
-                    <div class="rows clearfix">
+                    <!-- <div class="rows clearfix">
                         <div class="fll" style="line-height: .6rem">融资方式</div>
-                        <!-- <input class="oneInput lessmore" type="text" v-model="formData.weChat"> -->
-                        <span v-for="(item , index) in financingWayList" :key="index" class="fll type_btn" :class="{'active':item.checked}" @click="get_type1(index,item.dataValue)">{{item.dataName}}</span>
-                    </div>
+                        <i v-show="errors.has('融资方式')" class="error lessa flr">{{ errors.first('融资方式')}}</i>
+                        <span v-for="(item , index) in financingWayList" :key="index" v-validate="'required|type'" name="融资方式" class="fll type_btn" :class="{'active':item.checked}" @click="get_type1(index,item.dataValue)">{{item.dataName}}</span>
+                    </div> -->
+                    <mu-flex align-items="center" class="radio">
+                        <!-- <span class="itemRadio">融资方式</span> -->
+                        <span class="itemRadio"><i class="red">*</i>融资方式</span>
+                        <mu-radio class="itemRadio" @click="get_type1(index,item.dataValue)" v-validate="'required|type'" name="融资方式" v-model="formData.financingWay" v-for="(item,index) in financingWayList" :key="item.dataValue"
+                            :value="item.dataValue" :label="item.dataName"></mu-radio>
+                            <i v-show="errors.has('融资方式')" class="lessa typeError">{{ errors.first('融资方式')}}</i>
+                    </mu-flex>
                 </div>
                 <div class="wayBox">
                     <div v-if="fin_way == 0">
@@ -436,11 +443,8 @@
                     <div class="rows" v-for="(team, index) in formData.teamList" :key="index">
                         <div>
                             <i class="red">*</i>成员介绍：</div>
-                        <textarea class="teamText" placeholder="" v-validate="'required|detail'" name="内容" v-model="team.introduce"></textarea>
+                        <textarea class="teamText" placeholder="" v-model="team.introduce"></textarea>
                         <!-- <span @click.prevent="removeTeam(team)">删除</span> -->
-                        <div>
-                            <i v-show="errors.has('内容')" class="error lessa flr">{{ errors.first('内容')}}</i>
-                        </div>
                     </div>
                 </div>
                 <div>
@@ -575,6 +579,14 @@
         }
     });
     Validator.extend("title", {
+        getMessage: field => "请输入",
+        validate: value => {
+            return (
+                value.length != 0
+            );
+        }
+    });
+    Validator.extend("type", {
         getMessage: field => "请输入",
         validate: value => {
             return (
@@ -4624,8 +4636,8 @@
                                 financingMoney: this.formData.financingMoney,
                                 companyName: this.formData.companyName,
                                 address: this.formData.address,
-                                registeredCapital: this.formData.registeredCapital,
-                                // registeredCapital: this.formData.registeredCapitalFormat,
+                                // registeredCapital: this.formData.registeredCapital,
+                                registeredCapital: this.formData.registeredCapitalFormat,
                                 owner: this.formData.owner,
                                 business: this.formData.business,
                                 brightSpot: this.formData.brightSpot,
@@ -4697,8 +4709,8 @@
                                 financingMoney: this.formData.financingMoney,
                                 companyName: this.formData.companyName,
                                 address: this.formData.address,
-                                registeredCapital: this.formData.registeredCapital,
-                                // registeredCapital: this.formData.registeredCapitalFormat,
+                                // registeredCapital: this.formData.registeredCapital,
+                                registeredCapital: this.formData.registeredCapitalFormat,
                                 owner: this.formData.owner,
                                 business: this.formData.business,
                                 brightSpot: this.formData.brightSpot,
@@ -4771,17 +4783,14 @@
                                         instance.close();
                                     }, 1000);
                                     return false;
-
                                     setTimeout(() => {
                                         this.$router.push("/myProject");
                                     }, 1000);
                                 } else {
-
                                     let instance = Toast('上传项目成功');
                                     setTimeout(() => {
                                         instance.close();
                                     }, 1000);
-
                                     setTimeout(() => {
                                         this.$router.push("/myProject");
                                     }, 2000);
@@ -4792,7 +4801,6 @@
                                     instance.close();
                                 }, 2000);
                             }
-
                         });
                         return;
                     }
@@ -5015,6 +5023,12 @@
         color: #f00;
         font-size: .2rem
     }
+    .typeError{
+        color: #f00;
+        font-size: .2rem;
+        margin: .4rem 0 0 2rem;
+        font-style: normal;
+    }
 
     .moneyInput {
         width: 2.8rem;
@@ -5125,7 +5139,8 @@
     }
 
     .radio {
-        padding: .25rem 0
+        padding: .25rem 0;
+        position:relative;
     }
 
     .rows {

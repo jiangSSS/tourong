@@ -401,7 +401,7 @@
         color: #005982;
         padding: .1rem;
         height: .6rem;
-        width: 1.2rem;
+        width: 1.4rem;
         line-height: .4rem;
         font-family: "PingFang";
         font-size: .23rem;

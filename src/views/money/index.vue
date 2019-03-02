@@ -369,8 +369,7 @@
                             regionList.forEach(item => {
                                 this.$set(item, "checked", false);
                             });
-                            // regionList.unshift({ dataName: "不限" });
-                            // this.regionList = regionList;
+                            this.regionList = regionList;
 
                             let investTypeList = res.data.investTypeList;
                             investTypeList.forEach(item => {
@@ -578,7 +577,7 @@
     .input_search {
         border: 0;
         color: rgb(153, 153, 153);
-        width: 4.8rem;
+        width: 4.6rem;
         border-radius: 4px;
         font-family: "PingFang";
         line-height: 2.103;

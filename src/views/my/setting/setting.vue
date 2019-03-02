@@ -8,24 +8,24 @@
             <img src="../../../../static/app/img/my/logoa.jpg" class="logo" alt="">
                 
             </div>
-            <router-link to="" >
+            <!-- <router-link to="" >
                 <div class="myDetail">
                     <span class="myName">版本更新</span>
                 <i class="iconfont icon-xiangyou flr"></i>
                 </div>    
-            </router-link>
+            </router-link> -->
             <router-link to="aboutUs" >
                 <div class="myDetail">
                     <span class="myName">关于投融咨询App</span>
                 <i class="iconfont icon-xiangyou flr"></i>
                 </div>    
             </router-link>
-            <router-link to="" >
+            <!-- <router-link to="" >
                 <div class="myDetail">
                     <span class="myName">清除缓存</span>
                 <i class="iconfont icon-xiangyou flr"></i>
                 </div>    
-            </router-link>
+            </router-link> -->
             <router-link to="callMe" >
                 <div class="myDetail">
                     <span class="myName">联系我们</span>

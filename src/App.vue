@@ -79,4 +79,5 @@
   .mintui-back:before {
     font-size: .3rem !important
   }
+
 </style>

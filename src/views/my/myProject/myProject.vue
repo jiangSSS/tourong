@@ -83,11 +83,11 @@
                             checked: false,
                             status: 0
                         },
-                        {
-                            name: '审核',
-                            checked: false,
-                            status: 1
-                        },
+                        // {
+                        //     name: '审核',
+                        //     checked: false,
+                        //     status: 1
+                        // },
                     ]
                 };
             },
@@ -185,7 +185,10 @@
                         item.checked = false
                     })
                     this.title[index].checked = true
-                    this.getData(status)
+                     this.$axios.get(`/jsp/wap/center/ctrl/jsonMyProjectList.jsp`,{params:{status}}).then(res=>{
+                     this.pageList = res.data.pageList
+                })
+                   
                 },
             },
             created() {
@@ -325,5 +328,13 @@
             font-size: 0.28rem;
             color: #005982;
             z-index: 999;
+        }
+        /deep/ .mint-msgbox-btns{
+            height: 1rem;
+            line-height: 1rem
+        }
+        /deep/ .mint-msgbox-btn{
+            height: 1rem;
+            line-height: 1rem;
         }
     </style>
