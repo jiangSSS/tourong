@@ -66,7 +66,7 @@
             <share :config="config"></share>
             <div class="cancelShare" @click="share = false">取消</div>
         </van-popup>
-        <div class="apply" @click="isShowApply = true" v-show="activityDetail.status == 1">
+        <div class="apply" @click="handleApply" v-show="activityDetail.status == 1">
             <i class="iconfont icon-bianji1"></i>
             <span>报名</span>
         </div>
@@ -74,10 +74,10 @@
             <i class="iconfont icon-bianji1"></i>
             <span>尚未开始</span>
         </div>
-        <div class="apply end" v-show="activityDetail.status == -1">
+        <!-- <div class="apply end" v-show="activityDetail.status == -1">
             <i class="iconfont icon-bianji1"></i>
             <span>往期回顾</span>
-        </div>
+        </div> -->
         <mu-dialog width="400" center class="applyDialog" :model="formData" :open.sync="isShowApply">
             <p class="dialogTitle">报名信息</p>
             <div class="">
@@ -171,6 +171,8 @@
             handleApply() {
                 if (this.activityDetail.status != 1) {
                     this.isShowApply = false
+                }else{
+                    this.isShowApply = true
                 }
             },
             // 确认报名 关闭报名框
@@ -390,7 +392,9 @@
         color: rgb( 102, 102, 102);
         line-height: 1.429;
     }
-
+    /deep/ .contentText img{
+        max-width: 100%;  
+    }
     .contentImg {
         padding: .3rem 0
     }

@@ -111,7 +111,8 @@
                                 <div class="titleBox">
                                     <div class="messageTitleImg">{{item.title}}</div>
                                 </div>
-                                <div class="newsDescImg">{{item.content}}</div>
+                                <!-- <div class="newsDescImg">{{item.content}}</div> -->
+                                <div class="newsDescImg" v-html="item.content"></div>
                             </div>
                         </div>
                     </div>
@@ -304,6 +305,7 @@
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
+        max-height: 1.55rem
     }
 
     .weekList {
